@@ -1,9 +1,9 @@
+import React from "react";
 import Link from "next/link";
 import axios from 'axios';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Home() {
-  
   const ping = async () => {
     console.log(apiUrl+'ping')
   // Realizar la solicitud GET al endpoint de Rails
