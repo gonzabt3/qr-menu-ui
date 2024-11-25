@@ -47,10 +47,12 @@ const CallbackPage = () => {
     const token = await getAccessTokenSilently();
     const response = await axios(apiUrl+'ping', {
       headers: {
+        "Access-Control-Allow-Origin": '*',
+        "content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    const data = await response
+    const data :any= await response
     setProfile(data);
   }
 

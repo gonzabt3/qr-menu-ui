@@ -3,11 +3,13 @@ import Link from "next/link";
 import axios from 'axios';
 import { useAuth0 } from "@auth0/auth0-react";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
 
 export default function Home() {
   const { loginWithRedirect } = useAuth0();
 
   const ping = async () => {
+
     console.log(apiUrl+'ping')
   // Realizar la solicitud GET al endpoint de Rails
     axios.get(apiUrl+'ping')
