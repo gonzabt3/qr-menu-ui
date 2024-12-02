@@ -36,10 +36,10 @@ export default function Home() {
 
     <Flex gap={5} height={"100%"}  flexDirection={'column'} justify="center" align={'center' }>
       <Stack  width={"70%"}>
-        <Heading as='h1' size={['xl','4xl']} noOfLines={1} textAlign='center'>
+        <Heading as='h1' size={['xl','4xl']} textAlign='center'>
           Crea el menu QR
         </Heading>
-        <Heading as='h1' size={['xl','4xl']} noOfLines={1} textAlign='center'>
+        <Heading as='h1' size={['xl','4xl']}  textAlign='center'>
           para tu negocio
         </Heading>
         <Text textAlign={"center"} fontSize={['xl','4xl']} color={'grey'}>Suscribite por mes y manejalo vos mismo</Text>
