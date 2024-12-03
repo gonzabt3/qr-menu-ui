@@ -1,15 +1,10 @@
 'use client'
 import { useRef, useEffect } from "react";
-import BaseCompents from "../components/BaseCompents";
-import { Button, Card, GridItem, Heading } from "@chakra-ui/react";
+import { Button, Card, CardRoot, GridItem, Heading } from "@chakra-ui/react";
 import ButtonWithMercadoPagoDialog from "./ButtonWithMercadoPagoDialog";
+import BaseCompents from "../components/BaseCompents";
 
-
-Amplify.configure(outputs)
-
-const client = generateClient<Schema>()
 const Profile = () => {
-  const {user, error, loading} = useUser();
   const refScreen : any = useRef(null);
   const shouldPay = true;
   useEffect(() => {
@@ -18,27 +13,20 @@ const Profile = () => {
     }
   }, []); 
 
-  const test = () => {
-    client.queries.pay({
-      paymentInfo: "Amplify",
-    })
-
-  }
 
   return (
     <div ref={refScreen}>
       <BaseCompents>
         <GridItem area={'nav'}  rowSpan={7} colSpan={5}>
-          <Card margin={5} height={'100%'}>
-            { !loading ? <> 
-            <Heading size={'md'}>Email: {user.email}</Heading>
+          <CardRoot margin={5} height={'100%'}>
+            { !false ? <> 
+            <Heading size={'md'}>Email: </Heading>
             <Heading size={'md'}>Estado de pago: asd</Heading>
-            <Button onClick={test}>test</Button>
             {
               shouldPay ? <ButtonWithMercadoPagoDialog /> : null
             }
             </> : "loading..."}
-          </Card>
+          </CardRoot>
         </GridItem>
       </BaseCompents>
     </div>
