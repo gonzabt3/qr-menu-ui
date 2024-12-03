@@ -22,6 +22,18 @@ export default function Home() {
       console.error("Hubo un error al hacer la solicitud:", error);
     });
   }
+
+
+  const asd = () => {
+    axios.get(apiUrl+'ping')
+    .then((res) => {
+      // Guardar la respuesta en el estado
+      console.log(res.data.message);
+    })
+    .catch((error) => {
+      console.error("Hubo un error al hacer la solicitud:", error);
+    });
+  }
   /*
       <div>
       Hello World.{" "}
@@ -55,6 +67,7 @@ export default function Home() {
             Editar mi menu
           </Button>
         </a>
+        <Button onClick={asd}>asd</Button>
       </Flex>
       </Flex>
   );
