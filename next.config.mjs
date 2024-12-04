@@ -4,6 +4,7 @@ const nextConfig = {
   // output: "export",
 
   reactStrictMode: true,
+  transpilePackages: ['@mercadopago/sdk-react'],
 };
 
 export default nextConfig;
