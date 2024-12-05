@@ -24,7 +24,16 @@ export default function App({ Component, pageProps }:AppProps) {
           clientId={auth0ClientId}
           authorizationParams={{
             audience: audience,
-            redirect_uri: redirectUri,
+            //redirect_uri: redirectUri,
+            redirect_uri: 'http://localhost:3001',
+          }}
+          onRedirectCallback={(appState) => {
+            console.log("asd",appState?.returnTo)
+            window.history.replaceState(
+              {},
+              document.title,
+              appState?.returnTo || "/"
+            );
           }}
         >
           <Component {...pageProps} />
