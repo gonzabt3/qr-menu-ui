@@ -22,10 +22,10 @@ export default function App({ Component, pageProps }:AppProps) {
         <Auth0Provider
           domain={auth0Domain}
           clientId={auth0ClientId}
+          cacheLocation="localstorage" 
           authorizationParams={{
             audience: audience,
-            //redirect_uri: redirectUri,
-            redirect_uri: 'http://localhost:3001',
+            redirect_uri: redirectUri,
           }}
           onRedirectCallback={(appState) => {
             console.log("asd",appState?.returnTo)

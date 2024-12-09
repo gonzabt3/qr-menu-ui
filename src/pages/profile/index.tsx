@@ -7,6 +7,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 
 const Profile = () => {
+  console.log("PROfile")
   const { isAuthenticated, loginWithRedirect, user, isLoading } = useAuth0();
   const router = useRouter();
 
@@ -14,7 +15,7 @@ const Profile = () => {
     if (!isLoading && !isAuthenticated) {
       loginWithRedirect(
         {
-          appState: { returnTo: 'http://localhost:3001/profile' }, // Guarda la ruta actual
+          appState: { returnTo: router.asPath }, // Guardar la ruta actual
         }      
       );
     }
