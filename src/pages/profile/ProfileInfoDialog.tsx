@@ -1,9 +1,35 @@
 import { DialogRoot, DialogTrigger, Button, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogFooter, DialogActionTrigger, DialogCloseTrigger, Input } from "@chakra-ui/react"
+import axios from "axios";
 import { useState } from "react";
 
 interface ProfileInfoDialogProps {
   open : Boolean
 }
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+const createUser = async (userData: { name: string; email: string; password: string }) => {
+  try {
+    const response = await axios.post(apiUrl+'/users', userData);
+    console.log('User created successfully:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw error;
+  }
+};
+
+// Función para actualizar un usuario
+const updateUser = async (userId: string, userData: { name: string; email: string; password: string }) => {
+  try {
+    const response = await axios.put(`${apiUrl}/users/${userId}`, userData);
+    console.log('User updated successfully:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw error;
+  }
+};
 
 const ProfileInfoDialog = ({open}:ProfileInfoDialogProps) => {
   const [nombre, setNombre] = useState("");
@@ -11,16 +37,38 @@ const ProfileInfoDialog = ({open}:ProfileInfoDialogProps) => {
   const [telefono, setTelefono] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
   
-  const handleSave = () => {
-    console.log({
-      nombre,
-      apellido,
-      telefono,
-      fechaNacimiento,
-    });
-    // Aquí podrías enviar los datos a una API o realizar otras acciones
+  const handleSave = async () => {
+    const userData = {
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      password: 'securepassword',
+    };
+  
+    try {
+      const newUser = await createUser(userData);
+      // Maneja la respuesta exitosa, por ejemplo, actualizando el estado o redirigiendo al usuario
+      console.log('New user:', newUser);
+    } catch (error) {
+      // Maneja el error, por ejemplo, mostrando un mensaje de error al usuario
+      console.error('Failed to create user:', error);
+    }
   };
   
+
+  const handleUpdate = async (userId: string) => {
+    const userData = {
+      name: nombre,
+      email: 'john.doe@example.com', // Ajusta esto según tus necesidades
+      password: 'securepassword', // Ajusta esto según tus necesidades
+    };
+
+    try {
+      const updatedUser = await updateUser(userId, userData);
+      console.log('Updated user:', updatedUser);
+    } catch (error) {
+      console.error('Failed to update user:', error);
+    }
+  };
 
   return(
 <DialogRoot lazyMount open={open}>

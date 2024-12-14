@@ -41,13 +41,20 @@ const Profile = () => {
     }
 
     const checkFirstLogin = async () => {
-      console.log(user)
-      try {
-        const response = await axios.get(apiUrl+'check_first_login');
-        setIsFirstLogin(response.data.isFirstLogin);
-      } catch (error) {
-        console.error('Error fetching first login status:', error);
-      }
+      const token = await getAccessTokenSilently();
+        axios.get(apiUrl+'check_first_login',{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then((res) => {
+        setIsFirstLogin(res.data.first_login);
+        // Guardar la respuesta en el estado
+        console.log(res.data.message);
+      })
+      .catch((error) => {
+        console.error("Hubo un error al hacer la solicitud:", error);
+      });
     };
 
     checkFirstLogin();
@@ -67,28 +74,10 @@ const Profile = () => {
     console.log("Valor ingresado:", inputValue);
     onClose(); // Cierra el diálogo
   };
-  const asd = async () => {
-    const token = await getAccessTokenSilently();
-    console.log(isAuthenticated)
-    axios.get(apiUrl+'check_first_login',{
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((res) => {
-      // Guardar la respuesta en el estado
-      console.log(res.data.message);
-    })
-    .catch((error) => {
-      console.error("Hubo un error al hacer la solicitud:", error);
-    });
-  }
 
   return (
     <div ref={refScreen}>
       <BaseCompents>
-      <Button onClick={asd}>asd</Button>
-
         <GridItem area={'nav'}  rowSpan={7} colSpan={5}>
           <CardRoot margin={5} height={'100%'}>
             { !false ? <> 
@@ -101,7 +90,7 @@ const Profile = () => {
           </CardRoot>
         </GridItem>
       </BaseCompents>
-      <ProfileInfoDialog open={false}/>
+      <ProfileInfoDialog open={isFirstLogin}/>
     </div>
   )
 }
