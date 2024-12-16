@@ -90,7 +90,7 @@ const Profile = () => {
           </CardRoot>
         </GridItem>
       </BaseCompents>
-      <ProfileInfoDialog open={isFirstLogin}/>
+      <ProfileInfoDialog user={user} open={isFirstLogin}/>
     </div>
   )
 }

@@ -3,7 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 
 interface ProfileInfoDialogProps {
-  open : Boolean
+  open : Boolean;
+  user: any;
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -20,9 +21,9 @@ const createUser = async (userData: { name: string; email: string; password: str
 };
 
 // Función para actualizar un usuario
-const updateUser = async (userId: string, userData: { name: string; email: string; password: string }) => {
+const updateUser = async (userId: string, userData: { name: string; apellido: string; telefono: string; fechaNacimiento: string }) => {
   try {
-    const response = await axios.put(`${apiUrl}/users/${userId}`, userData);
+    const response = await axios.put(`${apiUrl}users/${userId}`, userData);
     console.log('User updated successfully:', response.data);
     return response.data;
   } catch (error) {
@@ -31,7 +32,7 @@ const updateUser = async (userId: string, userData: { name: string; email: strin
   }
 };
 
-const ProfileInfoDialog = ({open}:ProfileInfoDialogProps) => {
+const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -55,11 +56,15 @@ const ProfileInfoDialog = ({open}:ProfileInfoDialogProps) => {
   };
   
 
-  const handleUpdate = async (userId: string) => {
+  const handleUpdate = async () => {
+    console.log('Updating user:', user);
+    const userId = user.sub.split('|')[1]; 
+    
     const userData = {
       name: nombre,
-      email: 'john.doe@example.com', // Ajusta esto según tus necesidades
-      password: 'securepassword', // Ajusta esto según tus necesidades
+      apellido: apellido,
+      telefono: telefono,
+      fechaNacimiento: fechaNacimiento
     };
 
     try {
@@ -120,7 +125,7 @@ const ProfileInfoDialog = ({open}:ProfileInfoDialogProps) => {
       <DialogActionTrigger asChild>
         <Button variant="outline">Cancelar</Button>
       </DialogActionTrigger>
-      <Button onClick={handleSave}>Guardar</Button>
+      <Button onClick={handleUpdate}>Guardar</Button>
     </DialogFooter>
     <DialogCloseTrigger />
   </DialogContent>
