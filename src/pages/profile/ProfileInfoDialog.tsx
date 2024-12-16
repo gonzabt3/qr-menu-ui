@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { DialogRoot, DialogTrigger, Button, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogFooter, DialogActionTrigger, DialogCloseTrigger, Input } from "@chakra-ui/react"
 import axios from "axios";
 import { useState } from "react";
@@ -21,9 +22,14 @@ const createUser = async (userData: { name: string; email: string; password: str
 };
 
 // Función para actualizar un usuario
-const updateUser = async (userId: string, userData: { name: string; apellido: string; telefono: string; fechaNacimiento: string }) => {
+const updateUser = async (userId: string,token:string, userData: { name: string; apellido: string; telefono: string; fechaNacimiento: string }) => {
+
   try {
-    const response = await axios.put(`${apiUrl}users/${userId}`, userData);
+    const response = await axios.put(`${apiUrl}users/${userId}`, userData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     console.log('User updated successfully:', response.data);
     return response.data;
   } catch (error) {
@@ -37,6 +43,7 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
   const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
+  const {getAccessTokenSilently} = useAuth0();
   
   const handleSave = async () => {
     const userData = {
@@ -57,6 +64,7 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
   
 
   const handleUpdate = async () => {
+    const token = await getAccessTokenSilently();
     console.log('Updating user:', user);
     const userId = user.sub.split('|')[1]; 
     
@@ -68,7 +76,7 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
     };
 
     try {
-      const updatedUser = await updateUser(userId, userData);
+      const updatedUser = await updateUser(userId, token , userData);
       console.log('Updated user:', updatedUser);
     } catch (error) {
       console.error('Failed to update user:', error);

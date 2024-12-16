@@ -7,7 +7,6 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
 
 export default function Home() {
-  const { loginWithRedirect } = useAuth0();
 
   const ping = async () => {
 
