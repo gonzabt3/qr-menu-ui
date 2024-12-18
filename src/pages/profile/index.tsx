@@ -6,13 +6,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import {
   Button,
-  CardRoot,
   GridItem,
   Heading,
  useDisclosure,
 } from "@chakra-ui/react";
 import ProfileInfoDialog from "./ProfileInfoDialog";
 import axios from "axios";
+import { Card } from "@chakra-ui/icons";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
@@ -79,7 +79,7 @@ const Profile = () => {
     <div ref={refScreen}>
       <BaseCompents>
         <GridItem area={'nav'}  rowSpan={7} colSpan={5}>
-          <CardRoot margin={5} height={'100%'}>
+          <Card margin={5} height={'100%'}>
             { !false ? <> 
             <Heading size={'md'}>Email: </Heading>
             <Heading size={'md'}>Estado de pago: asd</Heading>
@@ -87,7 +87,7 @@ const Profile = () => {
               shouldPay ? <ButtonWithMercadoPagoDialog /> : null
             }
             </> : "loading..."}
-          </CardRoot>
+          </Card>
         </GridItem>
       </BaseCompents>
       <ProfileInfoDialog user={user} open={isFirstLogin}/>

@@ -1,10 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { DialogRoot, DialogTrigger, Button, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogFooter, DialogActionTrigger, DialogCloseTrigger, Input } from "@chakra-ui/react"
+import {  Button, Input, ModalContent, ModalHeader, ModalBody, ModalFooter, Modal, ModalOverlay } from "@chakra-ui/react"
 import axios from "axios";
+import Head from "next/head";
 import { useState } from "react";
 
 interface ProfileInfoDialogProps {
-  open : Boolean;
+  open : boolean;
   user: any;
 }
 
@@ -84,12 +85,13 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
   };
 
   return(
-<DialogRoot lazyMount open={open}>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Formulario</DialogTitle>
-    </DialogHeader>
-    <DialogBody>
+<Modal isOpen={open} onClose={() => console.log("close")}>
+<ModalOverlay />
+  <ModalContent>
+    <ModalHeader>
+      <h1>Formulario</h1>
+    </ModalHeader>
+    <ModalBody>
       <form>
         <div style={{ marginBottom: "1rem" }}>
           <label htmlFor="nombre">Nombre</label>
@@ -128,16 +130,13 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
           />
         </div>
       </form>
-    </DialogBody>
-    <DialogFooter>
-      <DialogActionTrigger asChild>
+    </ModalBody>
+    <ModalFooter>
         <Button variant="outline">Cancelar</Button>
-      </DialogActionTrigger>
       <Button onClick={handleUpdate}>Guardar</Button>
-    </DialogFooter>
-    <DialogCloseTrigger />
-  </DialogContent>
-</DialogRoot>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
 
   )
 }

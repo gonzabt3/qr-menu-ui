@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { AppProps } from "next/app";
 import { Auth0Provider } from "@auth0/auth0-react";
 import createCache from '@emotion/cache';
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const auth0Domain : any = process.env.NEXT_PUBLIC_AUTH_DOMAIN;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }:AppProps) {
   }, [])
   return (<>
     { isClient ?
-      <ChakraProvider value={defaultSystem} >
+      <ChakraProvider  >
         <Auth0Provider
           domain={auth0Domain}
           clientId={auth0ClientId}

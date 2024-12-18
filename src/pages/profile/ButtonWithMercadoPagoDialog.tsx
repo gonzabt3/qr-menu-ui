@@ -1,4 +1,4 @@
-import { Button, DialogBackdrop, DialogContent, DialogRoot, DialogTrigger} from "@chakra-ui/react"
+import { Button, Modal, ModalContent, ModalOverlay} from "@chakra-ui/react"
 import { initMercadoPago, CardPayment } from "@mercadopago/sdk-react"
 import { useState } from "react"
 
@@ -15,16 +15,15 @@ const ButtonWithMercadoPagoDialog = () => {
   return(
     <>
       <Button onClick={() => setIsOpen(true)}>Pagar</Button>
-      <DialogRoot isOpen={isOpen} onClose={() => setIsOpen(false)} >
-      <DialogBackdrop />
-      <DialogTrigger />
-        <DialogContent>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} >
+        <ModalOverlay />
+        <ModalContent>
           <CardPayment
             initialization={{ amount: 100 }}
             onSubmit={pay}
           />
-        </DialogContent>
-      </DialogRoot>
+        </ModalContent>
+      </Modal>
     </>
   )
 }
