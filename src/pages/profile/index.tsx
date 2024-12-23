@@ -42,7 +42,7 @@ const Profile = () => {
 
     const checkFirstLogin = async () => {
       const token = await getAccessTokenSilently();
-        axios.get(apiUrl+'check_first_login',{
+      axios.get(apiUrl+'check_first_login',{
         headers: {
           Authorization: `Bearer ${token}`
         }
