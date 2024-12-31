@@ -60,10 +60,8 @@ export default function Page() {
           Authorization: `Bearer ${token}`
         }
       })
-      .then((res) => {
-        setRestaurants(res.data.restaurants);
-        // Guardar la respuesta en el estado
-        console.log(res.data.message);
+      .then((response) => {
+        setRestaurants(response.data);
       })
       .catch((error) => {
         console.error("Hubo un error al hacer la solicitud:", error);

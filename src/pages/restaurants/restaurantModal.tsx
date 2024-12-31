@@ -13,27 +13,30 @@ import {
   Input,
   Stack,
 } from '@chakra-ui/react';
+import { createRestaurant, updateRestaurant } from '../services/restaurant';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const RestaurantModal = ({isOpen, close, restaurant}:any) => {
   const [initialValues, setInitialValues] = useState<any>(null)
+  const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
 
 
-  const handleSubmit = async (values :any ) => {
-    if(values.id){
-      updateRestaurant(values)
-    }else{      
-      createRestaurant(values)
+  const handleSubmit = async (values: any) => {
+    const token = await getAccessTokenSilently();
+
+    try {
+      const { id, ...restValues } = values; // Remove the id key from values
+
+      if (id) {
+        await updateRestaurant(token, { id, ...restValues });
+      } else {
+        await createRestaurant(token, restValues);
+      }
+      close();
+    } catch (error) {
+      console.error('Error submitting form:', error);
     }
-    close();  
   };
-
-  const createRestaurant = async (values :any) => {
-    //endpoint para crear un nuevo restaurant
-  }
-
-  const updateRestaurant = async (values :any) => {
-    //endpoint para actualizar un restaurant
-  }
   
   useEffect(() => {
     if(restaurant==null){
