@@ -14,14 +14,15 @@ import BaseCompents from "../components/BaseCompents";
 import BreadcrumComponent from "../components/breadcrum";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import useRestaurants from "./useRestaurant";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
 export default function Page() {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
+  const { restaurants, loading, error, getRestaurants, deleteRestaurant } = useRestaurants();
   const refScreen : any = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [restaurants, setRestaurants] = useState<any>([]);
   const [restaurant, setRestaurant] = useState(null);
   useEffect(() => {
     if (refScreen.current) {
@@ -35,15 +36,7 @@ export default function Page() {
     setIsOpen(!isOpen)
   }
 
-  const deleteRestaurant = async (id:any) => {
-    //@ts-ignore
-    client.models.Restaurant.delete({
-      id: id,
-      cascade: true, // delete related data
-    }).then((data: any) => {
-      console.log('Document deleted with ID: ', data?.id);
-    })
-  }
+
 
   const changeIsOpenModal = () => {
     setRestaurant(null);
@@ -52,31 +45,21 @@ export default function Page() {
 
 
   useEffect(() => {
-
-    const listRestaurants = async () => {
-      const token = await getAccessTokenSilently();
-      axios.get(apiUrl+'users/'+user?.email+'/restaurants',{
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then((response) => {
-        setRestaurants(response.data);
-      })
-      .catch((error) => {
-        console.error("Hubo un error al hacer la solicitud:", error);
-      });
-    }
-
     if (!isLoading && !isAuthenticated) {
       loginWithRedirect();
     }
 
-    if(user){ 
-      console.log(user)
-      listRestaurants();
-    } 
-  }, [user]);
+
+  }, [isLoading, isAuthenticated]);
+
+  const refreshList = async () => {
+    try {
+      await getRestaurants(user);
+    } catch (error) {
+      console.error('Error fetching restaurants:', error);
+    }
+  }
+
 
   return (
     <div ref={refScreen}>
@@ -87,6 +70,7 @@ export default function Page() {
             Agregar resturant
           </Button>
           <Card margin={5} height={'100%'}>
+            { loading ? <Text>Loading...</Text> : 
             <SimpleGrid columns={[1, 3, 4]} scrollBehavior={'auto'} maxHeight={['100%','100%','100%','100%']}   overflowY="scroll">
               {restaurants.map((restaurantItem: any, index:any) => (
                 <RestaurantCard
@@ -97,9 +81,10 @@ export default function Page() {
                 />
               ))}
             </SimpleGrid>
+             }
           </Card>
         </GridItem>
-        <RestaurantModal isOpen={isOpen} close={changeIsOpenModal} restaurant={restaurant}/>
+        <RestaurantModal isOpen={isOpen} close={changeIsOpenModal} refreshList={refreshList} restaurant={restaurant}/>
       </BaseCompents>
     </div>
   )

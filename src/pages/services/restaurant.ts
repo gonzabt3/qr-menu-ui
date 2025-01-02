@@ -33,4 +33,18 @@ export const updateRestaurant = async (token:string, values: any) => {
   }
 };
 
-// Add other API functions as needed
+
+export const fetchRestaurants = async (token:string, user:any): Promise<any> => {
+  return await axios.get(API_BASE_URL+'users/'+user?.email+'/restaurants',{
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  .then((response) => {
+    console.log(response)
+    return response.data;
+  })
+  .catch((error) => {
+    console.error("Hubo un error al hacer la solicitud:", error);
+  });
+}

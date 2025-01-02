@@ -16,7 +16,7 @@ import {
 import { createRestaurant, updateRestaurant } from '../services/restaurant';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const RestaurantModal = ({isOpen, close, restaurant}:any) => {
+const RestaurantModal = ({isOpen, close, restaurant, refreshList}:any) => {
   const [initialValues, setInitialValues] = useState<any>(null)
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
 
@@ -33,6 +33,7 @@ const RestaurantModal = ({isOpen, close, restaurant}:any) => {
         await createRestaurant(token, restValues);
       }
       close();
+      refreshList();
     } catch (error) {
       console.error('Error submitting form:', error);
     }
@@ -46,7 +47,8 @@ const RestaurantModal = ({isOpen, close, restaurant}:any) => {
                 description: '',
                 address: '',
                 phone: '',
-                instagram: ''
+                instagram: '',
+                email: ''
       })
     }else{
       setInitialValues({
@@ -55,7 +57,8 @@ const RestaurantModal = ({isOpen, close, restaurant}:any) => {
         description: restaurant.description,
         address:  restaurant.address,
         phone: restaurant.phone,
-        instagram: restaurant.instagram
+        instagram: restaurant.instagram,
+        email: restaurant.email
       })
     }
 
@@ -114,6 +117,13 @@ const RestaurantModal = ({isOpen, close, restaurant}:any) => {
                     {({ field }:any) => (
                       <FormControl>
                         <Input {...field} type="text" placeholder="Instagram usuario" />
+                      </FormControl>
+                    )}
+                  </Field>
+                  <Field name="email">
+                    {({ field }:any) => (
+                      <FormControl>
+                        <Input {...field} type="text" placeholder="Email" />
                       </FormControl>
                     )}
                   </Field>
