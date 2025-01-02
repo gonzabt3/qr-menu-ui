@@ -15,19 +15,22 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode'
+import { useAuth0 } from '@auth0/auth0-react';
+import { createMenu } from '../../../services/menu';
 
 const MenuModal = ({isOpen, close, closeAndRefresh, restaurantId, restaurant}:any) => {
+  const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
+
   const handleSubmit = async (values :any ) => {
-    // @ts-ignore
-    client.models.Menu.create({
-      name: values.name,
-      description: values.description,
-      type: values.type,
-      restaurantId: restaurantId,
-    }).then((data :any) => {
-      console.log('Document written with ID: ', data?.id);
+    const token = await getAccessTokenSilently();
+    try {
+      const { id, ...restValues } = values; // Remove the id key from values
+      await createMenu(token, restaurantId, restValues);
+      close();
       closeAndRefresh();
-    })
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   const  handleOnClose = () => {
