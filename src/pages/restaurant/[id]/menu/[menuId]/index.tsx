@@ -9,13 +9,9 @@ import { Card, CardHeader, CardBody } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 import Sections from "../../../../sections";
 import Products from "../../../../products";
-import { generateClient } from "aws-amplify/api";
-import { Schema } from "@/amplify/data/resource";
-import { getSectionsByMenu } from "../../../../../lib/section";
-import BaseCompents from "@/pages/components/BaseCompents";
 import QRCode from "react-qr-code";
 import * as htmlToImage from "html-to-image";
-const client = generateClient<Schema>();
+import BaseCompents from "../../../../components/BaseCompents";
 
 
 export default function Page() {
@@ -33,10 +29,7 @@ export default function Page() {
   }, []);
 
   async function getMenu(menuId : any) {
-    if(menuId){
-      const { data: menu } = await client.models.Menu.get({id: menuId});
-      setMenu(menu);
-    }
+    
   }
 
 

@@ -13,10 +13,6 @@ import {
   Input,
   Stack,
 } from '@chakra-ui/react';
-import { generateClient } from 'aws-amplify/api';
-import { Schema } from '@/amplify/data/resource';
-import { postSection, updateSection } from '../../lib/section';
-const client = generateClient<Schema>();
 
 const SectionModal = ({close,closeAndRefresh, isOpen, section, menuId}:any) => {
   const [initialValues, setInitialValues] = useState<any>(null)
@@ -33,25 +29,11 @@ const SectionModal = ({close,closeAndRefresh, isOpen, section, menuId}:any) => {
 
   const createSection = async (values :any) => {
     const newValues = {...values}
-    const {section, errors} = await postSection(client, newValues, menuId)
 
-    if(!errors){
-      console.log('Document written with ID: ', section?.id);
-      closeAndRefresh();
-    }else{
-      console.log(errors)
-    }
   }
 
    const updateRestaurant = async (values :any) => {
-    const {section, errors} = await updateSection(client, values, menuId)
 
-    if(!errors){
-      console.log('Document written with ID: ', section?.id);
-      closeAndRefresh();
-    }else{
-      console.log(errors)
-    }
   }
   useEffect(() => {
     if(section==null){

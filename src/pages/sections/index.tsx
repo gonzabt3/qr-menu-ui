@@ -3,8 +3,6 @@ import { CloseButton, Flex, Spacer, Box, List, ListItem, Stack, Heading, Text, C
 import SectionModal from './SectionModal'
 import { useEffect, useState } from 'react';
 import Section from './Section';
-import { generateClient } from 'aws-amplify/api';
-import { Schema } from '@/amplify/data/resource';
 interface Section {
   readonly id: string;
   readonly menuId: string;
@@ -12,7 +10,6 @@ interface Section {
 
 
 
-const client = generateClient<Schema>();
 const Sections = ({menuId, menu, refreshSections, sections}:any) => {
   const [isOpen, setIsOpen] = useState(false)
   const [sectionToEdit, setSectionToEdit] = useState();
@@ -23,15 +20,6 @@ const Sections = ({menuId, menu, refreshSections, sections}:any) => {
   }
 
   const deleteSection = async (id:any) => {
-    client.models.Section.delete({
-      id: id,
-      // @ts-ignore
-      cascade: true, // delete related data
-    }).then((data: any) => {
-      console.log('Document deleted with ID: ', data?.id);
-      closeAndRefresh();
-    }) 
-    
   }
 
   const openModal = () => {

@@ -21,7 +21,7 @@ export default function Page() {
   const refScreen : any = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [restaurant, setRestaurant] = useState<any>(null);
-  const { menus, loading, error, getMenusByRestaurant } = useMenus(id);
+  const { menus, loading, error, getMenusByRestaurant, deleteMenu } = useMenus(id);
 
   const changeIsOpenModal = () => {
     setIsOpen(!isOpen);
@@ -32,15 +32,9 @@ export default function Page() {
     getMenusByRestaurant();
   }
 
-  const deleteMenu = async (id:any) => {
-    // @ts-ignore
-    client.models.Menu.delete({
-      id: id,
-      cascade: true, // delete related data
-    }).then((data: any) => {
-      console.log('Document deleted with ID: ', data?.id);
-      getMenusByRestaurant();
-    })
+  const handleDeleteMenu = async (id:any) => {
+    await deleteMenu(id);
+    getMenusByRestaurant();
   }
 
   useEffect(() => {
@@ -65,7 +59,7 @@ export default function Page() {
         {menus.length != 0 ?
           <SimpleGrid columns={[1, 3, 4]} scrollBehavior={'auto'} maxHeight={['100%','100%','100%','100%']}   overflowY="scroll">
              {menus.map((menu:any) => (
-              <MenuCard menu={menu} key={menu.id} deleteMenu={deleteMenu}/>
+              <MenuCard menu={menu} key={menu.id} deleteMenu={handleDeleteMenu}/>
             ))} 
           </SimpleGrid>
           : <Heading >No hay menus</Heading>}

@@ -27,11 +27,29 @@ export const useMenus = (id: string) => {
     }
   };
 
+
+  const deleteMenu = async (idMenu: string) => {
+    const token = await getAccessTokenSilently();
+    axios.delete(API_BASE_URL + 'restaurants/'+id+'/menus/' + idMenu, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((response) => {
+        const newMenus = menus.filter((menu: any) => menu.id != idMenu);
+        setMenus(newMenus);
+      })
+      .catch((error) => {
+        console.error("Hubo un error al hacer la solicitud:", error);
+      });
+  }
+
+
   useEffect(() => {
     getMenusByRestaurant();
   }, [id]);
 
-  return { menus, loading, error, getMenusByRestaurant };
+  return { menus, loading, error, deleteMenu, getMenusByRestaurant };
 }
 
 export default useMenus;
