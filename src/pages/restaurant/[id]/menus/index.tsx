@@ -13,14 +13,15 @@ import MenuModal from "./MenuModal";
 import Head from "next/head";
 import { useRouter } from 'next/router';
 import BaseCompents from "../../../components/BaseCompents";
+import useMenus from "./useMenus";
 
 export default function Page() {
   const router = useRouter();
   const { id } = router.query;
   const refScreen : any = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [menus, setMenus] = useState([]);
   const [restaurant, setRestaurant] = useState<any>(null);
+  const { menus, loading, error, getMenusByRestaurant } = useMenus(id);
 
   const changeIsOpenModal = () => {
     setIsOpen(!isOpen);
@@ -28,21 +29,7 @@ export default function Page() {
 
   const closeAndRefresh = () => {
     changeIsOpenModal();
-    getMenus();
-  }
-
-  const getMenus = async ()  => {
-    if(id){ 
-      // @ts-ignore
-      const { restaurant, errors } = await getRestaurant(client, id);
-
-      if(!errors){
-        const { data: menus } = await restaurant.menus();
-        setMenus(menus);
-      }else{
-        console.log(errors)
-      }
-    }
+    getMenusByRestaurant();
   }
 
   const deleteMenu = async (id:any) => {
@@ -52,7 +39,7 @@ export default function Page() {
       cascade: true, // delete related data
     }).then((data: any) => {
       console.log('Document deleted with ID: ', data?.id);
-      getMenus();
+      getMenusByRestaurant();
     })
   }
 
@@ -63,7 +50,7 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    getMenus();
+    getMenusByRestaurant();
   }, [id]);
 
   return (
