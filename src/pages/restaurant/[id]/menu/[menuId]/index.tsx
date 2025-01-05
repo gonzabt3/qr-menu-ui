@@ -12,15 +12,15 @@ import Products from "../../../../products";
 import QRCode from "react-qr-code";
 import * as htmlToImage from "html-to-image";
 import BaseCompents from "../../../../components/BaseCompents";
-
+import  useMenu from "../useMenu" ;
 
 export default function Page() {
   const router = useRouter();
   const ref : any= useRef(null);
   const qrCodeRef :any= useRef(null);
-  const [menu, setMenu] :any = useState(null);
   const [menuUrl, setMenuUrl] : any = useState('');
   const [sections, setSections] : any = useState([]);
+  const {menu, getMenu}= useMenu(router.query.id,router.query.menuId);
 
   useEffect(() => {
     if (ref.current) {
@@ -28,34 +28,18 @@ export default function Page() {
     }
   }, []);
 
-  async function getMenu(menuId : any) {
-    
-  }
-
-
-
   const refreshMenu = () => {
-    getMenu(router.query.menuId);
+    getMenu();
   }
   const getSections = async (menuId: any) => {
-    console.log(menuId)
-    const sections =await menu.sections()
-    if(sections.data){
-      setSections(sections.data)
-    }else{
-      console.log("errors")
-      setSections([])
-    }
+
   }
   const refreshSections = () => {
     getSections(menu);
   }
 
   const createMenuUrl = async () => {
-    if (menu) {
-      const restaurant = await menu?.restaurant();
-      return window.location.origin + '/'+restaurant.data.name
-    }
+    return '';
   }
 
   const downloadQr = () => {
@@ -85,13 +69,6 @@ export default function Page() {
       });
     }
   },[menu])
-
-  useEffect(() => {
-    const menuId = router.query.menuId
-    if(menuId != undefined) {
-      getMenu(router.query.menuId);
-    }
-  }, [router.query.menuId]);
   
   return (
     <div ref={ref} >

@@ -6,6 +6,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 export const useMenus = (id: string) => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
   const [menus, setMenus] = useState([]);
+  const [menu , setMenu] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
 
@@ -28,6 +29,8 @@ export const useMenus = (id: string) => {
   };
 
 
+
+
   const deleteMenu = async (idMenu: string) => {
     const token = await getAccessTokenSilently();
     axios.delete(API_BASE_URL + 'restaurants/'+id+'/menus/' + idMenu, {
@@ -44,12 +47,11 @@ export const useMenus = (id: string) => {
       });
   }
 
-
   useEffect(() => {
     getMenusByRestaurant();
   }, [id]);
 
-  return { menus, loading, error, deleteMenu, getMenusByRestaurant };
+  return { menu, menus, loading, error, deleteMenu, getMenusByRestaurant };
 }
 
 export default useMenus;
