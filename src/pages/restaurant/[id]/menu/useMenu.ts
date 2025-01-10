@@ -24,8 +24,10 @@ const useMenu = (idRestaurant: string, idMenu:string) => {
   }
 
   useEffect(() => {
-    getMenu();
-  } , []);
+    if (idRestaurant && idMenu){
+      getMenu();
+    }
+  } , [idRestaurant, idMenu]);
 
   return { menu, loading, error, getMenu };
 }

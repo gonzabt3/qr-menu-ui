@@ -16,11 +16,15 @@ import  useMenu from "../useMenu" ;
 
 export default function Page() {
   const router = useRouter();
+  const { id } = router.query;
+  const { menuId } = router.query;
+
   const ref : any= useRef(null);
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
   const [sections, setSections] : any = useState([]);
-  const {menu, getMenu}= useMenu(router.query.id,router.query.menuId);
+  const {menu, getMenu}= useMenu(id, menuId);
+  //todo useSections
 
   useEffect(() => {
     if (ref.current) {

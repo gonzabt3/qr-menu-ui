@@ -41,6 +41,7 @@ export default function Page() {
     if (refScreen.current) {
       refScreen.current.style.maxHeight = `${window.innerHeight}px`;
     }
+    console.log("rest id", id);
   }, []);
 
   useEffect(() => {
