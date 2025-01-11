@@ -13,6 +13,7 @@ import QRCode from "react-qr-code";
 import * as htmlToImage from "html-to-image";
 import BaseCompents from "../../../../components/BaseCompents";
 import  useMenu from "../useMenu" ;
+import useSections from "../../../../../hooks/useSections";
 
 export default function Page() {
   const router = useRouter();
@@ -22,8 +23,8 @@ export default function Page() {
   const ref : any= useRef(null);
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
-  const [sections, setSections] : any = useState([]);
-  const {menu, getMenu}= useMenu(id, menuId);
+  const {menu, getMenu} = useMenu(id, menuId);
+  const {sections, getSections} = useSections(id, menuId)
   //todo useSections
 
   useEffect(() => {
@@ -35,11 +36,9 @@ export default function Page() {
   const refreshMenu = () => {
     getMenu();
   }
-  const getSections = async (menuId: any) => {
 
-  }
   const refreshSections = () => {
-    getSections(menu);
+    getSections();
   }
 
   const createMenuUrl = async () => {
@@ -65,7 +64,7 @@ export default function Page() {
 
   useEffect(() => {
     if (menu?.id) {
-      getSections(menu.id);
+      getSections();
       createMenuUrl().then((url) => {
         if (url) {
           setMenuUrl(url);

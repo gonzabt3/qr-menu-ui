@@ -14,6 +14,7 @@ import {
   Stack,
   Select
 } from '@chakra-ui/react';
+import useProducts from '../../hooks/useProducts';
 
 const ProductModal = ({ product,sections, menu, closeAndRefresh, isOpen, close } : any) => {
 const [initialValues, setInitialValues] = useState<any>(null)
