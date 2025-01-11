@@ -3,7 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import axiosMock from 'axios-mock-adapter';
 import useRestaurants from './useRestaurant';
-import { fetchRestaurants } from '../services/restaurant';
+import { fetchRestaurants } from '../../services/restaurant';
 
 jest.mock('@auth0/auth0-react');
 jest.mock('../services/restaurant');

@@ -13,7 +13,6 @@ import QRCode from "react-qr-code";
 import * as htmlToImage from "html-to-image";
 import BaseCompents from "../../../../components/BaseCompents";
 import  useMenu from "../../../../../hooks/useMenu" ;
-import useSections from "../../../../../hooks/useSections";
 
 export default function Page() {
   const router = useRouter();
@@ -24,8 +23,6 @@ export default function Page() {
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
   const {menu, getMenu, updateMenu} = useMenu(id, menuId);
-  const {sections, getSections} = useSections(id, menuId)
-  //todo useSections
 
   useEffect(() => {
     if (ref.current) {
@@ -35,10 +32,6 @@ export default function Page() {
 
   const refreshMenu = () => {
     getMenu();
-  }
-
-  const refreshSections = () => {
-    getSections();
   }
 
   const createMenuUrl = async () => {
@@ -64,7 +57,6 @@ export default function Page() {
 
   useEffect(() => {
     if (menu?.id) {
-      getSections();
       createMenuUrl().then((url) => {
         if (url) {
           setMenuUrl(url);
@@ -121,10 +113,10 @@ export default function Page() {
                   </CardBody>
                 </GridItem>
                 <GridItem colSpan={3} >
-                  <Sections menuId={menu.id} menu={menu} refreshSections={refreshSections} sections={sections}/>
+                  <Sections />
                 </GridItem>
                 <GridItem colSpan={4}  >
-                  {sections && <Products sections={sections} onRefreshMenu={refreshMenu} menu={menu} />}
+                  {false && <Products sections={[]} onRefreshMenu={refreshMenu} menu={menu} />}
                 </GridItem>
               </Grid>
             </Card>

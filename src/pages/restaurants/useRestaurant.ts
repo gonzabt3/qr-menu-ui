@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { fetchRestaurants } from '../services/restaurant';
+import { fetchRestaurants } from '../../services/restaurant';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;

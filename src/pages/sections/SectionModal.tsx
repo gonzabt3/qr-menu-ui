@@ -13,14 +13,18 @@ import {
   Input,
   Stack,
 } from '@chakra-ui/react';
+import useSection from '../../hooks/useSection';
 
-const SectionModal = ({close,closeAndRefresh, isOpen, section, menuId}:any) => {
+const SectionModal = ({close,closeAndRefresh, isOpen, menuId}:any) => {
+  //hay que pasar por prps toods los url params
+   
   const [initialValues, setInitialValues] = useState<any>(null)
-  
+  const {loading, error, section, updateSection} = useSection();  
+
   const handleSubmit = async (values :any ) => {
 
     if(values.id){
-      updateRestaurant(values)
+      updateSection(values)
     }else{
       createSection(values)
     }

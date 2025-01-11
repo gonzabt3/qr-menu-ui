@@ -16,7 +16,7 @@ import {
 import { useRouter } from 'next/navigation';
 import QRCode from 'qrcode'
 import { useAuth0 } from '@auth0/auth0-react';
-import { createMenu } from '../../../services/menu';
+import { createMenu } from '../../../../services/menu';
 
 const MenuModal = ({isOpen, close, closeAndRefresh, restaurantId, restaurant}:any) => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();

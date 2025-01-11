@@ -3,6 +3,8 @@ import { CloseButton, Flex, Spacer, Box, List, ListItem, Stack, Heading, Text, C
 import SectionModal from './SectionModal'
 import { useEffect, useState } from 'react';
 import Section from './Section';
+import useSections from '../../hooks/useSections';
+import { useRouter } from 'next/router';
 interface Section {
   readonly id: string;
   readonly menuId: string;
@@ -10,12 +12,16 @@ interface Section {
 
 
 
-const Sections = ({menuId, menu, refreshSections, sections}:any) => {
+const Sections = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const { menuId } = router.query;
+  const {sections, getSections} = useSections(id, menuId)
   const [isOpen, setIsOpen] = useState(false)
   const [sectionToEdit, setSectionToEdit] = useState();
 
   const edit = (sectionToEdit:any) => {
-    setSectionToEdit(sectionToEdit);
+    setSectionToEdit(sectionToEdit);SectionModal
     openModal()
   }
 
@@ -31,7 +37,7 @@ const Sections = ({menuId, menu, refreshSections, sections}:any) => {
   }
   const closeAndRefresh = () => {
     closeModal()
-    refreshSections()
+    getSections()
   }
 
   return(
@@ -57,7 +63,7 @@ const Sections = ({menuId, menu, refreshSections, sections}:any) => {
           )
         }
       </Flex>
-     <SectionModal isOpen={isOpen} close={closeModal} closeAndRefresh={closeAndRefresh} section={sectionToEdit} menuId={menuId} />
+     <SectionModal isOpen={isOpen} close={closeModal} closeAndRefresh={closeAndRefresh} menuId={menuId} />
     </>
   )
 }

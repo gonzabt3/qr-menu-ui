@@ -13,7 +13,7 @@ import {
   Input,
   Stack,
 } from '@chakra-ui/react';
-import { createRestaurant, updateRestaurant } from '../services/restaurant';
+import { createRestaurant, updateRestaurant } from '../../services/restaurant';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const RestaurantModal = ({isOpen, close, restaurant, refreshList}:any) => {

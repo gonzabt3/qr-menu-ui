@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { use, useEffect, useState } from "react";
-import { putMenu } from "../pages/services/menu";
+import { putMenu } from "../services/menu";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const useMenu = (idRestaurant: string, idMenu:string) => {
