@@ -3,10 +3,11 @@ import { Field, Form, Formik } from 'formik';
 import React from 'react';
 
 
-const FormMenu = ({menu, menuId}:any) => {
+const FormMenu = ({menu, menuId, updateMenu}:any) => {
 
 
   const handleSubmit = async (values :any) => {
+    updateMenu(values)
   };
   
   return (

@@ -18,3 +18,21 @@ export const createMenu = async (token : string, restaurantId:string, values: an
     throw error;
   }
 }
+
+export const putMenu = async (token : string, restaurantId:string,menuId:string,values: any) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}restaurants/${restaurantId}/menus/`+menuId,
+      values,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating menu:', error);
+    throw error;
+  }
+}

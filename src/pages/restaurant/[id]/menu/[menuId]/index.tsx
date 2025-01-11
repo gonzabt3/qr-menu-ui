@@ -12,7 +12,7 @@ import Products from "../../../../products";
 import QRCode from "react-qr-code";
 import * as htmlToImage from "html-to-image";
 import BaseCompents from "../../../../components/BaseCompents";
-import  useMenu from "../useMenu" ;
+import  useMenu from "../../../../../hooks/useMenu" ;
 import useSections from "../../../../../hooks/useSections";
 
 export default function Page() {
@@ -23,7 +23,7 @@ export default function Page() {
   const ref : any= useRef(null);
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
-  const {menu, getMenu} = useMenu(id, menuId);
+  const {menu, getMenu, updateMenu} = useMenu(id, menuId);
   const {sections, getSections} = useSections(id, menuId)
   //todo useSections
 
@@ -96,7 +96,7 @@ export default function Page() {
                   </CardHeader>
                 </GridItem>
                 <GridItem colStart={1} rowSpan={5} colSpan={[2]}>
-                  <FormMenu menu={menu} menuId={menu?.id} />
+                  <FormMenu menu={menu} menuId={menu?.id} updateMenu={updateMenu}/>
                 </GridItem>
                 <GridItem colStart={3} rowSpan={5} colSpan={1}>
                   {menuUrl &&
