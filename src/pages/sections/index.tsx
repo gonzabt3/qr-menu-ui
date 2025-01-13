@@ -63,7 +63,7 @@ const Sections = () => {
           )
         }
       </Flex>
-     <SectionModal isOpen={isOpen} close={closeModal} closeAndRefresh={closeAndRefresh} menuId={menuId} />
+     <SectionModal isOpen={isOpen} close={closeModal} closeAndRefresh={closeAndRefresh} restaurantId={id} menuId={menuId}  sectionId={null} />
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React, { useState } from 'react';
-import { putSection } from '../services/section';
+import { postSection, putSection } from '../services/section';
 
 const useSection = (idRestaurant: string, idMenu:string, idSection:string) => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
@@ -18,11 +18,23 @@ const useSection = (idRestaurant: string, idMenu:string, idSection:string) => {
     }
   }
 
+  const createSection = async (values:any) => {
+    const token = await getAccessTokenSilently();
+    try {
+      const response = await postSection(token, idRestaurant, idMenu, values);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating section:', error);
+      throw error;
+    }
+  }
+
   return {
       loading: false,
       error: null,
       section: null,
-      updateSection
+      updateSection,
+      createSection
   };
 }
 
