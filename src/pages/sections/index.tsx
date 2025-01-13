@@ -21,7 +21,7 @@ const Sections = () => {
   const [sectionToEdit, setSectionToEdit] = useState();
 
   const edit = (sectionToEdit:any) => {
-    setSectionToEdit(sectionToEdit);SectionModal
+    setSectionToEdit(sectionToEdit);
     openModal()
   }
 

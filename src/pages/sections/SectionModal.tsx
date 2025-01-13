@@ -26,6 +26,7 @@ const SectionModal = ({close,closeAndRefresh, isOpen, restaurantId, menuId, sect
     }else{
       createSection(values)
     }
+    closeAndRefresh()
   };
 
   useEffect(() => {
