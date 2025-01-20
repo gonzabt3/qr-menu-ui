@@ -4,9 +4,13 @@ import { CardBody, Flex, Spacer, Box, List, ListItem, Stack, Heading, Text, Card
 import Product from './Product';
 import { debug } from 'console';
 import useProducts from '../../hooks/useProducts';
+import { useRouter } from 'next/router';
 
 
 const Products = ({menu,sections, onRefreshMenu}:any) => {
+  const router = useRouter();
+  const { id } = router.query;
+  const { menuId } = router.query;
   const [isOpen, setIsOpen] = useState(false);
   const [productForEdit, setProductForEdit] = useState<any>(null);
   const {
@@ -79,6 +83,8 @@ const Products = ({menu,sections, onRefreshMenu}:any) => {
         closeAndRefresh={closeAndRefresh}  
         menu={menu}
         sections={sections}
+        restaurantId={id}
+        menuId={menuId}
         />
       </Card>
     </>

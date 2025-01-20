@@ -13,16 +13,18 @@ import QRCode from "react-qr-code";
 import * as htmlToImage from "html-to-image";
 import BaseCompents from "../../../../components/BaseCompents";
 import  useMenu from "../../../../../hooks/useMenu" ;
+import useSections from "../../../../../hooks/useSections";
 
 export default function Page() {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query ;
   const { menuId } = router.query;
 
   const ref : any= useRef(null);
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
   const {menu, getMenu, updateMenu} = useMenu(id, menuId);
+  const {sections} = useSections(id, menuId);
 
   useEffect(() => {
     if (ref.current) {
@@ -116,7 +118,7 @@ export default function Page() {
                   <Sections />
                 </GridItem>
                 <GridItem colSpan={4}  >
-                  {false && <Products sections={[]} onRefreshMenu={refreshMenu} menu={menu} />}
+                  <Products sections={sections} onRefreshMenu={refreshMenu} menu={menu} />
                 </GridItem>
               </Grid>
             </Card>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const useSections = (idRestaurant: string, idMenu:string) => {
+const useSections = (idRestaurant: string | string[]  | undefined , idMenu : string | string[]  | undefined) => {
     const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
     const [sections, setSections] = useState([]);
     const [error, setError] = useState(null);

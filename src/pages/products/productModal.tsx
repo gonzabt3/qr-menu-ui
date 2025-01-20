@@ -15,15 +15,16 @@ import {
   Select
 } from '@chakra-ui/react';
 import useProducts from '../../hooks/useProducts';
+import useProduct from '../../hooks/useProduct';
 
-const ProductModal = ({ product,sections, menu, closeAndRefresh, isOpen, close } : any) => {
+const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, closeAndRefresh, isOpen, close } : any) => {
 const [initialValues, setInitialValues] = useState<any>(null)
 const [isLoading, setIsLoading] = useState(true)
 const {
   loading,
   error,
-  postProduct,
-} = useProducts();
+  createSection,
+} = useProduct(restaurantId, menuId, section?.id, product?.id);
   
   const handleSubmit = async (values: any) => {
     if (values.id) {
@@ -33,27 +34,19 @@ const {
     } 
   } 
   const updateRecord = async (values:any) => {
-    const {product, errors} = await updateProduct(client, values)
+    /*const {product, errors} = await updateProduct(client, values)
     
     if(!errors){
       console.log('Document written with ID: ', product?.id);
        closeAndRefresh();
      }else{
        console.log(errors)
-     }
+     }*/
   }
 
   const createRecord = async (values:any) => {
-    const newValues = {
-      name: values.name,
-      description: values.description,
-      price: values.price,
-      sectionId: values.section,
-    }
-    const succesOnPostProuduct = await postProduct(newValues, values.image)
-    if (succesOnPostProuduct) {
-      closeAndRefresh();
-    }
+    createSection(values)
+    //closeAndRefresh();
   }
 
   const populateFields = async () => {
@@ -94,6 +87,7 @@ const {
   };
 
   useEffect(() => {
+    console.log(sections)
     if (menu != null && sections.length > 0) {
       setIsLoading(false)  
     }
