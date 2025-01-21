@@ -1,9 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
+import { get } from 'http';
 import React, { use, useEffect, useState } from 'react';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const useProducts = () => {
+const useProducts = (idRestaurant: string | string[]  | undefined , idMenu : string | string[]  | undefined) => {
   const [products, setProducts] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
@@ -12,10 +13,9 @@ const useProducts = () => {
   const getProducts = async () => {
     setLoading(true);
     const token = await getAccessTokenSilently();
-    const restaurantId :string = "1";
-    const sectionId :string = "1";
+
     try {
-      const response = await axios.get(`${API_BASE_URL}restaurants/${restaurantId}/sections/${sectionId}/products`,{
+      const response = await axios.get(`${API_BASE_URL}restaurants/${idRestaurant}/menus/${idMenu}/products`,{
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -35,7 +35,8 @@ const useProducts = () => {
   return {
     products,
     loading,
-    error
+    error,
+    getProducts
   };
 }
 export default useProducts;

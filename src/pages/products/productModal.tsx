@@ -45,8 +45,9 @@ const {
   }
 
   const createRecord = async (values:any) => {
-    createSection(values)
-    //closeAndRefresh();
+    if(await createSection(values)){
+      closeAndRefresh();
+    }
   }
 
   const populateFields = async () => {

@@ -17,7 +17,8 @@ const Products = ({menu,sections, onRefreshMenu}:any) => {
     products,
     loading,
     error,
-  } = useProducts();
+    getProducts
+  } = useProducts(id, menuId);
   const changeIsOpenModal = () => {
     setProductForEdit(null)
     setIsOpen(!isOpen);
@@ -47,6 +48,7 @@ const Products = ({menu,sections, onRefreshMenu}:any) => {
 
 
   const closeAndRefresh = () => {
+    getProducts()
     closeModal()
   }
 

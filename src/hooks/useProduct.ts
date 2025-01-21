@@ -20,7 +20,7 @@ const useProduct = (idRestaurant: string, idMenu:string, idSection:string, idPro
         const idSection = values.section
         try {
           const response = await postProduct(token, idRestaurant, idMenu, idSection, newValues);
-          return response.data;
+          return true;
         } catch (error) {
           console.error('Error creating section:', error);
           throw error;
