@@ -29,8 +29,8 @@ const Products = ({menu,sections, onRefreshMenu}:any) => {
     onRefreshMenu()
   }
   const handleRemoveProduct = async (productParam : any) => {
-    const succesOnDeleteProduct = removeProduct(productParam);
-    if(succesOnDeleteProduct){
+    await removeProduct(productParam);
+    if (!error) {
       closeAndRefresh();
     }
   }

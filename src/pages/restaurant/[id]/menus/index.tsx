@@ -14,10 +14,11 @@ import Head from "next/head";
 import { useRouter } from 'next/router';
 import BaseCompents from "../../../components/BaseCompents";
 import useMenus from "./useMenus";
+import { returnOnlyString } from "../../../../common/utils";
 
 export default function Page() {
   const router = useRouter();
-  const { id } = router.query;
+  const id  = returnOnlyString(router.query.id);
   const refScreen : any = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [restaurant, setRestaurant] = useState<any>(null);

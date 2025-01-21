@@ -38,13 +38,13 @@ const useProducts = (idRestaurant: string | string[]  | undefined , idMenu : str
       }
     })
     .then((response) => {
-      const newProducts = products.filter((restaurant:any) => restaurant.id != id);
+      const newProducts = products.filter((restaurant:any) => restaurant.id != idProduct);
       setProducts(newProducts);
       return true;
     })
     .catch((error) => {
       console.error("Hubo un error al hacer la solicitud:", error);
-      return false;
+      throw error;
     });
   }
 

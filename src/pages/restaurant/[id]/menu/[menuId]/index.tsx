@@ -14,11 +14,14 @@ import * as htmlToImage from "html-to-image";
 import BaseCompents from "../../../../components/BaseCompents";
 import  useMenu from "../../../../../hooks/useMenu" ;
 import useSections from "../../../../../hooks/useSections";
+import { returnOnlyString } from "../../../../../common/utils";
+
+
 
 export default function Page() {
   const router = useRouter();
-  const { id } = router.query ;
-  const { menuId } = router.query;
+  const id  = returnOnlyString(router.query.id);
+  const menuId  = returnOnlyString(router.query.menuId);
 
   const ref : any= useRef(null);
   const qrCodeRef :any= useRef(null);
@@ -58,7 +61,7 @@ export default function Page() {
   }
 
   useEffect(() => {
-    if (menu?.id) {
+    if (menu) {
       createMenuUrl().then((url) => {
         if (url) {
           setMenuUrl(url);
