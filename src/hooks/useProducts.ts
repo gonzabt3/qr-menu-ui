@@ -28,6 +28,27 @@ const useProducts = (idRestaurant: string | string[]  | undefined , idMenu : str
     }
   };
 
+  const removeProduct = async (product:any) => {
+    const idProduct = product.id;
+    const idSection = product.section_id;
+    const token = await getAccessTokenSilently();
+    axios.delete(`${API_BASE_URL}restaurants/${idRestaurant}/menus/${idMenu}/sections/${idSection}/products/${idProduct}`,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then((response) => {
+      const newProducts = products.filter((restaurant:any) => restaurant.id != id);
+      setProducts(newProducts);
+      return true;
+    })
+    .catch((error) => {
+      console.error("Hubo un error al hacer la solicitud:", error);
+      return false;
+    });
+  }
+
+
   useEffect(() => {
     getProducts();
   }, []);
@@ -36,7 +57,8 @@ const useProducts = (idRestaurant: string | string[]  | undefined , idMenu : str
     products,
     loading,
     error,
-    getProducts
+    getProducts,
+    removeProduct
   };
 }
 export default useProducts;

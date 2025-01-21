@@ -17,7 +17,8 @@ const Products = ({menu,sections, onRefreshMenu}:any) => {
     products,
     loading,
     error,
-    getProducts
+    getProducts,
+    removeProduct
   } = useProducts(id, menuId);
   const changeIsOpenModal = () => {
     setProductForEdit(null)
@@ -27,8 +28,8 @@ const Products = ({menu,sections, onRefreshMenu}:any) => {
   const handleRefreshProducts = () => {
     onRefreshMenu()
   }
-  const removeProduct = async (productParam : any) => {
-    const succesOnDeleteProduct = false;
+  const handleRemoveProduct = async (productParam : any) => {
+    const succesOnDeleteProduct = removeProduct(productParam);
     if(succesOnDeleteProduct){
       closeAndRefresh();
     }
@@ -71,7 +72,7 @@ const Products = ({menu,sections, onRefreshMenu}:any) => {
         <List display="flex" flexDirection={'column'}>
           {products.map((product:any) => (
           <ListItem  margin={2} display="flex" width={'100%'} justifyContent={'center'} key={product.id}>
-            <Product width={['90%','90%','70%','70%']}  onEdit={editProduct} onDelete={removeProduct} product={product}/> 
+            <Product width={['90%','90%','70%','70%']}  onEdit={editProduct} onDelete={handleRemoveProduct} product={product}/> 
           </ListItem>
           ))} 
         </List> :
