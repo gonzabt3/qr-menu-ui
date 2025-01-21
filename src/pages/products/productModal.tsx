@@ -23,7 +23,9 @@ const [isLoading, setIsLoading] = useState(true)
 const {
   loading,
   error,
-  createSection,
+  createProduct,
+  updateProduct
+
 } = useProduct(restaurantId, menuId, section?.id, product?.id);
   
   const handleSubmit = async (values: any) => {
@@ -34,6 +36,9 @@ const {
     } 
   } 
   const updateRecord = async (values:any) => {
+    if(await updateProduct(values)){
+      closeAndRefresh();
+    }
     /*const {product, errors} = await updateProduct(client, values)
     
     if(!errors){
@@ -45,19 +50,19 @@ const {
   }
 
   const createRecord = async (values:any) => {
-    if(await createSection(values)){
+    if(await createProduct(values)){
       closeAndRefresh();
     }
   }
 
   const populateFields = async () => {
-    const section= await product.section()
+    console.log(product)
     setInitialValues({
       id: product.id,
       name: product.name,
       description: product.description,
       price: product.price,
-      section: section.data.id,
+      section: product.section_id,
       image: product.image ? product.image : null
     })
   }
