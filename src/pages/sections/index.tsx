@@ -12,20 +12,16 @@ interface Section {
 
 
 
-const Sections = () => {
+const Sections = ({sections, handleRemoveSection, getSections}:any) => {
   const router = useRouter();
   const { id } = router.query;
   const { menuId } = router.query;
-  const {sections, getSections} = useSections(id, menuId)
   const [isOpen, setIsOpen] = useState(false)
   const [sectionToEdit, setSectionToEdit] = useState();
 
   const edit = (sectionToEdit:any) => {
     setSectionToEdit(sectionToEdit);
     openModal()
-  }
-
-  const deleteSection = async (id:any) => {
   }
 
   const openModal = () => {
@@ -36,8 +32,8 @@ const Sections = () => {
     setIsOpen(false)
   }
   const closeAndRefresh = () => {
-    closeModal()
     getSections()
+    closeModal()
   }
 
   return(
@@ -54,7 +50,7 @@ const Sections = () => {
           <List  display="flex" flexDirection={'column'}>
             {sections.map((section:any) => (
             <ListItem margin={2} display="flex" width={'100%'} justifyContent={'center'} key={section.id}>
-              <Section width={['90%','90%','70%','70%']}  onEdit={edit} onDelete={deleteSection} section={section}/> 
+              <Section width={['90%','90%','70%','70%']}  onEdit={edit} onDelete={handleRemoveSection} section={section}/> 
             </ListItem>
             ))} 
           </List>

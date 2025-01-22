@@ -15,6 +15,8 @@ import BaseCompents from "../../../../components/BaseCompents";
 import  useMenu from "../../../../../hooks/useMenu" ;
 import useSections from "../../../../../hooks/useSections";
 import { returnOnlyString } from "../../../../../common/utils";
+import useProducts from "../../../../../hooks/useProducts";
+import { get } from "http";
 
 
 
@@ -27,17 +29,21 @@ export default function Page() {
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
   const {menu, getMenu, updateMenu} = useMenu(id, menuId);
-  const {sections} = useSections(id, menuId);
+  const {
+    products,
+    loadingProducts,
+    errorProducts,
+    getProducts,
+    removeProduct
+  } = useProducts(id, menuId);
+  const {errorSections, sections, loadingSections, getSections, removeSection} = useSections(id, menuId)
+
 
   useEffect(() => {
     if (ref.current) {
       ref.current.style.maxHeight = `${window.innerHeight}px`;
     }
   }, []);
-
-  const refreshMenu = () => {
-    getMenu();
-  }
 
   const createMenuUrl = async () => {
     return '';
@@ -57,7 +63,21 @@ export default function Page() {
         console.error("Error generating QR code:", error);
       });
     }
+  }
 
+  const handleRemoveProduct = async (productParam : any) => {
+    await removeProduct(productParam);
+    if (!errorProducts) {
+      getProducts();
+    }
+  }
+
+  const handleRemoveSection = async (sectionParam:any) => {
+    await removeSection(sectionParam);
+    if (!errorSections) {
+      getSections();
+      getProducts();
+    }
   }
 
   useEffect(() => {
@@ -118,10 +138,10 @@ export default function Page() {
                   </CardBody>
                 </GridItem>
                 <GridItem colSpan={3} >
-                  <Sections />
+                  <Sections sections={sections} handleRemoveSection={handleRemoveSection} getSections={getSections}/>
                 </GridItem>
                 <GridItem colSpan={4}  >
-                  <Products sections={sections} onRefreshMenu={refreshMenu} menu={menu} />
+                  <Products products={products} sections={sections} menu={menu} handleRemoveProduct={handleRemoveProduct} getProducts={getProducts}/>
                 </GridItem>
               </Grid>
             </Card>

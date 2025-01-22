@@ -6,8 +6,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const useProducts = (idRestaurant: string | string[]  | undefined , idMenu : string | string[]  | undefined) => {
   const [products, setProducts] = useState<any>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+  const [loadingProducts, setLoading] = useState(false);
+  const [errorProducts, setError] = useState<any>(null);
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
 
   const getProducts = async () => {
@@ -55,8 +55,8 @@ const useProducts = (idRestaurant: string | string[]  | undefined , idMenu : str
 
   return {
     products,
-    loading,
-    error,
+    loadingProducts,
+    errorProducts,
     getProducts,
     removeProduct
   };

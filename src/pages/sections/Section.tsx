@@ -7,7 +7,7 @@ const Section = ({section, onEdit, onDelete}:any) => {
   }
 
   const handleDelete = () => {
-    onDelete(section.id)
+    onDelete(section)
   }
 
   return(

@@ -7,34 +7,18 @@ import useProducts from '../../hooks/useProducts';
 import { useRouter } from 'next/router';
 
 
-const Products = ({menu,sections, onRefreshMenu}:any) => {
+const Products = ({menu, products, sections, handleRemoveProduct, getProducts}:any) => {
   const router = useRouter();
   const { id } = router.query;
   const { menuId } = router.query;
   const [isOpen, setIsOpen] = useState(false);
   const [productForEdit, setProductForEdit] = useState<any>(null);
-  const {
-    products,
-    loading,
-    error,
-    getProducts,
-    removeProduct
-  } = useProducts(id, menuId);
+
   const changeIsOpenModal = () => {
     setProductForEdit(null)
     setIsOpen(!isOpen);
   }
   
-  const handleRefreshProducts = () => {
-    onRefreshMenu()
-  }
-  const handleRemoveProduct = async (productParam : any) => {
-    await removeProduct(productParam);
-    if (!error) {
-      closeAndRefresh();
-    }
-  }
-
   const editProduct = (product:any) => {
     setProductForEdit(product)
     setIsOpen(true)
