@@ -12,16 +12,17 @@ import {
   FormControl,
   Input,
   Stack,
-  Select
+  Select,
+  Spinner
 } from '@chakra-ui/react';
 import useProducts from '../../hooks/useProducts';
 import useProduct from '../../hooks/useProduct';
 
 const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, closeAndRefresh, isOpen, close } : any) => {
 const [initialValues, setInitialValues] = useState<any>(null)
-const [isLoading, setIsLoading] = useState(true)
+const [isLoadingSections, setIsLoadingSections] = useState(true)
 const {
-  loading,
+  isLoadingProduct,
   error,
   createProduct,
   updateProduct
@@ -96,7 +97,7 @@ const {
   useEffect(() => {
     console.log(sections)
     if (menu != null && sections.length > 0) {
-      setIsLoading(false)  
+      setIsLoadingSections(false)  
     }
   }, [menu, sections])
   return (
@@ -104,7 +105,7 @@ const {
       <Modal isOpen={isOpen} onClose={handleOnClose} >
         <ModalOverlay />
         <ModalContent>
-        {loading ? (        
+        {isLoadingSections ? (        
           <div>Loading...</div>
         ) : (
           <Formik
@@ -164,7 +165,7 @@ const {
           </ModalBody>
           <ModalFooter>
             <Button  colorScheme='orange' mr={3} type="submit">
-              Guardar
+              {isLoadingProduct ? <Spinner /> : 'Guardar'}
             </Button>
             <Button onClick={handleOnClose} variant='ghost'>Cancelar</Button>
           </ModalFooter>

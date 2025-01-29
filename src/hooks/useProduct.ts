@@ -5,10 +5,11 @@ import { postProduct, putProduct } from "../services/product";
 const useProduct = (idRestaurant: string, idMenu:string, idSection:string, idProduct:string) => {
     const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
     const [product, setProduct] = useState<any | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [isLoadingProduct, setIsLoadingProduct] = useState(false);
     const [error, setError] = useState<any>(null);
 
     const createProduct = async (values:any) => {
+      setIsLoadingProduct(true);
       const token = await getAccessTokenSilently();
       console.log(values)
       const newValues = {
@@ -24,10 +25,13 @@ const useProduct = (idRestaurant: string, idMenu:string, idSection:string, idPro
       } catch (error) {
         console.error('Error creating section:', error);
         throw error;
+      }finally{
+        setIsLoadingProduct(false);
       }
     }
 
     const updateProduct = async (values:any) => {
+      setIsLoadingProduct(true);
       const token = await getAccessTokenSilently();
       const productId = idProduct
       console.log(values)
@@ -44,12 +48,14 @@ const useProduct = (idRestaurant: string, idMenu:string, idSection:string, idPro
       } catch (error) {
         console.error('Error creating section:', error);
         throw error;
+      }finally{
+        setIsLoadingProduct(false);
       }
     }
 
     return {
         product,
-        loading,
+        isLoadingProduct,
         error,
         createProduct,
         updateProduct
