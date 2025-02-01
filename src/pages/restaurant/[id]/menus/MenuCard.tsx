@@ -1,7 +1,26 @@
 import React from 'react';
-import { Box, Card, CardBody, Stack, Heading, Text, CardFooter, ButtonGroup, Button, CloseButton, Flex, Spacer } from '@chakra-ui/react';
+import { Box, Card, CardBody, Stack, Heading, Text, CardFooter, ButtonGroup, Button, CloseButton, Flex, Spacer, IconButton, createIcon } from '@chakra-ui/react';
 import { useParams, useRouter } from "next/navigation";
-const MenuCard = ({menu, deleteMenu}:any) => {
+import { StarIcon } from '@chakra-ui/icons';
+import { favoriteMenu } from '../../../../services/menu';
+import { useAuth0 } from '@auth0/auth0-react';
+
+const StarOutlineIcon = createIcon({
+  displayName: 'StarOutlineIcon',
+  viewBox: '0 0 24 24',
+  path: (
+    <path
+      fill="currentColor"
+      d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+    />
+  ),
+});
+
+const MenuCard = ({menu, deleteMenu, refreshMenus}:any) => {
+  const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
   const router = useRouter();
   const id : any = useParams()?.id;
 
@@ -13,16 +32,21 @@ const MenuCard = ({menu, deleteMenu}:any) => {
     deleteMenu(menu?.id);
   }
 
+  const handleFavoriteMenu = async () => {
+    const token = await getAccessTokenSilently();
+    favoriteMenu(token, id,menu?.id);
+    refreshMenus()
+  }
+
+  const handleUnfavoriteMenu = () => {
+    console.log("Desfavorito");
+  }
+
   return (
     <>
       <Box bg='' >
           <Card maxW='xs' margin={3}>
             <CardBody>
-              {/* <Image
-                src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                alt='Green double couch with wooden legs'
-                borderRadius='lg'
-              /> */}
               <Stack spacing='1'>
               <Flex direction={'row'}>
                 <Heading size='sm'>{menu?.name}</Heading>
@@ -38,9 +62,26 @@ const MenuCard = ({menu, deleteMenu}:any) => {
               <ButtonGroup spacing='2'>
                 <Button 
                   onClick={handleMenu}
-                  variant='ghost' colorScheme='orange'>
+                  variant="outline"
+                  colorScheme='orange'>
                   Editar
                 </Button>
+                { menu.favorite ?
+                  <IconButton
+                  aria-label="Favorite"
+                  icon={<StarIcon />}
+                  variant="outline"
+                  colorScheme="yellow"
+                />             
+                : 
+                  <IconButton
+                  aria-label="Unfavorite"
+                  icon={<StarOutlineIcon />}
+                  variant="outline"
+                  colorScheme="yellow"
+                  onClick={handleFavoriteMenu}
+                  />
+                }
               </ButtonGroup>
             </CardFooter>
           </Card>

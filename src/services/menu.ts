@@ -36,3 +36,20 @@ export const putMenu = async (token : string, restaurantId:string,menuId:string,
     throw error;
   }
 }
+
+export const favoriteMenu = async (token : string, restaurantId:string,menuId:string) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/restaurants/${restaurantId}/menus/${menuId}/set_favorite`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('Favorito', response.data);
+  } catch (error) {
+    console.error('Error setting favorite menu:', error);
+  }
+};

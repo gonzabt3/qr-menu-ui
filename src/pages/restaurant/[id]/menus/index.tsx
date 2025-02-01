@@ -61,7 +61,7 @@ export default function Page() {
         {menus.length != 0 ?
           <SimpleGrid columns={[1, 3, 4]} scrollBehavior={'auto'} maxHeight={['100%','100%','100%','100%']}   overflowY="scroll">
              {menus.map((menu:any) => (
-              <MenuCard menu={menu} key={menu.id} deleteMenu={handleDeleteMenu}/>
+              <MenuCard menu={menu} key={menu.id} deleteMenu={handleDeleteMenu} refreshMenus={getMenusByRestaurant}/>
             ))} 
           </SimpleGrid>
           : <Heading >No hay menus</Heading>}
