@@ -43,12 +43,12 @@ const Product = ({product} : any) => {
           </CardFooter>
         </Stack>
         <Spacer/>
-        { urlImagePath ? <>
+        { product.image_url ? <>
         <Image
           objectFit='cover'
           width={{ base: '30%', sm: '200px' }}
           height={{ base: '30%', sm: '200px' }}
-          src={urlImagePath}
+          src={product.image_url}
           alt={product.name}
         />
         </>:null}        
