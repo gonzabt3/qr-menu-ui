@@ -39,7 +39,7 @@ const useProduct = (idRestaurant: string, idMenu:string, idSection:string, idPro
           name: values.name,
           description: values.description,
           price: values.price,
-          //image: values.image,
+          image: values.image,
       }
       const idSection = values.section
       try {

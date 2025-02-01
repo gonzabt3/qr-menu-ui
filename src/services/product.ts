@@ -30,7 +30,15 @@ export const postProduct = async (token : string, restaurantId:string, menuId:st
 
 export const putProduct = async (token:string,  restaurantId:string, menuId:string,sectionId:string,productId:string,values: any) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}restaurants/${restaurantId}/menus/`+menuId+'/sections/'+sectionId+'/products/'+productId,values,{
+    const formData = new FormData();
+    formData.append('name', values.name);
+    formData.append('price', values.price);
+    formData.append('description', values.description);
+
+    if (values.image) {
+      formData.append('image',values.image);
+    }
+    const response = await axios.put(`${API_BASE_URL}restaurants/${restaurantId}/menus/`+menuId+'/sections/'+sectionId+'/products/'+productId,formData,{
       headers: {
         Authorization: `Bearer ${token}`
       }

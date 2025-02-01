@@ -13,14 +13,19 @@ import {
   Input,
   Stack,
   Select,
-  Spinner
+  Spinner,
+  IconButton,
+  Flex,
+  Box
 } from '@chakra-ui/react';
 import useProducts from '../../hooks/useProducts';
 import useProduct from '../../hooks/useProduct';
+import { CloseIcon, DeleteIcon } from '@chakra-ui/icons';
 
 const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, closeAndRefresh, isOpen, close } : any) => {
 const [initialValues, setInitialValues] = useState<any>(null)
 const [isLoadingSections, setIsLoadingSections] = useState(true)
+const [showImage, setShowImage] = useState(false)
 const {
   isLoadingProduct,
   error,
@@ -39,6 +44,7 @@ const {
   } 
   const updateRecord = async (values:any) => {
     if(await updateProduct(values)){
+      console.log("values", values)
       closeAndRefresh();
     }
     /*const {product, errors} = await updateProduct(client, values)
@@ -65,8 +71,11 @@ const {
       description: product.description,
       price: product.price,
       section: product.section_id,
-      image: product.image ? product.image : null
+      image: product.image_url? product.image_url : null
     })
+    if(product.image_url){
+      setShowImage(true)
+    }
   }
 
   useEffect(()=>{
@@ -93,6 +102,11 @@ const {
   const handleImageChange = (e:any, setFieldValue:any) => {
     setFieldValue('image', e.currentTarget.files[0]);
   };
+
+  const handleDeleteImage = (e:any, setFieldValue:any) => {
+    setFieldValue('image', null);
+    setShowImage(false)
+  }
 
   useEffect(() => {
     console.log(sections)
@@ -153,14 +167,39 @@ const {
                   </FormControl>
                   )}
                 </Field>
-                <Field name="image">
-                  {({field}:any) => (
-                    <FormControl>
-                      {product?.image && <img src={product.image} alt="Uploaded" style={{ maxWidth: '100px' }} />}
-                      <Input type="file"  onChange={(e) => handleImageChange(e, setFieldValue)} />
-                    </FormControl>
-                  )}
-                </Field>
+                <FormControl>
+      <Field name="image">
+        {({ field }: any) => (
+          <FormControl>
+            {showImage ? (
+              <Box position="relative" display="inline-block">
+                <img src={product.image_url} alt="Uploaded" style={{ maxWidth: '100px' }} />
+                <IconButton
+                  aria-label="Delete image"
+                  icon={<CloseIcon />}
+                  size="xs"
+                  margin={1}
+                  position="absolute"
+                  top="0"
+                  right="0"
+                  onClick={(e) => handleDeleteImage(e, setFieldValue)}
+                  borderRadius="full" // Esto redondea completamente el botón
+
+                />
+              </Box>
+            ):
+            <>
+              <label>No hay imagenes</label>
+              <Flex alignItems="center">
+                <Input type="file" onChange={(e) => handleImageChange(e, setFieldValue)} />
+              </Flex>
+            </>
+            }
+
+          </FormControl>
+        )}
+      </Field>
+    </FormControl>
                 </Stack>
           </ModalBody>
           <ModalFooter>
