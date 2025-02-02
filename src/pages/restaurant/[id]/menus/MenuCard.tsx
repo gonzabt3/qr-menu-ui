@@ -10,7 +10,6 @@ const StarOutlineIcon = createIcon({
   viewBox: '0 0 24 24',
   path: (
     <path
-      fill="currentColor"
       d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"
       stroke="currentColor"
       strokeWidth="2"
