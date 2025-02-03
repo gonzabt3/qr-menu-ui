@@ -28,7 +28,6 @@ export default function App({ Component, pageProps }:AppProps) {
             redirect_uri: redirectUri,
           }}
           onRedirectCallback={(appState) => {
-            console.log("asd",appState?.returnTo)
             window.history.replaceState(
               {},
               document.title,

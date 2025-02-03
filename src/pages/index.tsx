@@ -22,27 +22,6 @@ export default function Home() {
     });
   }
 
-
-  const asd = () => {
-    axios.get(apiUrl+'ping')
-    .then((res) => {
-      // Guardar la respuesta en el estado
-      console.log(res.data.message);
-    })
-    .catch((error) => {
-      console.error("Hubo un error al hacer la solicitud:", error);
-    });
-  }
-  /*
-      <div>
-      Hello World.{" "}
-      <Link href="/about">
-        About
-      </Link>
-      <button onClick={ping}>ping asd</button>
-      <button onClick={() => loginWithRedirect()}>Login</button>
-    </div>
-  */
   return (
 
     <Flex gap={5} height={"100%"}  flexDirection={'column'} justify="center" align={'center' }>
@@ -66,7 +45,6 @@ export default function Home() {
             Editar mi menu
           </Button>
         </a>
-        <Button onClick={asd}>asd</Button>
       </Flex>
       </Flex>
   );

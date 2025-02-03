@@ -1,14 +1,21 @@
 'use client'
 import React, { useEffect } from 'react';
 import { Box, Button, Flex, Heading, Icon, IconButton, Spacer } from '@chakra-ui/react';
-import { FaUserCircle } from "react-icons/fa";
+import { FaUser, FaUserCircle } from "react-icons/fa";
 import { useRouter } from 'next/navigation'
+import { useAuth0 } from '@auth0/auth0-react';
 
-const Navbar = ({user, signOut}:any) => {
+const Navbar = () => {
+  const { isAuthenticated, loginWithRedirect, user,logout } = useAuth0();
   const router = useRouter();
 
   const goToProfilePage = () => {
     router.push('/profile')
+  }
+
+  const signOut = () => {
+    logout();
+
   }
 
   return (
@@ -32,8 +39,10 @@ const Navbar = ({user, signOut}:any) => {
           :
           <>
             <IconButton
-              colorScheme='orange' variant='outline'
+              colorScheme='orange' 
+              variant='outline'
               aria-label="Profile"
+              icon={<FaUser />}
               onClick={goToProfilePage}
             />         
             <Button  onClick={signOut} colorScheme='orange' variant='outline'>Salir</Button>

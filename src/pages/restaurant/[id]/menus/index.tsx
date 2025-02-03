@@ -1,16 +1,12 @@
 // app/page.tsx
 'use client'
 import { useRef, useEffect, useState,  useContext } from "react";
-import Navbar from '../../../components/navbar';
 import MenuCard from './MenuCard';
-import { Link } from '@chakra-ui/next-js'
-import {Grid, GridItem, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react'
-import { Flex, Spacer, Box, Divider, Image, Heading, ButtonGroup, Button, Stack, SimpleGrid } from '@chakra-ui/react'
-import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
-import { StarIcon } from '@chakra-ui/icons';
+import {GridItem } from '@chakra-ui/react'
+import { Heading, Button, SimpleGrid } from '@chakra-ui/react'
+import { Card } from '@chakra-ui/react'
 import BreadcrumComponent from "../../../components/breadcrum";
 import MenuModal from "./MenuModal";
-import Head from "next/head";
 import { useRouter } from 'next/router';
 import BaseCompents from "../../../components/BaseCompents";
 import useMenus from "./useMenus";

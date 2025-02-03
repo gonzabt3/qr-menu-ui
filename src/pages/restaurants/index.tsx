@@ -1,18 +1,13 @@
 // app/page.tsx
 'use client'
-import { useRef, useEffect, useState,  useContext } from "react";
-import Navbar from '../components/navbar';
+import { useRef, useEffect, useState } from "react";
 import RestaurantCard from './restaurantCard';
-import { Link } from '@chakra-ui/next-js'
-import {Grid, GridItem, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react'
-import { Flex, Spacer, Box, Divider, Image, Heading, ButtonGroup, Button, Stack, SimpleGrid } from '@chakra-ui/react'
-import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react'
-import { StarIcon } from '@chakra-ui/icons';
+import {GridItem, Text } from '@chakra-ui/react'
+import {  Button, SimpleGrid } from '@chakra-ui/react'
+import { Card } from '@chakra-ui/react'
 import RestaurantModal from "./restaurantModal";
-import { validateLocaleAndSetLanguage } from "typescript";
 import BaseCompents from "../components/BaseCompents";
 import BreadcrumComponent from "../components/breadcrum";
-import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import useRestaurants from "./useRestaurant";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
