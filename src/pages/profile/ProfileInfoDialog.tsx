@@ -5,7 +5,7 @@ import Head from "next/head";
 import { useState } from "react";
 
 interface ProfileInfoDialogProps {
-  open : boolean;
+  isFirsLogin : boolean;
   user: any;
 }
 
@@ -23,7 +23,7 @@ const createUser = async (userData: { name: string; email: string; password: str
 };
 
 // Función para actualizar un usuario
-const updateUser = async (userId: string,token:string, userData: { name: string; apellido: string; telefono: string; fechaNacimiento: string }) => {
+const updateUser = async (userId: string,token:string, userData: { name: string; surname: string; phone: string; birthday: string }) => {
 
   try {
     const response = await axios.put(`${apiUrl}users/${userId}`, userData, {
@@ -39,29 +39,13 @@ const updateUser = async (userId: string,token:string, userData: { name: string;
   }
 };
 
-const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [fechaNacimiento, setFechaNacimiento] = useState("");
+const ProfileInfoDialog = ({isFirsLogin, user}:ProfileInfoDialogProps) => {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [birthday, setBirthday] = useState("");
   const {getAccessTokenSilently} = useAuth0();
-  
-  const handleSave = async () => {
-    const userData = {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      password: 'securepassword',
-    };
-  
-    try {
-      const newUser = await createUser(userData);
-      // Maneja la respuesta exitosa, por ejemplo, actualizando el estado o redirigiendo al usuario
-      console.log('New user:', newUser);
-    } catch (error) {
-      // Maneja el error, por ejemplo, mostrando un mensaje de error al usuario
-      console.error('Failed to create user:', error);
-    }
-  };
   
 
   const handleUpdate = async () => {
@@ -70,10 +54,10 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
     const userId = user.sub.split('|')[1]; 
     
     const userData = {
-      name: nombre,
-      apellido: apellido,
-      telefono: telefono,
-      fechaNacimiento: fechaNacimiento
+      name: name,
+      surname: surname,
+      phone: phone,
+      birthday: birthday
     };
 
     try {
@@ -85,6 +69,9 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
   };
 
   return(
+    <>
+    <Button onClick={() => setOpen(true)}>Editar Datos</Button>
+
 <Modal isOpen={open} onClose={() => console.log("close")}>
 <ModalOverlay />
   <ModalContent>
@@ -98,8 +85,8 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
           <Input
             id="nombre"
             placeholder="Ingresa tu nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div style={{ marginBottom: "1rem" }}>
@@ -107,8 +94,8 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
           <Input
             id="apellido"
             placeholder="Ingresa tu apellido"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
           />
         </div>
         <div style={{ marginBottom: "1rem" }}>
@@ -116,8 +103,8 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
           <Input
             id="telefono"
             placeholder="Ingresa tu teléfono"
-            value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
         </div>
         <div style={{ marginBottom: "1rem" }}>
@@ -125,19 +112,19 @@ const ProfileInfoDialog = ({open, user}:ProfileInfoDialogProps) => {
           <Input
             id="fechaNacimiento"
             type="date"
-            value={fechaNacimiento}
-            onChange={(e) => setFechaNacimiento(e.target.value)}
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
           />
         </div>
       </form>
     </ModalBody>
     <ModalFooter>
-        <Button variant="outline">Cancelar</Button>
+        <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
       <Button onClick={handleUpdate}>Guardar</Button>
     </ModalFooter>
   </ModalContent>
 </Modal>
-
+</>
   )
 }
 

@@ -6,6 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import {
   Button,
+  Grid,
   GridItem,
   Heading,
  useDisclosure,
@@ -78,19 +79,22 @@ const Profile = () => {
   return (
     <div ref={refScreen}>
       <BaseCompents>
-        <GridItem area={'nav'}  rowSpan={7} colSpan={5}>
-          <Card margin={5} height={'100%'}>
-            { !false ? <> 
-            <Heading size={'md'}>Email: </Heading>
-            <Heading size={'md'}>Estado de pago: asd</Heading>
-            {
-              shouldPay ? <ButtonWithMercadoPagoDialog /> : null
-            }
-            </> : "loading..."}
-          </Card>
+        <GridItem area={'nav'} rowSpan={7} colSpan={5}>
+          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+        <Card margin={5} height={'100%'} padding={5}>
+          <Heading size={'md'} mb={4}>Editar Perfil</Heading>
+          <Heading size={'sm'}>Email: {user?.email}</Heading>
+          <ProfileInfoDialog user={user} isFirstLogin={isFirstLogin}/>
+
+        </Card>
+        <Card margin={5} height={'100%'} padding={5}>
+          <Heading size={'md'} mb={4}>Subscripción</Heading>
+          <Heading size={'sm'}>Estado de pago: asd</Heading>
+          {shouldPay ? <ButtonWithMercadoPagoDialog /> : null}
+        </Card>
+          </Grid>
         </GridItem>
       </BaseCompents>
-      <ProfileInfoDialog user={user} open={isFirstLogin}/>
     </div>
   )
 }
