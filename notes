@@ -1,3 +1,59 @@
-loading icon at upload
-delete
-modify
+crear el plan
+
+https://github.com/mercadopago/sdk-react
+
+hay qye guardar el flag subscriptionPayed en true
+hay que linkear agregar si pago
+
+buscar resturant x user id buscar todos menus x restaurantId agregar el flag a todos los menus
+
+La solucion definitiva es esta:
+
+Esto es lo que deben hacer (es muy 🥴):
+
+En tu cuenta personal de MP creas una Integracion y dentro de esa integracion se crean 2 users de prueba. Ir a mercadopago.cl o .ar (depende de tu pais) y se inicia sesion con cada uno de los users de prueba (distintos navegadores) Crear un plan en el user de prueba 1. En el user de prueba 1 se crea otra integracion y se usan las credenciales de PRODUCCION. Ir al mercado pago de user de prueba 2 y copiar su email. Usar ese email para suscribirse al plan del user 1. La api te retornará un json con una URL de checkout. Ir a esa url con el user de prueba 2 confirmar suscripcion
+
+datos de pruba-test vendedor test_user_386200@testuser.com REM9H2RGjI
+
+comprador test_user_977925870@testuser.com
+
+tarjeta 5031 7557 3453 0604 123456789 123 11/25 apro
+
+funca, hay que agregar el response en cloud functions
+
+
+
+app mercadopago
+https://www.mercadopago.com.ar/developers/panel/app
+
+las request hacia el plan de subscripcion deben estar hechas con 
+el access token de la cuenta del vendedor
+y mercado pago bricks debe tener tambien la clave correspondiente
+
+
+objecto que genera el modal de mercadopago
+{
+  "token": "d35147d88c4bf13fe4915dedf4734aea",
+  "issuer_id": "3",
+  "payment_method_id": "master",
+  "transaction_amount": 100,
+  "installments": 1,
+  "payer": {
+    "email": "test_user_977925870@testuser.com",
+    "identification": {
+      "type": "DNI",
+      "number": "12345678"
+    }
+  }
+}
+
+
+--
+        auto_recurring: {
+          frequency: 1,
+          frequency_type: 'months',
+          transaction_amount: 60,
+          currency_id: 'ARS',
+          start_date: Time.now.iso8601,
+          end_date: (Time.now + 1.year).iso8601
+        }
