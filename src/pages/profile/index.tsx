@@ -6,6 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
 import {
   Button,
+  Flex,
   Grid,
   GridItem,
   Heading,
@@ -14,6 +15,7 @@ import {
 import ProfileInfoDialog from "./ProfileInfoDialog";
 import axios from "axios";
 import { Card } from "@chakra-ui/icons";
+import SubscriptionStatus from "./SubscriptionStatus";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
@@ -22,7 +24,7 @@ const Profile = () => {
   const router = useRouter();
   const { isOpen, onOpen, onClose } :any = useDisclosure(); // Controla el estado del modal
   const [inputValue, setInputValue] :any= useState(""); // Estado para el valor del input
-  const [isFirstLogin, setIsFirstLogin] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -49,7 +51,7 @@ const Profile = () => {
         }
       })
       .then((res) => {
-        setIsFirstLogin(res.data.first_login);
+        setUserInfo(res.data);
         // Guardar la respuesta en el estado
         console.log(res.data.message);
       })
@@ -61,7 +63,7 @@ const Profile = () => {
     checkFirstLogin();
   }, []); 
 
-  if (isLoading) {
+  if (isLoading && userInfo === null) {
     return <div>Loading...</div>;
   }
 
@@ -84,13 +86,16 @@ const Profile = () => {
         <Card margin={5} height={'100%'} padding={5}>
           <Heading size={'md'} mb={4}>Editar Perfil</Heading>
           <Heading size={'sm'}>Email: {user?.email}</Heading>
-          <ProfileInfoDialog user={user} isFirstLogin={isFirstLogin}/>
+          <ProfileInfoDialog user={user} isFirstLogin={userInfo?.isFirstLogin}/>
 
         </Card>
         <Card margin={5} height={'100%'} padding={5}>
           <Heading size={'md'} mb={4}>Subscripción</Heading>
-          <Heading size={'sm'}>Estado de pago: asd</Heading>
-          {shouldPay ? <ButtonWithMercadoPagoDialog /> : null}
+          <Flex alignItems="center">
+            <Heading size="sm">Estado de pago:</Heading>
+            <SubscriptionStatus isSubscribed={userInfo?.subscribed} />
+          </Flex>
+          {userInfo?.subscribed ? null : <ButtonWithMercadoPagoDialog />}
         </Card>
           </Grid>
         </GridItem>
