@@ -24,7 +24,7 @@ const Profile = () => {
   const router = useRouter();
   const { isOpen, onOpen, onClose } :any = useDisclosure(); // Controla el estado del modal
   const [inputValue, setInputValue] :any= useState(""); // Estado para el valor del input
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState<any>(null);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -86,7 +86,7 @@ const Profile = () => {
         <Card margin={5} height={'100%'} padding={5}>
           <Heading size={'md'} mb={4}>Editar Perfil</Heading>
           <Heading size={'sm'}>Email: {user?.email}</Heading>
-          <ProfileInfoDialog user={user} isFirstLogin={userInfo?.isFirstLogin}/>
+          <ProfileInfoDialog user={user}/>
 
         </Card>
         <Card margin={5} height={'100%'} padding={5}>

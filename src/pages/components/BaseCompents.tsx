@@ -4,7 +4,7 @@ import Navbar from './navbar';
 const BaseCompents = ({children} :any) => {
   return (
     <>
-      <Navbar user={null} signOut={() => console.log("singout")}/>
+      <Navbar />
       {children}
     </>
   )

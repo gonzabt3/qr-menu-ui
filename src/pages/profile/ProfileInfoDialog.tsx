@@ -5,7 +5,6 @@ import Head from "next/head";
 import { useState } from "react";
 
 interface ProfileInfoDialogProps {
-  isFirsLogin : boolean;
   user: any;
 }
 
@@ -39,7 +38,7 @@ const updateUser = async (userId: string,token:string, userData: { name: string;
   }
 };
 
-const ProfileInfoDialog = ({isFirsLogin, user}:ProfileInfoDialogProps) => {
+const ProfileInfoDialog = ({user}:ProfileInfoDialogProps) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
