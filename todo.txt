@@ -1,0 +1,7 @@
+todo.txt
+
+agregar restaurant button en el profile button
+agregar el welcome message y llevar el ususario al trial
+colision restaurant name
+comprar domain
+blocker los botones de submit
