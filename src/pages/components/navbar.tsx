@@ -1,16 +1,22 @@
 'use client'
 import React, { useEffect } from 'react';
 import { Box, Button, Flex, Heading, Icon, IconButton, Spacer } from '@chakra-ui/react';
-import { FaUser, FaUserCircle } from "react-icons/fa";
+import { FaStore, FaUser, FaUserCircle } from "react-icons/fa";
 import { useRouter } from 'next/navigation'
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, user,logout } = useAuth0();
   const router = useRouter();
+  const currentUrl = typeof window !== 'undefined' ? window.location.pathname : '';
+  const currentPage = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
 
   const goToProfilePage = () => {
     router.push('/profile')
+  }
+
+  const goToRestaurantsPage = () => {
+    router.push('/restaurants')
   }
 
   const signOut = () => {
@@ -38,6 +44,18 @@ const Navbar = () => {
             </>
           :
           <>
+          {
+            currentPage === 'profile' &&
+            <IconButton
+              colorScheme='orange' 
+              variant='outline'
+              aria-label="Restuarants"
+              icon={<FaStore />}
+              onClick={goToRestaurantsPage}
+            />         
+            }
+            {
+            currentPage === 'restaurants' &&
             <IconButton
               colorScheme='orange' 
               variant='outline'
@@ -45,6 +63,7 @@ const Navbar = () => {
               icon={<FaUser />}
               onClick={goToProfilePage}
             />         
+            }
             <Button  onClick={signOut} colorScheme='orange' variant='outline'>Salir</Button>
           </>
         }          
