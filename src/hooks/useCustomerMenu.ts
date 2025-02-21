@@ -3,34 +3,53 @@ import { useEffect, useState } from "react";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const replaceSpaces = (string: string) => string.replace(/%20/g, ' ');
 
-const useCustomerMenu = (restaurantNameQuery:string) =>  {
+export enum CustomerMenuQueryType {
+  NAME = 'name',
+  QR = 'qr'
+}  
+
+const useCustomerMenu = (value: string, type: CustomerMenuQueryType) =>  {
   const [customerMenu, setCustomerMenu] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
 
   useEffect(() => {
-    const getCustomerMenu = async (queryRestaurantName:string) => {
-      console.log(queryRestaurantName)
+    const getCustomerMenu = async (value:string, type: CustomerMenuQueryType) => {
       try {
-        const response = await axios.get(API_BASE_URL + 'menus/by_name/'+queryRestaurantName, {
-          headers: {
-            Accept:"application/json"
-          }
-        });
-        const newCustomerMenu = response.data
-        console.log(newCustomerMenu)
-        setCustomerMenu(newCustomerMenu);
-        setLoading(false);
+        if(type === CustomerMenuQueryType.QR){
+          const response = await axios.get(API_BASE_URL + 'menus/by_restaurant_id/'+value, {
+            headers: {
+              Accept:"application/json"
+            }
+          });
+          const newCustomerMenu = response.data
+          console.log(newCustomerMenu)
+          setCustomerMenu(newCustomerMenu);
+          setLoading(false);
+          return;
+        }
+        if(type === CustomerMenuQueryType.NAME){
+          const queryRestaurantName = replaceSpaces(value);
+          const response = await axios.get(API_BASE_URL + 'menus/by_name/'+queryRestaurantName, {
+            headers: {
+              Accept:"application/json"
+            }
+          });
+          const newCustomerMenu = response.data
+          console.log(newCustomerMenu)
+          setCustomerMenu(newCustomerMenu);
+          setLoading(false);
+        }
+        
       } catch (error) {
         console.error('Error getting menu:', error);
       }
     }
     
-    if (restaurantNameQuery) {
-      const queryRestaurantName = replaceSpaces(restaurantNameQuery);
-      getCustomerMenu(queryRestaurantName);
+    if (value && type) {
+      getCustomerMenu(value, type);
     }
-  }, [restaurantNameQuery]); 
+  }, [value, type]); 
 
   return {
     customerMenu,

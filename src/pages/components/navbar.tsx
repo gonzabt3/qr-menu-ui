@@ -21,7 +21,6 @@ const Navbar = () => {
 
   const signOut = () => {
     logout();
-
   }
 
   return (

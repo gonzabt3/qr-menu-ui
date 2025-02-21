@@ -2,6 +2,7 @@
 import React,{useRef, useEffect} from 'react';
 import { Card, Flex, GridItem, Heading, Text } from '@chakra-ui/react'
 import Section from './section';
+
 const CustomerMenu = ({menu, showErrorNotFound, loading}:any) => {
   const refScreen : any = useRef(null);
 
