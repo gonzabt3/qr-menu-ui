@@ -16,9 +16,11 @@ import  useMenu from "../../../../../hooks/useMenu" ;
 import useSections from "../../../../../hooks/useSections";
 import { returnOnlyString } from "../../../../../common/utils";
 import useProducts from "../../../../../hooks/useProducts";
-import { get } from "http";
+const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
-
+const createMenuUrl = async (menu:any) => {
+  return `${FRONTEND_URL}/qr/${menu.restaurant_id}`;
+}
 
 export default function Page() {
   const router = useRouter();
@@ -44,10 +46,6 @@ export default function Page() {
       ref.current.style.maxHeight = `${window.innerHeight}px`;
     }
   }, []);
-
-  const createMenuUrl = async () => {
-    return '';
-  }
 
   const downloadQr = () => {
     if (qrCodeRef.current) {
@@ -82,7 +80,7 @@ export default function Page() {
 
   useEffect(() => {
     if (menu) {
-      createMenuUrl().then((url) => {
+      createMenuUrl(menu).then((url) => {
         if (url) {
           setMenuUrl(url);
         }
