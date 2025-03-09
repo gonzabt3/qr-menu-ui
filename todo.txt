@@ -1,3 +1,2 @@
 todo.txt
 comprar domain
-blocker los botones de submit
