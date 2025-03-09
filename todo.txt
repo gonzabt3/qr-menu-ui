@@ -1,8 +1,5 @@
 todo.txt
-
-QR
 agregar el welcome message y llevar el ususario al trial
     idea: apenas entras al sistema que te explique y que te lleve a pagar el trial version
-colision restaurant name
 comprar domain
 blocker los botones de submit

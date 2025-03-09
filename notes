@@ -57,12 +57,3 @@ objecto que genera el modal de mercadopago
           start_date: Time.now.iso8601,
           end_date: (Time.now + 1.year).iso8601
         }
-
-
-todo:
-  sinatra
-    validar webhook ok https://www.mercadopago.com.ar/developers/es/docs/your-integrations/notifications/webhooks
-
-    mandar al back
-    consultar a mercadopago
-    actualizar la data

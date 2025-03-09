@@ -1,4 +1,4 @@
-import { Button, Modal, ModalContent, ModalOverlay} from "@chakra-ui/react"
+import { Box, Button, Center, Modal, ModalContent, ModalOverlay, Text } from "@chakra-ui/react"
 import { initMercadoPago, CardPayment } from "@mercadopago/sdk-react"
 import { useState } from "react"
 import { putSubscription } from "../../services/user"
@@ -35,7 +35,17 @@ const ButtonWithMercadoPagoDialog = () => {
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} >
         <ModalOverlay />
         <ModalContent>
-          {success ? <p>Subscription successful</p> :
+          {success ? 
+            <Center h="200px">
+                <Box textAlign="center">
+                  <Text fontSize="2xl" fontWeight="bold" color="orange.500">
+                    Subscription exitosa!
+                  </Text>
+                  <Text mt={4} color="gray.600">
+                    Gracias por subscribirse!
+                  </Text>
+                </Box>
+              </Center>:
           <CardPayment
             initialization={{ amount: 100 }}
             onSubmit={pay}
