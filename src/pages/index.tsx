@@ -7,21 +7,6 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
 
 export default function Home() {
-
-  const ping = async () => {
-
-    console.log(apiUrl+'ping')
-  // Realizar la solicitud GET al endpoint de Rails
-    axios.get(apiUrl+'ping')
-    .then((res) => {
-      // Guardar la respuesta en el estado
-      console.log(res.data.message);
-    })
-    .catch((error) => {
-      console.error("Hubo un error al hacer la solicitud:", error);
-    });
-  }
-
   return (
 
     <Flex gap={5} height={"100%"}  flexDirection={'column'} justify="center" align={'center' }>
