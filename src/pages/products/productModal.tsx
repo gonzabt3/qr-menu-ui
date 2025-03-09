@@ -203,7 +203,7 @@ const {
                 </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button  colorScheme='orange' mr={3} type="submit">
+            <Button  colorScheme='orange' mr={3} type="submit" disabled={isSubmitting}>
               {isLoadingProduct ? <Spinner /> : 'Guardar'}
             </Button>
             <Button onClick={handleOnClose} variant='ghost'>Cancelar</Button>

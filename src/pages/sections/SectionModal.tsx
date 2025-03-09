@@ -59,6 +59,8 @@ const SectionModal = ({close,closeAndRefresh, isOpen, restaurantId, menuId, sect
           onSubmit={handleSubmit}
           enableReinitialize
         >
+                                      {({ isSubmitting, setFieldValue }) => (
+
           <Form>
           <ModalHeader>Nueva Seccion</ModalHeader>
           <ModalCloseButton onClick={() => handleOnClose} />
@@ -81,12 +83,13 @@ const SectionModal = ({close,closeAndRefresh, isOpen, restaurantId, menuId, sect
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button  colorScheme='orange' mr={3} type="submit">
+            <Button  colorScheme='orange' mr={3} type="submit" disabled={isSubmitting}>
               Guardar
             </Button>
             <Button variant='ghost' onClick={close}>Cancelar</Button>
           </ModalFooter>
           </Form>
+        )}
           </Formik>
         </ModalContent>
       </Modal>

@@ -79,6 +79,8 @@ const RestaurantModal = ({isOpen, close, restaurant, refreshList}:any) => {
               onSubmit={handleSubmit}
               enableReinitialize
             >
+                            {({ isSubmitting, setFieldValue }) => (
+
               <Form>
           <ModalHeader>Nuevo Restaurant</ModalHeader>
           <ModalCloseButton onClick={() => handleOnClose} />
@@ -131,12 +133,13 @@ const RestaurantModal = ({isOpen, close, restaurant, refreshList}:any) => {
            
           </ModalBody>
           <ModalFooter>
-            <Button  colorScheme='orange' mr={3} type="submit">
+            <Button  colorScheme='orange' mr={3} type="submit" isDisabled={isSubmitting}>
               Guardar
             </Button>
             <Button variant='ghost'>Cancelar</Button>
           </ModalFooter>
-          </Form>
+          </Form> 
+            )}
             </Formik>
         </ModalContent>
       </Modal>

@@ -50,6 +50,7 @@ const MenuModal = ({isOpen, close, closeAndRefresh, restaurantId, restaurant}:an
               }}
               onSubmit={handleSubmit}
             >
+              {({ isSubmitting, setFieldValue }) => (
           <Form>
           <ModalHeader>Nuevo Menu</ModalHeader>
           <ModalCloseButton onClick={() => handleOnClose} />
@@ -80,12 +81,13 @@ const MenuModal = ({isOpen, close, closeAndRefresh, restaurantId, restaurant}:an
                 </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button  colorScheme='orange' mr={3} type="submit">
+            <Button  colorScheme='orange' mr={3} type="submit" disabled={isSubmitting}>
               Guardar
             </Button>
             <Button variant='ghost'>Cancelar</Button>
           </ModalFooter>
           </Form>
+           )}
             </Formik>
         </ModalContent>
       </Modal>
