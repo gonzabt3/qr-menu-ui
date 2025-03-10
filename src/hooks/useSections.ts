@@ -14,6 +14,9 @@ const useSections = (idRestaurant: string | string[]  | undefined , idMenu : str
       try {
         const response = await axios.get(API_BASE_URL + 'restaurants/'+idRestaurant+'/menus/' + idMenu+'/sections', {
           headers: {
+            CacheControl: 'no-cache',
+            Pragma: 'no-cache',
+            Expires: '0',
             Authorization: `Bearer ${token}`,
             Accept:"application/json"
           }

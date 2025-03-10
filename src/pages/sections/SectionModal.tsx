@@ -22,9 +22,9 @@ const SectionModal = ({close,closeAndRefresh, isOpen, restaurantId, menuId, sect
   const handleSubmit = async (values :any ) => {
 
     if(values.id){
-      updateSection(values)
+      await updateSection(values)
     }else{
-      createSection(values)
+      await createSection(values)
     }
     closeAndRefresh()
   };

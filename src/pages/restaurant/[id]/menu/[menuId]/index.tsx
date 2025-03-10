@@ -136,7 +136,7 @@ export default function Page() {
                   </CardBody>
                 </GridItem>
                 <GridItem colSpan={3} >
-                  <Sections sections={sections} handleRemoveSection={handleRemoveSection} getSections={getSections}/>
+                  <Sections sections={sections} handleRemoveSection={handleRemoveSection} getSections={() => getSections()}/>
                 </GridItem>
                 <GridItem colSpan={4}  >
                   <Products products={products} sections={sections} menu={menu} handleRemoveProduct={handleRemoveProduct} getProducts={getProducts}/>
