@@ -1,10 +1,8 @@
-// app/page.tsx
 'use client'
-import { useRef, useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useRef, useEffect, useState } from "react";
 import BreadcrumComponent from '../../../../components/breadcrum';
 import FormMenu from '../formMenu';
-import {Center, CloseButton, Grid, GridItem, IconButton, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react'
-import { Flex, Spacer, Box, Divider, Image, Heading, ButtonGroup, Button, Stack, SimpleGrid, FormControl, FormLabel, FormHelperText, Textarea } from '@chakra-ui/react' 
+import {Center, Grid, GridItem, Text, Flex, Button, Heading } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 import Sections from "../../../../sections";
@@ -12,7 +10,7 @@ import Products from "../../../../products";
 import QRCode from "react-qr-code";
 import * as htmlToImage from "html-to-image";
 import BaseCompents from "../../../../components/BaseCompents";
-import  useMenu from "../../../../../hooks/useMenu" ;
+import useMenu from "../../../../../hooks/useMenu";
 import useSections from "../../../../../hooks/useSections";
 import { returnOnlyString } from "../../../../../common/utils";
 import useProducts from "../../../../../hooks/useProducts";
@@ -39,7 +37,6 @@ export default function Page() {
     removeProduct
   } = useProducts(id, menuId);
   const {errorSections, sections, loadingSections, getSections, removeSection} = useSections(id, menuId)
-
 
   useEffect(() => {
     if (ref.current) {
@@ -88,6 +85,12 @@ export default function Page() {
     }
   },[menu])
   
+  const handlePreviewClick = () => {
+    if (menuUrl) {
+      window.open(menuUrl, '_blank');
+    }
+  }
+
   return (
     <div ref={ref} >
       <BaseCompents>
@@ -95,9 +98,12 @@ export default function Page() {
         {menu ? (
           <>
             <BreadcrumComponent />
-            <Heading marginLeft={6}>
-              {menu?.name} 
-            </Heading>
+            <Flex justifyContent="space-between" alignItems="center" marginLeft={6} marginRight={6}>
+              <Heading>
+                {menu?.name} 
+              </Heading>
+              {/* <Button colorScheme="orange" onClick={handlePreviewClick}>Previsualización</Button> */}
+            </Flex>
             <Card margin={5} height={'100%'}  overflowY="scroll">
               <Grid
                 h='100%'
