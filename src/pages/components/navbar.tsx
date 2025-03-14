@@ -27,7 +27,7 @@ const Navbar = () => {
     <>
       <Flex alignItems='center' gap='1' margin={5}>
         <Box p='2'>
-          <Heading size='md'>GoMenu</Heading>
+          <Heading size='md'>Menu QR</Heading>
         </Box>
         <Spacer />
         { (!user) ?
