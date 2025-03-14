@@ -10,14 +10,14 @@ import {
   Grid,
   GridItem,
   Heading,
- useDisclosure,
+  Link,
+  useDisclosure,
 } from "@chakra-ui/react";
 import ProfileInfoDialog from "./ProfileInfoDialog";
 import axios from "axios";
 import { Card } from "@chakra-ui/icons";
 import SubscriptionStatus from "./SubscriptionStatus";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 
 const Profile = () => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
@@ -71,35 +71,36 @@ const Profile = () => {
     return null; // El usuario será redirigido al login automáticamente
   }
 
-
-
   const handleSave = () => {
     console.log("Valor ingresado:", inputValue);
     onClose(); // Cierra el diálogo
   };
 
   return (
-    <div ref={refScreen}>
-      <BaseCompents>
+    <div ref={refScreen} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <BaseCompents style={{ flex: 1 }}>
         <GridItem area={'nav'} rowSpan={7} colSpan={5}>
           <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-        <Card margin={5} height={'100%'} padding={5}>
-          <Heading size={'md'} mb={4}>Editar Perfil</Heading>
-          <Heading size={'sm'}>Email: {user?.email}</Heading>
-          <ProfileInfoDialog user={user}/>
-
-        </Card>
-        <Card margin={5} height={'100%'} padding={5}>
-          <Heading size={'md'} mb={4}>Subscripción</Heading>
-          <Flex alignItems="center">
-            <Heading size="sm">Estado de pago:</Heading>
-            <SubscriptionStatus isSubscribed={userInfo?.subscribed} />
-          </Flex>
-          {userInfo?.subscribed ? null : <ButtonWithMercadoPagoDialog />}
-        </Card>
+            <Card margin={5} height={'100%'} padding={5}>
+              <Heading size={'md'} mb={4}>Editar Perfil</Heading>
+              <Heading size={'sm'}>Email: {user?.email}</Heading>
+              <ProfileInfoDialog user={user}/>
+            </Card>
+            <Card margin={5} height={'100%'} padding={5}>
+              <Heading size={'md'} mb={4}>Subscripción</Heading>
+              <Flex alignItems="center">
+                <Heading size="sm">Estado de pago:</Heading>
+                <SubscriptionStatus isSubscribed={userInfo?.subscribed} />
+              </Flex>
+              {userInfo?.subscribed ? null : <ButtonWithMercadoPagoDialog />}
+            </Card>
           </Grid>
         </GridItem>
       </BaseCompents>
+      <Flex justifyContent="center" mt={10} style={{ marginTop: 'auto' }}>
+        <Link href="/terms" mx={2} color="gray.500">Términos de uso</Link>
+        <Link href="/contact" mx={2} color="gray.500">Contacto</Link>
+      </Flex>
     </div>
   )
 }
