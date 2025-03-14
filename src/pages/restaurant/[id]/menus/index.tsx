@@ -2,7 +2,7 @@
 'use client'
 import { useRef, useEffect, useState,  useContext } from "react";
 import MenuCard from './MenuCard';
-import {GridItem } from '@chakra-ui/react'
+import {Center, GridItem } from '@chakra-ui/react'
 import { Heading, Button, SimpleGrid } from '@chakra-ui/react'
 import { Card } from '@chakra-ui/react'
 import BreadcrumComponent from "../../../components/breadcrum";
@@ -60,7 +60,11 @@ export default function Page() {
               <MenuCard menu={menu} key={menu.id} deleteMenu={handleDeleteMenu} refreshMenus={getMenusByRestaurant}/>
             ))} 
           </SimpleGrid>
-          : <Heading >No hay menus</Heading>}
+          : 
+          <Center>
+            <Heading color="gray.600">No hay menús</Heading>
+          </Center>
+          }
         </Card>
       </GridItem>
       <MenuModal 

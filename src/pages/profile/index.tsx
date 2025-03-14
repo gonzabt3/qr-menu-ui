@@ -13,7 +13,8 @@ import {
   GridItem,
   Heading,
   Text,
- useDisclosure,
+  Link,
+  useDisclosure,
 } from "@chakra-ui/react";
 import ProfileInfoDialog from "./ProfileInfoDialog";
 import axios from "axios";
@@ -22,7 +23,6 @@ import SubscriptionStatus from "./SubscriptionStatus";
 import { unsubscribe } from "diagnostics_channel";
 import { postUnsubscribe } from "../../services/user";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
 
 const Profile = () => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
@@ -99,8 +99,8 @@ const Profile = () => {
   };
 
   return (
-    <div ref={refScreen}>
-      <BaseCompents>
+    <div ref={refScreen} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <BaseCompents style={{ flex: 1 }}>
         <GridItem area={'nav'} rowSpan={7} colSpan={5}>
           <Grid templateColumns="repeat(2, 1fr)" gap={6}>
         <Card margin={5} height={'100%'} padding={5}>
@@ -132,6 +132,10 @@ const Profile = () => {
           </Grid>
         </GridItem>
       </BaseCompents>
+      <Flex justifyContent="center" mt={10} style={{ marginTop: 'auto' }}>
+        <Link href="/terms" mx={2} color="gray.500">Términos de uso</Link>
+        <Link href="/contact" mx={2} color="gray.500">Contacto</Link>
+      </Flex>
     </div>
   )
 }
