@@ -1,2 +1,3 @@
 todo.txt
 comprar domain
+boton de cancelar sub

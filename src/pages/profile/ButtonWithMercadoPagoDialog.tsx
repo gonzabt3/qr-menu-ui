@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 
 initMercadoPago('APP_USR-5cadb7a0-b3cf-4da1-8490-d1a4ff48d49b')
 
-const ButtonWithMercadoPagoDialog = () => {
+const ButtonWithMercadoPagoDialog = ({updateUserInfo}:any) => {
   const [isOpen, setIsOpen] = useState(false)
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
   const [loading, setLoading] = useState(false);
@@ -26,13 +26,23 @@ const ButtonWithMercadoPagoDialog = () => {
         setError(error);
       } finally {
         setLoading(false);
-      }    }
+      }    
+    }
+  }
+
+  const handleClose = () => {
+    if(success){
+      updateUserInfo();
+      setIsOpen(false);
+    }else{
+      setIsOpen(false);
+    }
   }
 
   return(
     <>
-      <Button onClick={() => setIsOpen(true)}>Pagar</Button>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} >
+      <Button onClick={() => setIsOpen(true)}>Subscribirse</Button>
+      <Modal isOpen={isOpen} onClose={() => handleClose()} >
         <ModalOverlay />
         <ModalContent>
           {success ? 
