@@ -17,5 +17,11 @@ describe('template spec', () => {
       // Assert that the text "Suscribite por mes y manejalo vos mismo" is present
       cy.contains('Suscribite por mes y manejalo vos mismo').should('be.visible')
     })
+
+    it('displays the correct buttons', () => {
+      // Wait for the content to load
+      cy.contains('Crear menu').should('be.visible')
+      cy.contains('Editar mi menu').should('be.visible')
+    })
   }) 
 })
