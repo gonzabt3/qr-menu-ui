@@ -1,37 +1,52 @@
 /// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+import 'cypress-localstorage-commands';
+
+// Declaración de los comandos personalizados en el espacio de nombres de Cypress
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      loginToAuth0(): Chainable<void>;
+    }
+  }
+}
+
+// Comando personalizado para iniciar sesión en Auth0
+Cypress.Commands.add('loginToAuth0', () => {
+  const options = {
+    method: 'POST',
+    url: `https://${Cypress.env('auth0_domain')}/oauth/token`,
+    body: {
+      grant_type: 'password',
+      username: Cypress.env('auth0_username'),
+      password: Cypress.env('auth0_password'),
+      audience: Cypress.env('auth0_audience'),
+      scope: Cypress.env('auth0_scope'),
+      client_id: Cypress.env('auth0_client_id'),
+      client_secret: Cypress.env('auth0_client_secret')
+    }
+  };
+
+  cy.request(options).then(({ body }) => {
+    const { access_token, expires_in, id_token } = body;
+
+    const auth0State = {
+      nonce: '',
+      audience: Cypress.env('auth0_audience'),
+      client_id: Cypress.env('auth0_client_id'),
+      scope: Cypress.env('auth0_scope'),
+      token_type: 'Bearer',
+      id_token,
+      access_token,
+      expires_in,
+      decodedToken: {
+        user: {
+          sub: 'auth0|1234567890',
+          email: Cypress.env('auth0_username')
+        }
+      }
+    };
+
+    cy.setLocalStorage('auth0Cypress', JSON.stringify(auth0State));
+    cy.saveLocalStorage();
+  });
+});
