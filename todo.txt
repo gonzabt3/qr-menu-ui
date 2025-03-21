@@ -1,5 +1,6 @@
 todo.txt
 mejorar landing page
+
 agregar logo del resto
 agregar ocultar en section y product
 precio para uno o para dos personas

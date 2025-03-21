@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect } from 'react';
-import { Box, Button, Flex, Heading, Icon, IconButton, Spacer } from '@chakra-ui/react';
+import MenuIcon from './menuqr.svg';
+import { Box, Button, Flex, Heading, Icon, IconButton, Spacer, Image } from '@chakra-ui/react';
 import { FaStore, FaUser, FaUserCircle } from "react-icons/fa";
 import { useRouter } from 'next/navigation'
 import { useAuth0 } from '@auth0/auth0-react';
@@ -25,21 +26,15 @@ const Navbar = () => {
 
   return (
     <>
-      <Flex alignItems='center' gap='1' margin={5}>
-        <Box p='2'>
-          <Heading size='md'>Menu QR</Heading>
+      <Flex alignItems='center' gap='1' margin={5} marginTop={2}>
+        <Box p='2' display="flex" alignItems="center">
+        <Image src={'/menuqr.svg'} boxSize={20} mr={4} alt="Menu QR Icon" />          <Heading size='md'>Menu QR</Heading>
         </Box>
         <Spacer />
         { (!user) ?
           <>
-            <a href={'/singup'}>
-              <Button  colorScheme='orange' variant='solid'>
-                Registrarse
-              </Button> 
-            </a>
-            <a href={'/signin'}>
-              <Button  colorScheme='orange' variant='outline'>Ingresar</Button>
-            </a>
+              <Button  colorScheme='orange' variant='outline'               onClick={goToProfilePage}
+              >Ingresar</Button>
             </>
           :
           <>
