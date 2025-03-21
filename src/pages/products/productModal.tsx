@@ -34,13 +34,15 @@ const {
 
 } = useProduct(restaurantId, menuId, section?.id, product?.id);
   
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: any,{ setSubmitting }:any) => {
     console.log(values)
     if (values.id) {
-      updateRecord(values)
+      await updateRecord(values);
     } else {
-      createRecord(values)
-    } 
+      await createRecord(values);
+    }
+    setSubmitting(false);
+    
   } 
   const updateRecord = async (values:any) => {
     if(await updateProduct(values)){

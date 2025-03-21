@@ -21,7 +21,7 @@ import { createMenu } from '../../../../services/menu';
 const MenuModal = ({isOpen, close, closeAndRefresh, restaurantId, restaurant}:any) => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
 
-  const handleSubmit = async (values :any ) => {
+  const handleSubmit = async (values: any,{ setSubmitting }:any) => {
     const token = await getAccessTokenSilently();
     try {
       const { id, ...restValues } = values; // Remove the id key from values
@@ -31,6 +31,7 @@ const MenuModal = ({isOpen, close, closeAndRefresh, restaurantId, restaurant}:an
     } catch (error) {
       console.error('Error submitting form:', error);
     }
+    setSubmitting(false);
   };
 
   const  handleOnClose = () => {
