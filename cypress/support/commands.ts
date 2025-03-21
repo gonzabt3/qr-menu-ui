@@ -14,15 +14,15 @@ declare global {
 Cypress.Commands.add('loginToAuth0', () => {
   const options = {
     method: 'POST',
-    url: `https://${Cypress.env('auth0_domain')}/oauth/token`,
+    url: `https://${Cypress.env('auth_url')}/oauth/token`,
     body: {
       grant_type: 'password',
-      username: Cypress.env('auth0_username'),
-      password: Cypress.env('auth0_password'),
-      audience: Cypress.env('auth0_audience'),
-      scope: Cypress.env('auth0_scope'),
-      client_id: Cypress.env('auth0_client_id'),
-      client_secret: Cypress.env('auth0_client_secret')
+      username: Cypress.env('auth_username'),
+      password: Cypress.env('auth_password'),
+      audience: Cypress.env('auth_audience'),
+      scope: Cypress.env('auth_scope'),
+      client_id: Cypress.env('auth_client_id'),
+      client_secret: Cypress.env('auth_client_secret')
     }
   };
 
