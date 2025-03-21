@@ -14,8 +14,9 @@ export const useMenus = (id: string) => {
     setLoading(true);
     const token = await getAccessTokenSilently();
     const restaurantId :string = id;
+    const cacheBuster = new Date().getTime(); // Genera un valor único basado en la hora actual
     try {
-      const response = await axios.get(`${API_BASE_URL}restaurants/${restaurantId}/menus`,{
+      const response = await axios.get(`${API_BASE_URL}restaurants/${restaurantId}/menus?cb=${cacheBuster}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

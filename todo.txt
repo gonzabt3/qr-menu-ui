@@ -1,3 +1,7 @@
 todo.txt
-comprar domain
-boton de cancelar sub
+
+agregar ocultar en section y product
+precio para uno o para dos personas
+para compartir flag?
+hacer pruebas
+agregar blacklist de nombres

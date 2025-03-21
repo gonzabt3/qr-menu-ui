@@ -21,7 +21,7 @@ const RestaurantModal = ({isOpen, close, restaurant, refreshList}:any) => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
 
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: any,{ setSubmitting }:any) => {
     const token = await getAccessTokenSilently();
 
     try {
@@ -37,6 +37,7 @@ const RestaurantModal = ({isOpen, close, restaurant, refreshList}:any) => {
     } catch (error) {
       console.error('Error submitting form:', error);
     }
+    setSubmitting(false);
   };
   
   useEffect(() => {

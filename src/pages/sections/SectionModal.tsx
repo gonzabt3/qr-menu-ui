@@ -19,7 +19,7 @@ const SectionModal = ({close,closeAndRefresh, isOpen, restaurantId, menuId, sect
   const [initialValues, setInitialValues] = useState<any>(null)
   const {loading, error, updateSection, createSection} = useSection(restaurantId, menuId, section?.id);  
 
-  const handleSubmit = async (values :any ) => {
+  const handleSubmit = async (values: any,{ setSubmitting }:any) => {
 
     if(values.id){
       await updateSection(values)
@@ -27,6 +27,7 @@ const SectionModal = ({close,closeAndRefresh, isOpen, restaurantId, menuId, sect
       await createSection(values)
     }
     closeAndRefresh()
+    setSubmitting(false);
   };
 
   useEffect(() => {

@@ -33,8 +33,9 @@ const MenuCard = ({menu, deleteMenu, refreshMenus}:any) => {
 
   const handleFavoriteMenu = async () => {
     const token = await getAccessTokenSilently();
-    favoriteMenu(token, id,menu?.id);
-    refreshMenus()
+    favoriteMenu(token, id,menu?.id).then(() => {
+      refreshMenus()
+    })
   }
 
   const handleUnfavoriteMenu = () => {
