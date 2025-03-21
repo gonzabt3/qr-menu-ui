@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import {
   Modal,
   ModalOverlay,
@@ -12,16 +12,21 @@ import {
   FormControl,
   Input,
   Stack,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { createRestaurant, updateRestaurant } from '../../services/restaurant';
 import { useAuth0 } from '@auth0/auth0-react';
+import * as Yup from 'yup';
 
-const RestaurantModal = ({isOpen, close, restaurant, refreshList}:any) => {
-  const [initialValues, setInitialValues] = useState<any>(null)
-  const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
+const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
+  const [initialValues, setInitialValues] = useState<any>(null);
+  const { getAccessTokenSilently } = useAuth0();
 
+  const validationSchema = Yup.object({
+    name: Yup.string().required('El nombre es obligatorio'),
+  });
 
-  const handleSubmit = async (values: any,{ setSubmitting }:any) => {
+  const handleSubmit = async (values: any, { setSubmitting }: any) => {
     const token = await getAccessTokenSilently();
 
     try {
@@ -39,109 +44,111 @@ const RestaurantModal = ({isOpen, close, restaurant, refreshList}:any) => {
     }
     setSubmitting(false);
   };
-  
+
   useEffect(() => {
-    if(restaurant==null){
-      setInitialValues({ 
-                id:null,
-                name: '',
-                description: '',
-                address: '',
-                phone: '',
-                instagram: '',
-                email: ''
-      })
-    }else{
+    if (restaurant == null) {
+      setInitialValues({
+        id: null,
+        name: '',
+        description: '',
+        address: '',
+        phone: '',
+        instagram: '',
+        email: ''
+      });
+    } else {
       setInitialValues({
         id: restaurant.id,
         name: restaurant.name,
         description: restaurant.description,
-        address:  restaurant.address,
+        address: restaurant.address,
         phone: restaurant.phone,
         instagram: restaurant.instagram,
         email: restaurant.email
-      })
+      });
     }
+  }, [restaurant]);
 
-
-  },[restaurant])
-
-  const  handleOnClose = () => {
+  const handleOnClose = () => {
     close();
-  }
+  };
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={handleOnClose} >
+      <Modal isOpen={isOpen} onClose={handleOnClose}>
         <ModalOverlay />
         <ModalContent>
-        <Formik
-              initialValues={initialValues}
-              onSubmit={handleSubmit}
-              enableReinitialize
-            >
-                            {({ isSubmitting, setFieldValue }) => (
-
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            enableReinitialize
+          >
+            {({ isSubmitting }) => (
               <Form>
-          <ModalHeader>Nuevo Restaurant</ModalHeader>
-          <ModalCloseButton onClick={() => handleOnClose} />
-          <ModalBody>
-           
-                <Stack spacing={4}>
-                  <Field name="name">
-                    {({ field }:any) => (
-                      <FormControl>
-                        <Input {...field} type="text" placeholder="Nombre" />
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name="description">
-                    {({ field }:any) => (
-                      <FormControl>
-                        <Input {...field} type="text" placeholder="Descripcion" />
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name="address">
-                    {({ field }:any) => (
-                      <FormControl>
-                        <Input {...field} type="text" placeholder="Direccion" />
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name="phone">
-                    {({ field }:any) => (
-                      <FormControl>
-                        <Input {...field} type="phone" placeholder="Telefono" />
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name="instagram">
-                    {({ field }:any) => (
-                      <FormControl>
-                        <Input {...field} type="text" placeholder="Instagram usuario" />
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name="email">
-                    {({ field }:any) => (
-                      <FormControl>
-                        <Input {...field} type="text" placeholder="Email" />
-                      </FormControl>
-                    )}
-                  </Field>
-                </Stack>
-           
-          </ModalBody>
-          <ModalFooter>
-            <Button  colorScheme='orange' mr={3} type="submit" isDisabled={isSubmitting}>
-              Guardar
-            </Button>
-            <Button variant='ghost'>Cancelar</Button>
-          </ModalFooter>
-          </Form> 
+                <ModalHeader>Nuevo Restaurant</ModalHeader>
+                <ModalCloseButton onClick={handleOnClose} />
+                <ModalBody>
+                  <Stack spacing={4}>
+                    <Field name="name">
+                      {({ field, form }: any) => (
+                        <FormControl isInvalid={form.errors.name && form.touched.name}>
+                          <Input {...field} type="text" placeholder="Nombre" />
+                          <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="description">
+                      {({ field, form }: any) => (
+                        <FormControl isInvalid={form.errors.description && form.touched.description}>
+                          <Input {...field} type="text" placeholder="Descripción" />
+                          <FormErrorMessage>{form.errors.description}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="address">
+                      {({ field, form }: any) => (
+                        <FormControl isInvalid={form.errors.address && form.touched.address}>
+                          <Input {...field} type="text" placeholder="Dirección" />
+                          <FormErrorMessage>{form.errors.address}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="phone">
+                      {({ field, form }: any) => (
+                        <FormControl isInvalid={form.errors.phone && form.touched.phone}>
+                          <Input {...field} type="text" placeholder="Teléfono" />
+                          <FormErrorMessage>{form.errors.phone}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="instagram">
+                      {({ field, form }: any) => (
+                        <FormControl isInvalid={form.errors.instagram && form.touched.instagram}>
+                          <Input {...field} type="text" placeholder="Instagram usuario" />
+                          <FormErrorMessage>{form.errors.instagram}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="email">
+                      {({ field, form }: any) => (
+                        <FormControl isInvalid={form.errors.email && form.touched.email}>
+                          <Input {...field} type="text" placeholder="Email" />
+                          <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                  </Stack>
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme='orange' mr={3} type="submit" isDisabled={isSubmitting}>
+                    {isSubmitting ? 'Guardando...' : 'Guardar'}
+                  </Button>
+                  <Button variant='ghost' onClick={handleOnClose}>Cancelar</Button>
+                </ModalFooter>
+              </Form>
             )}
-            </Formik>
+          </Formik>
         </ModalContent>
       </Modal>
     </>
