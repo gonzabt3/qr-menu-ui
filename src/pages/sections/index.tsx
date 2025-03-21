@@ -10,8 +10,6 @@ interface Section {
   readonly menuId: string;
 }
 
-
-
 const Sections = ({sections, handleRemoveSection, getSections}:any) => {
   const router = useRouter();
   const { id } = router.query;
@@ -55,7 +53,9 @@ const Sections = ({sections, handleRemoveSection, getSections}:any) => {
             ))} 
           </List>
           ) : (
-          <div> No hay secciones</div>
+          <Box display="flex" justifyContent="center" alignItems="center" height="100px">
+            <Text>No hay secciones</Text>
+          </Box>
           )
         }
       </Flex>
