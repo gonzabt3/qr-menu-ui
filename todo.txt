@@ -1,11 +1,8 @@
 todo.txt
-mejorar landing page
 
-agregar logo del resto
 agregar ocultar en section y product
 precio para uno o para dos personas
 para compartir flag?
 
 hacer pruebas
-hacer logo
 agregar blacklist de nombres
