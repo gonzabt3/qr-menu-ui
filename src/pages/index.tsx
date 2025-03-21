@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, ChakraProvider, Flex, Heading, Icon, Link, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardHeader, ChakraProvider, Flex, Heading, Icon, Link, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import Navbar from "./components/navbar";
 import { FaUtensils, FaConciergeBell, FaMoneyBillWave, FaChartLine, FaMobileAlt, FaUsers, FaQrcode, FaStore } from "react-icons/fa";
 
@@ -64,6 +64,25 @@ export default function Home() {
             <Text mt={4} fontSize='xl'>Asesoramiento telefónico permanente</Text>
           </Box>
         </SimpleGrid>
+      </Box>
+      <Box mt={10} width={"70%"}>
+        <Heading as='h2' size='xl' textAlign='center' mb={6}>
+          Precio
+        </Heading>
+        <Card>
+          <CardHeader>
+            <Heading size='md' textAlign='center'>Suscripción Mensual</Heading>
+          </CardHeader>
+          <CardBody textAlign='center'>
+            <Text fontSize='2xl' color='orange.500'>3000 pesos por mes</Text>
+            <Text fontSize='lg' color='gray.500'>¡Primer mes gratis!</Text>
+            <a href={'/restaurants'}>
+              <Button mt={4} size={'lg'} colorScheme='orange' variant='solid'>
+                Crear menú
+              </Button>
+            </a>
+          </CardBody>
+        </Card>
       </Box>
       </Flex>
       </>
