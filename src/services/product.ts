@@ -34,6 +34,7 @@ export const putProduct = async (token:string,  restaurantId:string, menuId:stri
     formData.append('name', values.name);
     formData.append('price', values.price);
     formData.append('description', values.description);
+    formData.append('section', sectionId);
 
     if (values.image) {
       formData.append('image',values.image);
