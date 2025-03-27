@@ -99,7 +99,7 @@ const Profile = () => {
       </BaseCompents>
       <Flex justifyContent="center" mt={10} style={{ marginTop: 'auto' }}>
         <Link href="/terms" mx={2} color="gray.500">Términos de uso</Link>
-        <Link href="/contact" mx={2} color="gray.500">Contacto</Link>
+        <Link href={`mailto: gonzalo.muscolo@gmail.com`} as="a" mx={2} color="gray.500">Contacto</Link>
       </Flex>
     </div>
   )
