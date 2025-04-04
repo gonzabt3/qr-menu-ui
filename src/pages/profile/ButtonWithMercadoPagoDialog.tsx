@@ -3,8 +3,8 @@ import { initMercadoPago, CardPayment } from "@mercadopago/sdk-react"
 import { useState } from "react"
 import { putSubscription } from "../../services/user"
 import { useAuth0 } from "@auth0/auth0-react"
-
-initMercadoPago('APP_USR-5cadb7a0-b3cf-4da1-8490-d1a4ff48d49b')
+const MERCADOPAGO_FRONTEND_KEY:string = process.env.NEXT_PUBLIC_MERCADOPAGO_FRONTEND_KEY || "";
+initMercadoPago(MERCADOPAGO_FRONTEND_KEY)
 
 const ButtonWithMercadoPagoDialog = ({refreshUserData}:any) => {
   const [isOpen, setIsOpen] = useState(false)
