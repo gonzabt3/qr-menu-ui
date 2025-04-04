@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 
 initMercadoPago('APP_USR-5cadb7a0-b3cf-4da1-8490-d1a4ff48d49b')
 
-const ButtonWithMercadoPagoDialog = ({refreshUserData}) => {
+const ButtonWithMercadoPagoDialog = ({refreshUserData}:any) => {
   const [isOpen, setIsOpen] = useState(false)
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
   const [loading, setLoading] = useState(false);
