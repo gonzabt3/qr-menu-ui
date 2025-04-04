@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 
 initMercadoPago('APP_USR-5cadb7a0-b3cf-4da1-8490-d1a4ff48d49b')
 
-const ButtonWithMercadoPagoDialog = () => {
+const ButtonWithMercadoPagoDialog = ({refreshUserData}) => {
   const [isOpen, setIsOpen] = useState(false)
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
   const [loading, setLoading] = useState(false);
@@ -32,23 +32,29 @@ const ButtonWithMercadoPagoDialog = () => {
   return(
     <>
       <Button onClick={() => setIsOpen(true)}>Pagar</Button>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} >
+      <Modal 
+        isOpen={isOpen} 
+        onClose={() => {
+          setIsOpen(false);
+          refreshUserData();
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
           {success ? 
-            <Center h="200px">
-                <Box textAlign="center">
-                  <Text fontSize="2xl" fontWeight="bold" color="orange.500">
-                    Subscription exitosa!
-                  </Text>
-                  <Text mt={4} color="gray.600">
-                    Gracias por subscribirse!
-                  </Text>
-                </Box>
-              </Center>:
+        <Center h="200px">
+            <Box textAlign="center">
+          <Text fontSize="2xl" fontWeight="bold" color="orange.500">
+            Subscription exitosa!
+          </Text>
+          <Text mt={4} color="gray.600">
+            Gracias por subscribirse!
+          </Text>
+            </Box>
+          </Center>:
           <CardPayment
-            initialization={{ amount: 100 }}
-            onSubmit={pay}
+        initialization={{ amount: 100 }}
+        onSubmit={pay}
           />
           }
         </ModalContent>

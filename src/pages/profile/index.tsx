@@ -38,30 +38,32 @@ const Profile = () => {
 
   const refScreen : any = useRef(null);
   const shouldPay = true;
+
+  const checkFirstLogin = async () => {
+    const token = await getAccessTokenSilently();
+    axios.get(apiUrl+'check_first_login',{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then((res) => {
+      setUserInfo(res.data);
+      // Guardar la respuesta en el estado
+      console.log(res.data.message);
+    })
+    .catch((error) => {
+      console.error("Hubo un error al hacer la solicitud:", error);
+    });
+  };
   useEffect(() => {
     if (refScreen.current) {
       refScreen.current.style.maxHeight = `${window.innerHeight}px`;
     }
 
-    const checkFirstLogin = async () => {
-      const token = await getAccessTokenSilently();
-      axios.get(apiUrl+'check_first_login',{
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then((res) => {
-        setUserInfo(res.data);
-        // Guardar la respuesta en el estado
-        console.log(res.data.message);
-      })
-      .catch((error) => {
-        console.error("Hubo un error al hacer la solicitud:", error);
-      });
-    };
+
 
     checkFirstLogin();
-  }, []); 
+  }, [checkFirstLogin]); 
 
   if (isLoading && userInfo === null) {
     return <div>Loading...</div>;
@@ -92,7 +94,7 @@ const Profile = () => {
                 <Heading size="sm">Estado de pago:</Heading>
                 <SubscriptionStatus isSubscribed={userInfo?.subscribed} />
               </Flex>
-              {userInfo?.subscribed ? null : <ButtonWithMercadoPagoDialog />}
+              {userInfo?.subscribed ? null : <ButtonWithMercadoPagoDialog refreshUserData={checkFirstLogin} />}
             </Card>
           </Grid>
         </GridItem>
