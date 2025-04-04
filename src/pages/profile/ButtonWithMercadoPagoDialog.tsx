@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react"
 const MERCADOPAGO_FRONTEND_KEY:string = process.env.NEXT_PUBLIC_MERCADOPAGO_FRONTEND_KEY || "";
 initMercadoPago(MERCADOPAGO_FRONTEND_KEY)
 
-const ButtonWithMercadoPagoDialog = ({refreshUserData}:any) => {
+const ButtonWithMercadoPagoDialog = ({updateUserInfo}:any) => {
   const [isOpen, setIsOpen] = useState(false)
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ const ButtonWithMercadoPagoDialog = ({refreshUserData}:any) => {
         isOpen={isOpen} 
         onClose={() => {
           setIsOpen(false);
-          refreshUserData();
+          updateUserInfo();
         }}
       >
         <ModalOverlay />

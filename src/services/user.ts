@@ -18,3 +18,21 @@ export const putSubscription = async (token : string,userEmail:string, values: a
       throw error;
     }
 }
+
+export const postUnsubscribe = async (token : string,userEmail:string) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}users/${userEmail}/unsubscribe`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error creating subscription:', error);
+    throw error;
+  }
+}
