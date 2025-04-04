@@ -1,14 +1,42 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import { AppProps } from "next/app";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import createCache from '@emotion/cache';
 import { ChakraProvider } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 const auth0Domain : any = process.env.NEXT_PUBLIC_AUTH_DOMAIN;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
 const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE;
 const redirectUri = process.env.NEXT_PUBLIC_AUTH0_CALLBACK_URL;
+
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      // Redirige al usuario a la página principal si no está autenticado
+      if (
+        router.pathname === "/restaurants" || 
+        router.pathname === "/restaurant" ||   
+        router.pathname.startsWith("/restaurant/")
+      ) {
+        router.push("/");
+      }
+      //loginWithRedirect({
+      //  appState: { returnTo: router.pathname },
+      //});
+    }
+  }, [isAuthenticated, isLoading, loginWithRedirect, router]);
+
+  if (isLoading) {
+    return <div>Cargando...</div>; // Muestra un indicador de carga mientras se verifica la autenticación
+  }
+
+  return <>{children}</>;
+}
 
 export default function App({ Component, pageProps }:AppProps) {
   const [isClient, setIsClient] = useState(false)
@@ -35,7 +63,9 @@ export default function App({ Component, pageProps }:AppProps) {
             );
           }}
         >
-          <Component {...pageProps} />
+          <AuthGuard>
+            <Component {...pageProps} />
+          </AuthGuard>
         </Auth0Provider>
       </ChakraProvider>
       : null
