@@ -5,3 +5,10 @@ precio para uno o para dos personas
 para compartir flag?
 hacer pruebas
 agregar blacklist de nombres
+
+
+end2end test
+crearon usuario?
+crear resto editarlo eliminarlo
+crear prod editarlo eliminarlo
+crear section editarlo eliminarlo

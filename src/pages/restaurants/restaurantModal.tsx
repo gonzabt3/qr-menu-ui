@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import {
   Modal,
   ModalOverlay,
@@ -13,6 +13,7 @@ import {
   Input,
   Stack,
   FormErrorMessage,
+  Box,
 } from '@chakra-ui/react';
 import { createRestaurant, updateRestaurant } from '../../services/restaurant';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -20,6 +21,8 @@ import * as Yup from 'yup';
 
 const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
   const [initialValues, setInitialValues] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
+
   const { getAccessTokenSilently } = useAuth0();
 
   const validationSchema = Yup.object({
@@ -27,6 +30,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
   });
 
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
+    setError(null);
     const token = await getAccessTokenSilently();
 
     try {
@@ -41,8 +45,11 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
       refreshList();
     } catch (error) {
       console.error('Error submitting form:', error);
-    }
-    setSubmitting(false);
+      if (error instanceof Error && (error as any).response?.data?.error === "Restaurant name must be unique") {
+        setError('El nombre del restaurante ya existe');
+      }
+      setSubmitting(false);
+  }
   };
 
   useEffect(() => {
@@ -139,6 +146,22 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                       )}
                     </Field>
                   </Stack>
+                  {error && (
+                  <Box
+                    mt={4}
+                    border="1px"
+                    borderColor="red.500"
+                    backgroundColor="red.50"
+                    color="red.500"
+                    borderRadius="md"
+                    p={3}
+                    mb={4}
+                    textAlign="center"
+                    width="100%"
+                  >
+                    {error}
+                  </Box>
+                )}
                 </ModalBody>
                 <ModalFooter>
                   <Button colorScheme='orange' mr={3} type="submit" isDisabled={isSubmitting}>
