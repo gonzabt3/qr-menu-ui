@@ -44,13 +44,15 @@ const Product = ({product} : any) => {
         </Stack>
         <Spacer/>
         { product.image_url ? <>
-        <Image
-          objectFit='cover'
-          width={{ base: '30%', sm: '200px' }}
-          height={{ base: '30%', sm: '200px' }}
-          src={product.image_url}
-          alt={product.name}
-        />
+          <Image
+    objectFit="contain" // Asegura que la imagen se ajuste dentro del contenedor sin recortarse
+    width={{ base: '100%', sm: '200px' }} // Ajusta el ancho para pantallas pequeñas
+    height={{ base: 'auto', sm: '200px' }} // Mantén la proporción de la imagen
+    maxWidth="200px" // Limita el ancho máximo
+    maxHeight="200px" // Limita la altura máxima
+    src={product.image_url}
+    alt={product.name}
+  />
         </>:null}        
       </Card>
       : null }
