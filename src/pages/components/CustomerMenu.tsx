@@ -23,7 +23,7 @@ const CustomerMenu = ({menu, showErrorNotFound, loading}:any) => {
           ) : (
             <>
               <Flex minWidth="max-content" justifyContent="center" gap="2">
-                <Heading size={'2xl'}>{menu.restaurantName}</Heading>
+                <Heading size={'2xl'} margin={2}>{menu.restaurantName}</Heading>
               </Flex>
               <Flex direction="column">
                 {menu.sections.map((section: any) => (
