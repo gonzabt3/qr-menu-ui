@@ -5,6 +5,7 @@ import { Box, Button, Card, CardBody, CardHeader, ChakraProvider, Flex, Heading,
 import Navbar from "./components/navbar";
 import { FaUtensils, FaConciergeBell, FaMoneyBillWave, FaChartLine, FaMobileAlt, FaUsers, FaQrcode, FaStore } from "react-icons/fa";
 import router from "next/router";
+const PRICE: number = parseFloat(process.env.NEXT_PUBLIC_PRICE || "0");
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
@@ -79,7 +80,7 @@ export default function Home() {
             <Heading size='md' textAlign='center'>Suscripción Mensual</Heading>
           </CardHeader>
           <CardBody textAlign='center'>
-            <Text fontSize='2xl' color='orange.500'>3000 pesos por mes</Text>
+            <Text fontSize='2xl' color='orange.500'>{PRICE} pesos por mes</Text>
             <Text fontSize='lg' color='gray.500'>¡Primer mes gratis!</Text>
               <Button mt={4} size={'lg'} colorScheme='orange' variant='solid' onClick={handleCreateEditMenu}>
                 {isAuthenticated ? "Editar menu" : "Crear Menu"}

@@ -4,7 +4,8 @@ import { useState } from "react"
 import { putSubscription } from "../../services/user"
 import { useAuth0 } from "@auth0/auth0-react"
 const MERCADOPAGO_FRONTEND_KEY:string = process.env.NEXT_PUBLIC_MERCADOPAGO_FRONTEND_KEY || "";
-initMercadoPago(MERCADOPAGO_FRONTEND_KEY)
+const PRICE: number = parseFloat(process.env.NEXT_PUBLIC_PRICE || "0");
+initMercadoPago(MERCADOPAGO_FRONTEND_KEY);
 
 const ButtonWithMercadoPagoDialog = ({updateUserInfo}:any) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -53,8 +54,9 @@ const ButtonWithMercadoPagoDialog = ({updateUserInfo}:any) => {
             </Box>
           </Center>:
           <CardPayment
-        initialization={{ amount: 100 }}
-        onSubmit={pay}
+          locale="es-AR"
+            initialization={{ amount: PRICE }}
+            onSubmit={pay}
           />
           }
         </ModalContent>
