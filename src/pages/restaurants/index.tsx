@@ -102,7 +102,7 @@ export default function Page() {
           <ModalCloseButton />
           <ModalBody>
             <Text>
-              ¡Gracias por unirte a nosotros! Nuestra aplicación te permite crear menús QR para restaurantes. 
+              ¡Gracias por unirte a nosotros! Nuestra aplicación te permite crear menús QR. 
               Puedes gestionar múltiples restaurantes, cada uno con varios menús (solo uno puede estar activo a la vez). 
               Además, puedes añadir productos y secciones a tus menús para ofrecer una experiencia completa a tus clientes.
             </Text>
