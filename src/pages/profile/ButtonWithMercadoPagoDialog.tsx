@@ -27,7 +27,17 @@ const ButtonWithMercadoPagoDialog = ({updateUserInfo}:any) => {
         setError(error);
       } finally {
         setLoading(false);
-      }    }
+      }    
+    }
+  }
+
+  const handleClose = () => {
+    if(success){
+      updateUserInfo();
+      setIsOpen(false);
+    }else{
+      setIsOpen(false);
+    }
   }
 
   return(

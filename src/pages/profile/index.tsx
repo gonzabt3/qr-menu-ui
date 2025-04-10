@@ -12,8 +12,8 @@ import {
   Grid,
   GridItem,
   Heading,
-  Link,
   Text,
+  Link,
   useDisclosure,
 } from "@chakra-ui/react";
 import ProfileInfoDialog from "./ProfileInfoDialog";
