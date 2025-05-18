@@ -101,33 +101,36 @@ const Profile = () => {
     <div ref={refScreen} style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <BaseCompents style={{ flex: 1 }}>
         <GridItem area={'nav'} rowSpan={7} colSpan={5}>
-          <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-            <Card margin={5} height={'100%'} padding={5}>
-              <Heading size={'md'} mb={4}>Editar Perfil</Heading>
-              <Heading size={'sm'}>Email: {user?.email}</Heading>
-              <ProfileInfoDialog user={user}/>
-            </Card>
-            <Card margin={5} height={'100%'} padding={5}>
-              <Heading size={'md'} mb={4}>Subscripción</Heading>
-              <Flex alignItems="center">
-                <Heading size="sm">Estado de pago:</Heading>
-                <SubscriptionStatus isSubscribed={userInfo?.subscribed} />
-              </Flex>
-              {userInfo?.subscribed ?      
-           <Button onClick={() => unsubscribe()}>Desuscribirse</Button>
-            : <ButtonWithMercadoPagoDialog  updateUserInfo={checkFirstLogin} />}
-            {success ? <Center h="200px">
-              <Box textAlign="center">
-                <Text fontSize="2xl" fontWeight="bold" color="orange.500">
-                Desuscripcion exitosa!
-                </Text>
-                <Text mt={4} color="gray.600">
-                  Gracias vuelve pronto!
-                </Text>
-              </Box>
-            </Center>: null}
-                        </Card>
-          </Grid>
+        <Grid
+  templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} // Cambia a una columna en pantallas pequeñas
+  gap={6}
+>
+  <Card margin={5} height={'100%'} padding={5}>
+    <Heading size={'md'} mb={4}>Editar Perfil</Heading>
+    <Heading size={'sm'}>Email: {user?.email}</Heading>
+    <ProfileInfoDialog user={user}/>
+  </Card>
+  <Card margin={5} height={'100%'} padding={5}>
+    <Heading size={'md'} mb={4}>Subscripción</Heading>
+    <Flex alignItems="center">
+      <Heading size="sm">Estado de pago:</Heading>
+      <SubscriptionStatus isSubscribed={userInfo?.subscribed} />
+    </Flex>
+    {userInfo?.subscribed ?      
+      <Button onClick={() => unsubscribe()}>Desuscribirse</Button>
+    : <ButtonWithMercadoPagoDialog  updateUserInfo={checkFirstLogin} />}
+    {success ? <Center h="200px">
+      <Box textAlign="center">
+        <Text fontSize="2xl" fontWeight="bold" color="orange.500">
+          Desuscripcion exitosa!
+        </Text>
+        <Text mt={4} color="gray.600">
+          Gracias vuelve pronto!
+        </Text>
+      </Box>
+    </Center>: null}
+  </Card>
+</Grid>
         </GridItem>
       </BaseCompents>
       <Flex justifyContent="center" mt={10} style={{ marginTop: 'auto' }}>
