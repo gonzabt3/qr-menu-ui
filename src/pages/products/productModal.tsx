@@ -23,6 +23,7 @@ import useProducts from '../../hooks/useProducts';
 import useProduct from '../../hooks/useProduct';
 import { CloseIcon, DeleteIcon } from '@chakra-ui/icons';
 import * as Yup from 'yup';
+import { set } from 'cypress/types/lodash';
 
 const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, closeAndRefresh, isOpen, close }: any) => {
   const [initialValues, setInitialValues] = useState<any>(null);
@@ -76,6 +77,8 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
     });
     if (product.image_url) {
       setShowImage(true);
+    }else{
+      setShowImage(false);
     }
   };
 
@@ -89,6 +92,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
         section: null,
         image: null
       });
+      setShowImage(false);
     } else {
       populateFields();
     }
@@ -176,7 +180,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                             <FormControl>
                               {showImage ? (
                                 <Box position="relative" display="inline-block">
-                                  <img src={product.image_url} alt="Uploaded" style={{ maxWidth: '100px' }} />
+                                  <img src={product?.image_url} alt="Uploaded" style={{ maxWidth: '100px' }} />
                                   <IconButton
                                     aria-label="Delete image"
                                     icon={<CloseIcon />}
