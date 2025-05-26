@@ -1,6 +1,6 @@
 'use client'
 import React, { useRef, useEffect } from 'react';
-import { Box, Flex, GridItem, Heading, Text } from '@chakra-ui/react';
+import { Box, Divider, Flex, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import Section from './section';
 
 const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
@@ -13,36 +13,36 @@ const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
   }, []);
 
   return (
-    <>
-      <div ref={refScreen}>
-        <GridItem area={'nav'} rowSpan={7} colSpan={5}>
-          <Box padding={0} height={'100%'}>
-            {loading ? (
-              <Text textAlign="center">Cargando...</Text>
-            ) : (
-              <>
-                {showErrorNotFound || menu == null ? (
-                  <Text textAlign="center">Restaurante no encontrado</Text>
-                ) : (
-                  <>
-                    <Flex minWidth="max-content" justifyContent="center" gap="2">
-                      <Heading size={'2xl'} margin={2}>
-                        {menu.restaurantName}
-                      </Heading>
-                    </Flex>
-                    <Flex direction="column">
+    <div ref={refScreen}>
+      <GridItem area={'nav'} rowSpan={7} colSpan={5}>
+        <Box padding={0} height={'100%'}>
+          {loading ? (
+            <Text textAlign="center">Cargando...</Text>
+          ) : (
+            <>
+              {showErrorNotFound || menu == null ? (
+                <Text textAlign="center">Restaurante no encontrado</Text>
+              ) : (
+                <>
+                  <Box bg="#fefaf4" p={8} minH="100vh">
+                    <VStack spacing={6} align="start">
+                      <VStack align="center" w="full" spacing={3}>
+                        <Heading fontFamily="'KC Clementine Regular Inked', serif" size="2xl">
+                          {menu.restaurantName}
+                        </Heading>
+                      </VStack>
                       {menu.sections.map((section: any) => (
                         <Section key={section.id} section={section} />
                       ))}
-                    </Flex>
-                  </>
-                )}
-              </>
-            )}
-          </Box>
-        </GridItem>
-      </div>
-    </>
+                    </VStack>
+                  </Box>
+                </>
+              )}
+            </>
+          )}
+        </Box>
+      </GridItem>
+    </div>
   );
 };
 
