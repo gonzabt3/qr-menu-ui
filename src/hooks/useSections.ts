@@ -11,8 +11,10 @@ const useSections = (idRestaurant: string | string[]  | undefined , idMenu : str
 
     const getSections = async () => {
       const token = await getAccessTokenSilently();
-      try {
-        const response = await axios.get(API_BASE_URL + 'restaurants/'+idRestaurant+'/menus/' + idMenu+'/sections', {
+      try {      
+        const timestamp = new Date().getTime(); // Genera un timestamp único
+
+        const response = await axios.get(API_BASE_URL + `restaurants/${idRestaurant}/menus/${idMenu}/sections?timpestamp=${timestamp}`, {
           headers: {
             CacheControl: 'no-cache',
             Pragma: 'no-cache',

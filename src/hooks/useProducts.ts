@@ -15,7 +15,8 @@ const useProducts = (idRestaurant: string | string[]  | undefined , idMenu : str
     const token = await getAccessTokenSilently();
 
     try {
-      const response = await axios.get(`${API_BASE_URL}restaurants/${idRestaurant}/menus/${idMenu}/products`,{
+      const timestamp = new Date().getTime(); // Genera un timestamp único
+      const response = await axios.get(`${API_BASE_URL}restaurants/${idRestaurant}/menus/${idMenu}/products?timestamp=${timestamp}`,{
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -50,8 +51,10 @@ const useProducts = (idRestaurant: string | string[]  | undefined , idMenu : str
 
 
   useEffect(() => {
-    getProducts();
-  }, []);
+    if (idRestaurant && idMenu){
+      getProducts();
+    }
+  }, [idRestaurant, idMenu]);
 
   return {
     products,

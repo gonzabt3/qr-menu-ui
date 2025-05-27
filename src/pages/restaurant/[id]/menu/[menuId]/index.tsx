@@ -29,6 +29,7 @@ export default function Page() {
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
   const {menu, getMenu, updateMenu} = useMenu(id, menuId);
+  const {errorSections, sections, loadingSections, getSections, removeSection} = useSections(id, menuId)
   const {
     products,
     loadingProducts,
@@ -36,8 +37,6 @@ export default function Page() {
     getProducts,
     removeProduct
   } = useProducts(id, menuId);
-  const {errorSections, sections, loadingSections, getSections, removeSection} = useSections(id, menuId)
-
   useEffect(() => {
     if (ref.current) {
       ref.current.style.maxHeight = `${window.innerHeight}px`;
