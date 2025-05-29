@@ -49,6 +49,23 @@ const useSections = (idRestaurant: string | string[]  | undefined , idMenu : str
         throw error;
       });
     }
+
+    const reorderSections = async (newOrder: string[]) => {
+      const token = await getAccessTokenSilently();
+      try {
+        await axios.patch(`${API_BASE_URL}restaurants/${idRestaurant}/menus/${idMenu}/sections/reorder`, {
+          sections: newOrder,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('Orden actualizado correctamente');
+      } catch (error) {
+        console.error('Error al actualizar el orden:', error);
+        throw error;
+      }
+    };
     
     useEffect(() => {
       if (idRestaurant && idMenu){
@@ -61,7 +78,8 @@ const useSections = (idRestaurant: string | string[]  | undefined , idMenu : str
         errorSections,
         loadingSections,
         getSections,
-        removeSection
+        removeSection,
+        reorderSections
     }
 }
 

@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { AppProps } from "next/app";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
-import createCache from '@emotion/cache';
 import { ChakraProvider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const auth0Domain : any = process.env.NEXT_PUBLIC_AUTH_DOMAIN;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
@@ -64,7 +65,9 @@ export default function App({ Component, pageProps }:AppProps) {
           }}
         >
           <AuthGuard>
-            <Component {...pageProps} />
+            <DndProvider backend={HTML5Backend}>
+              <Component {...pageProps} />
+            </DndProvider>
           </AuthGuard>
         </Auth0Provider>
       </ChakraProvider>

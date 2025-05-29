@@ -29,7 +29,7 @@ export default function Page() {
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
   const {menu, getMenu, updateMenu} = useMenu(id, menuId);
-  const {errorSections, sections, loadingSections, getSections, removeSection} = useSections(id, menuId)
+  const {errorSections, sections, loadingSections, getSections, removeSection, reorderSections} = useSections(id, menuId)
   const {
     products,
     loadingProducts,
@@ -67,10 +67,18 @@ export default function Page() {
   }
 
   const handleRemoveSection = async (sectionParam:any) => {
+    console.log('sectionParam', sectionParam);
     await removeSection(sectionParam);
     if (!errorSections) {
       getSections();
       getProducts();
+    }
+  }
+
+  const handleReorderSection = async (sectionsParam:any) => {
+    await reorderSections(sectionsParam);
+    if (!errorSections) {
+      getSections();
     }
   }
 
@@ -141,7 +149,7 @@ export default function Page() {
                   </CardBody>
                 </GridItem>
                 <GridItem colSpan={3} >
-                  <Sections sections={sections} handleRemoveSection={handleRemoveSection} getSections={() => getSections()}/>
+                  <Sections sections={sections} handleRemoveSection={handleRemoveSection} getSections={() => getSections()} handleReorderSection={handleReorderSection}/>
                 </GridItem>
                 <GridItem colSpan={4}  >
                   <Products products={products} sections={sections} menu={menu} handleRemoveProduct={handleRemoveProduct} getProducts={getProducts}/>
