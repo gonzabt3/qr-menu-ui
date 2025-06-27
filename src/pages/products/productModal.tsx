@@ -17,6 +17,7 @@ import {
   IconButton,
   Flex,
   Box,
+  Checkbox,
   FormErrorMessage,
 } from '@chakra-ui/react';
 import useProducts from '../../hooks/useProducts';
@@ -40,10 +41,11 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
     name: Yup.string().required('El nombre es obligatorio'),
     price: Yup.number().required('El precio es obligatorio').positive('El precio debe ser un número positivo'),
     section: Yup.string().required('La sección es obligatoria'),
+    is_vegan: Yup.boolean(),
+    is_celiac: Yup.boolean(),
   });
 
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
-    console.log(values);
     if (values.id) {
       await updateRecord(values);
     } else {
@@ -54,7 +56,6 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
 
   const updateRecord = async (values: any) => {
     if (await updateProduct(values)) {
-      console.log("values", values);
       closeAndRefresh();
     }
   };
@@ -66,18 +67,19 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
   };
 
   const populateFields = async () => {
-    console.log(product);
     setInitialValues({
       id: product.id,
       name: product.name,
       description: product.description,
       price: product.price,
       section: product.section_id,
-      image: product.image_url ? product.image_url : null
+      image: product.image_url ? product.image_url : null,
+      is_vegan: product.is_vegan ?? false,
+      is_celiac: product.is_celiac ?? false,
     });
     if (product.image_url) {
       setShowImage(true);
-    }else{
+    } else {
       setShowImage(false);
     }
   };
@@ -90,7 +92,9 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
         price: '',
         description: '',
         section: null,
-        image: null
+        image: null,
+        is_vegan: false,
+        is_celiac: false,
       });
       setShowImage(false);
     } else {
@@ -112,7 +116,6 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
   };
 
   useEffect(() => {
-    console.log(sections);
     if (menu != null && sections.length > 0) {
       setIsLoadingSections(false);
     }
@@ -132,7 +135,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
               onSubmit={handleSubmit}
               enableReinitialize
             >
-              {({ isSubmitting, setFieldValue }) => (
+              {({ isSubmitting, setFieldValue, values }) => (
                 <Form>
                   <ModalHeader>Nuevo Producto</ModalHeader>
                   <ModalCloseButton onClick={handleOnClose} />
@@ -171,6 +174,24 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                               ))}
                             </Select>
                             <FormErrorMessage>{form.errors.section}</FormErrorMessage>
+                          </FormControl>
+                        )}
+                      </Field>
+                      <Field name="is_vegan" type="checkbox">
+                        {({ field }: any) => (
+                          <FormControl display="flex" alignItems="center">
+                            <Checkbox {...field} isChecked={field.value} colorScheme="green">
+                              Vegano
+                            </Checkbox>
+                          </FormControl>
+                        )}
+                      </Field>
+                      <Field name="is_celiac" type="checkbox">
+                        {({ field }: any) => (
+                          <FormControl display="flex" alignItems="center">
+                            <Checkbox {...field} isChecked={field.value} colorScheme="orange">
+                              Apto Celíacos
+                            </Checkbox>
                           </FormControl>
                         )}
                       </Field>

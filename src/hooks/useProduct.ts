@@ -17,6 +17,8 @@ const useProduct = (idRestaurant: string, idMenu:string, idSection:string, idPro
           description: values.description,
           price: values.price,
           image: values.image,
+          is_vegan: values.is_vegan ?? false,
+          is_celiac: values.is_celiac ?? false,
       }
       const idSection = values.section
       try {
@@ -40,6 +42,8 @@ const useProduct = (idRestaurant: string, idMenu:string, idSection:string, idPro
           description: values.description,
           price: values.price,
           image: values.image,
+          is_vegan: values.is_vegan ?? false,
+          is_celiac: values.is_celiac ?? false,
       }
       const idSection = values.section
       try {
