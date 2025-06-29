@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import BreadcrumComponent from '../../../../components/breadcrum';
 import FormMenu from '../formMenu';
-import {Center, Grid, GridItem, Text, Flex, Button, Heading } from '@chakra-ui/react'
+import { Center, Grid, GridItem, Text, Flex, Button, Heading, HStack } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 import Sections from "../../../../sections";
@@ -98,6 +98,10 @@ export default function Page() {
     }
   }
 
+  const handleDesignWithAI = () => {
+    router.push('/magicDesign');
+  }
+
   return (
     <div ref={ref} >
       <BaseCompents>
@@ -109,6 +113,23 @@ export default function Page() {
               <Heading>
                 {menu?.name} 
               </Heading>
+              <HStack>
+                <Button
+                  bgGradient="linear(to-r, orange.400, pink.400, purple.400, blue.400)"
+                  color="white"
+                  _hover={{
+                    bgGradient: "linear(to-r, orange.500, pink.500, purple.500, blue.500)",
+                    boxShadow: "md"
+                  }}
+                  fontWeight="bold"
+                  borderRadius="xl"
+                  px={6}
+                  py={2}
+                  onClick={handleDesignWithAI}
+                >
+                  Diseñar con IA
+                </Button>
+              </HStack>
               {/* <Button colorScheme="orange" onClick={handlePreviewClick}>Previsualización</Button> */}
             </Flex>
             <Card margin={5} height={'100%'}  overflowY="scroll">
