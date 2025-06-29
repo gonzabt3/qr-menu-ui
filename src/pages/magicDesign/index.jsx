@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import * as Chakra from "@chakra-ui/react";
 import axios from 'axios';
 import { Box, Flex, VStack, Input, Button, Text, Heading, Divider, useColorModeValue } from "@chakra-ui/react";
 import { LivePreview, LiveProvider } from "react-live";
@@ -34,13 +35,13 @@ export default function MagicDesign() {
             Authorization: `Bearer ${token}`
         }
       });
-      const data = response.data.response;
+       const data =JSON.parse(response.data.response);
+       console.log(data)
       setMessages(msgs => [
         ...msgs,
-        { from: "ia", text: data }
+        { from: "ia", text: data.explication }
       ]);
-      setPreview(`<h2 style="color:#ED8936;">${data}</h2>`);
-      setReactCode(data); // <--- así
+      setReactCode(data.code); // <--- así
       // Si la IA devuelve código React, puedes actualizar reactCode aquí:
     } catch (err) {
       setMessages(msgs => [
@@ -123,7 +124,7 @@ export default function MagicDesign() {
           {/* Preview HTML generado por IA */}
           {/* Preview React en vivo */}
           <Box>
-            <LiveProvider code={reactCode}>
+          <LiveProvider code={reactCode} scope={Chakra}>
               <LivePreview />
             </LiveProvider>          
           </Box>
