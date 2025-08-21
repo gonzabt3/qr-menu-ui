@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import BreadcrumComponent from '../../../../components/breadcrum';
 import FormMenu from '../formMenu';
-import {Center, Grid, GridItem, Text, Flex, Button, Heading } from '@chakra-ui/react'
+import { Center, Grid, GridItem, Text, Flex, Button, Heading, HStack, VStack } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 import Sections from "../../../../sections";
@@ -14,6 +14,7 @@ import useMenu from "../../../../../hooks/useMenu";
 import useSections from "../../../../../hooks/useSections";
 import { returnOnlyString } from "../../../../../common/utils";
 import useProducts from "../../../../../hooks/useProducts";
+import WiFiQRModal from "../../../../../components/WiFiQRModal";
 const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
 const createMenuUrl = async (menu:any) => {
@@ -98,6 +99,10 @@ export default function Page() {
     }
   }
 
+  const handleDesignWithAI = () => {
+    router.push(`/restaurant/${id}/menu/${menuId}/magicDesign`);
+  }
+
   return (
     <div ref={ref} >
       <BaseCompents>
@@ -128,19 +133,35 @@ export default function Page() {
                 </GridItem>
                 <GridItem colStart={3} rowSpan={5} colSpan={1}>
                   {menuUrl &&
-                   <div style={{ height: "auto", margin: "0 auto", maxWidth: 150, width: "100%" }}>
-                      <QRCode
-                        ref={qrCodeRef}
-                        size={256}
-                        style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                        value={menuUrl}
-                        viewBox={`0 0 256 256`}
-                      />
-                    <Button 
-                      onClick={downloadQr}
-                      style={{ marginTop: '10px' }}
-                      >Descargar QR</Button>
-                  </div>
+                   <VStack spacing={4}>
+                     <div style={{ height: "auto", margin: "0 auto", maxWidth: 150, width: "100%" }}>
+                        <QRCode
+                          ref={qrCodeRef}
+                          size={256}
+                          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                          value={menuUrl}
+                          viewBox={`0 0 256 256`}
+                        />
+                      <Button 
+                        onClick={downloadQr}
+                        style={{ marginTop: '10px' }}
+                        size="sm"
+                        width="100%"
+                        >Descargar QR Menú</Button>
+                    </div>
+                    
+                    <WiFiQRModal 
+                      trigger={
+                        <Button 
+                          colorScheme="blue" 
+                          size="sm"
+                          width="150px"
+                        >
+                          🔗 QR WiFi
+                        </Button>
+                      }
+                    />
+                   </VStack>
                   }
                 </GridItem>
                 <GridItem colSpan={4}>

@@ -7,6 +7,8 @@ export const postProduct = async (token : string, restaurantId:string, menuId:st
         formData.append('name', values.name);
         formData.append('price', values.price);
         formData.append('description', values.description);
+        formData.append('is_vegan', values.is_vegan ? 'true' : 'false');
+        formData.append('is_celiac', values.is_celiac ? 'true' : 'false');
 
         if (values.image) {
           formData.append('image',values.image);
@@ -35,6 +37,8 @@ export const putProduct = async (token:string,  restaurantId:string, menuId:stri
     formData.append('price', values.price);
     formData.append('description', values.description);
     formData.append('section', sectionId);
+    formData.append('is_vegan', values.is_vegan ? 'true' : 'false');
+    formData.append('is_celiac', values.is_celiac ? 'true' : 'false');
 
     if (values.image) {
       formData.append('image',values.image);

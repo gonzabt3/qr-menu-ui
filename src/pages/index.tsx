@@ -39,6 +39,11 @@ export default function Home() {
       <Button mt={4} size={'lg'} colorScheme='orange' variant='solid' onClick={handleCreateEditMenu}>
                 {isAuthenticated ? "Editar menu" : "Crear Menu"}
               </Button>
+      {!isAuthenticated && (
+        <Button mt={4} size={'lg'} colorScheme='orange' variant='outline' onClick={() => window.open('https://www.menuqr.ai/figacita', '_blank')}>
+                  Ver Demostración
+                </Button>
+      )}
       </Flex>
       <Box mt={10} width={"70%"}>
         <Heading as='h2' size='xl' textAlign='center' mb={6}>
@@ -82,9 +87,16 @@ export default function Home() {
           <CardBody textAlign='center'>
             <Text fontSize='2xl' color='orange.500'>{PRICE} pesos por mes</Text>
             <Text fontSize='lg' color='gray.500'>¡Primer mes gratis!</Text>
-              <Button mt={4} size={'lg'} colorScheme='orange' variant='solid' onClick={handleCreateEditMenu}>
+            <Flex gap={2} justify='center' mt={4}>
+              <Button size={'lg'} colorScheme='orange' variant='solid' onClick={handleCreateEditMenu}>
                 {isAuthenticated ? "Editar menu" : "Crear Menu"}
               </Button>
+              {!isAuthenticated && (
+                <Button size={'lg'} colorScheme='orange' variant='outline' onClick={() => window.open('https://www.menuqr.ai/figacita', '_blank')}>
+                  Ver Demostración
+                </Button>
+              )}
+            </Flex>
           </CardBody>
         </Card>
       </Box>
