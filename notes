@@ -57,3 +57,23 @@ objecto que genera el modal de mercadopago
           start_date: Time.now.iso8601,
           end_date: (Time.now + 1.year).iso8601
         }
+
+crear un template con el titulo seccion y productos (nodos)
+cada nodo dependiendo el tipo varia en sus propiedad
+
+
+menu
+    titulo
+    marco?
+    background
+
+seccion
+    margin
+    ancho
+    color
+    columnas
+    titulo
+    fuente
+    divisores
+productos
+    posicion de cosas

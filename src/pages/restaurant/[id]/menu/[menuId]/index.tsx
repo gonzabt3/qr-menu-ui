@@ -114,7 +114,9 @@ export default function Page() {
               <Heading>
                 {menu?.name} 
               </Heading>
-              {/* <Button colorScheme="orange" onClick={handlePreviewClick}>Previsualización</Button> */}
+              <Button colorScheme="purple" variant="solid" onClick={handleDesignWithAI}>
+                🎨 Editar Diseño
+              </Button>
             </Flex>
             <Card margin={5} height={'100%'}  overflowY="scroll">
               <Grid
