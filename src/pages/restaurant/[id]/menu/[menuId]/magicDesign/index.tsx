@@ -48,7 +48,16 @@ const MagicDesignPage = () => {
   const [designOptions, setDesignOptions] = useState({
     // Menú
     menuTitle: menu?.name || '',
+    menuTitleMargin: 20, // separación del título del borde superior en px
     menuFrame: false,
+    menuFrameStyle: 'solid', // solid, dashed, dotted, double
+    menuFrameWidth: 2, // grosor en px
+    menuFrameColor: '#000000',
+    menuFrameRadius: 8, // border radius
+    menuFrameMargin: 16, // separación del marco del borde de la página
+    menuFrameDoubleWidth1: 2, // grosor de la primera línea para doble
+    menuFrameDoubleWidth2: 1, // grosor de la segunda línea para doble
+    menuFrameDoubleGap: 3, // separación entre líneas dobles en px
     menuBackground: '#ffffff',
     menuTitleAlign: 'center', // left, center, right
     
@@ -58,12 +67,15 @@ const MagicDesignPage = () => {
     sectionColor: '#f7fafc',
     sectionColumns: 1,
     sectionTitleFont: 'Arial',
+    sectionTitleSize: 16, // tamaño de fuente en px
     sectionDividers: true,
+    sectionDividerWidth: 1, // ancho del divisor en px
     sectionTitleAlign: 'left', // left, center, right
     
     // Productos
     productLayout: 'horizontal', // horizontal, vertical, card
-    productTextAlign: 'left' // left, center, right
+    productTextAlign: 'left', // left, center, right
+    productShowDescription: true // mostrar/ocultar descripción
   });
 
   useEffect(() => {
@@ -150,6 +162,21 @@ const MagicDesignPage = () => {
                               </FormControl>
                               
                               <FormControl>
+                                <FormLabel fontSize="xs">Separación del borde: {designOptions.menuTitleMargin}px</FormLabel>
+                                <Slider
+                                  value={designOptions.menuTitleMargin}
+                                  onChange={(value) => updateDesignOption('menuTitleMargin', value)}
+                                  min={0}
+                                  max={60}
+                                >
+                                  <SliderTrack>
+                                    <SliderFilledTrack />
+                                  </SliderTrack>
+                                  <SliderThumb />
+                                </Slider>
+                              </FormControl>
+                              
+                              <FormControl>
                                 <HStack justify="space-between">
                                   <FormLabel fontSize="xs" mb={0}>Marco</FormLabel>
                                   <Switch 
@@ -159,6 +186,128 @@ const MagicDesignPage = () => {
                                   />
                                 </HStack>
                               </FormControl>
+                              
+                              {designOptions.menuFrame && (
+                                <>
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Estilo del marco</FormLabel>
+                                    <Select 
+                                      size="sm"
+                                      value={designOptions.menuFrameStyle}
+                                      onChange={(e) => updateDesignOption('menuFrameStyle', e.target.value)}
+                                    >
+                                      <option value="solid">Sólido</option>
+                                      <option value="dashed">Discontinuo</option>
+                                      <option value="dotted">Punteado</option>
+                                      <option value="double">Doble línea</option>
+                                    </Select>
+                                  </FormControl>
+                                  
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Separación del borde: {designOptions.menuFrameMargin}px</FormLabel>
+                                    <Slider
+                                      value={designOptions.menuFrameMargin}
+                                      onChange={(value) => updateDesignOption('menuFrameMargin', value)}
+                                      min={0}
+                                      max={50}
+                                    >
+                                      <SliderTrack>
+                                        <SliderFilledTrack />
+                                      </SliderTrack>
+                                      <SliderThumb />
+                                    </Slider>
+                                  </FormControl>
+                                  
+                                  {designOptions.menuFrameStyle === 'double' ? (
+                                    <>
+                                      <FormControl>
+                                        <FormLabel fontSize="xs">Grosor línea exterior: {designOptions.menuFrameDoubleWidth1}px</FormLabel>
+                                        <Slider
+                                          value={designOptions.menuFrameDoubleWidth1}
+                                          onChange={(value) => updateDesignOption('menuFrameDoubleWidth1', value)}
+                                          min={1}
+                                          max={10}
+                                        >
+                                          <SliderTrack>
+                                            <SliderFilledTrack />
+                                          </SliderTrack>
+                                          <SliderThumb />
+                                        </Slider>
+                                      </FormControl>
+                                      
+                                      <FormControl>
+                                        <FormLabel fontSize="xs">Grosor línea interior: {designOptions.menuFrameDoubleWidth2}px</FormLabel>
+                                        <Slider
+                                          value={designOptions.menuFrameDoubleWidth2}
+                                          onChange={(value) => updateDesignOption('menuFrameDoubleWidth2', value)}
+                                          min={1}
+                                          max={8}
+                                        >
+                                          <SliderTrack>
+                                            <SliderFilledTrack />
+                                          </SliderTrack>
+                                          <SliderThumb />
+                                        </Slider>
+                                      </FormControl>
+                                      
+                                      <FormControl>
+                                        <FormLabel fontSize="xs">Separación entre líneas: {designOptions.menuFrameDoubleGap}px</FormLabel>
+                                        <Slider
+                                          value={designOptions.menuFrameDoubleGap}
+                                          onChange={(value) => updateDesignOption('menuFrameDoubleGap', value)}
+                                          min={1}
+                                          max={15}
+                                        >
+                                          <SliderTrack>
+                                            <SliderFilledTrack />
+                                          </SliderTrack>
+                                          <SliderThumb />
+                                        </Slider>
+                                      </FormControl>
+                                    </>
+                                  ) : (
+                                    <FormControl>
+                                      <FormLabel fontSize="xs">Grosor: {designOptions.menuFrameWidth}px</FormLabel>
+                                      <Slider
+                                        value={designOptions.menuFrameWidth}
+                                        onChange={(value) => updateDesignOption('menuFrameWidth', value)}
+                                        min={1}
+                                        max={10}
+                                      >
+                                        <SliderTrack>
+                                          <SliderFilledTrack />
+                                        </SliderTrack>
+                                        <SliderThumb />
+                                      </Slider>
+                                    </FormControl>
+                                  )}
+                                  
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Color del marco</FormLabel>
+                                    <Input 
+                                      size="sm"
+                                      type="color"
+                                      value={designOptions.menuFrameColor}
+                                      onChange={(e) => updateDesignOption('menuFrameColor', e.target.value)}
+                                    />
+                                  </FormControl>
+                                  
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Bordes redondeados: {designOptions.menuFrameRadius}px</FormLabel>
+                                    <Slider
+                                      value={designOptions.menuFrameRadius}
+                                      onChange={(value) => updateDesignOption('menuFrameRadius', value)}
+                                      min={0}
+                                      max={30}
+                                    >
+                                      <SliderTrack>
+                                        <SliderFilledTrack />
+                                      </SliderTrack>
+                                      <SliderThumb />
+                                    </Slider>
+                                  </FormControl>
+                                </>
+                              )}
                               
                               <FormControl>
                                 <FormLabel fontSize="xs">Background</FormLabel>
@@ -252,6 +401,21 @@ const MagicDesignPage = () => {
                               </FormControl>
                               
                               <FormControl>
+                                <FormLabel fontSize="xs">Tamaño del título: {designOptions.sectionTitleSize}px</FormLabel>
+                                <Slider
+                                  value={designOptions.sectionTitleSize}
+                                  onChange={(value) => updateDesignOption('sectionTitleSize', value)}
+                                  min={12}
+                                  max={32}
+                                >
+                                  <SliderTrack>
+                                    <SliderFilledTrack />
+                                  </SliderTrack>
+                                  <SliderThumb />
+                                </Slider>
+                              </FormControl>
+                              
+                              <FormControl>
                                 <FormLabel fontSize="xs">Alineación del título</FormLabel>
                                 <Select 
                                   size="sm"
@@ -274,6 +438,23 @@ const MagicDesignPage = () => {
                                   />
                                 </HStack>
                               </FormControl>
+                              
+                              {designOptions.sectionDividers && (
+                                <FormControl>
+                                  <FormLabel fontSize="xs">Ancho del divisor: {designOptions.sectionDividerWidth}px</FormLabel>
+                                  <Slider
+                                    value={designOptions.sectionDividerWidth}
+                                    onChange={(value) => updateDesignOption('sectionDividerWidth', value)}
+                                    min={1}
+                                    max={5}
+                                  >
+                                    <SliderTrack>
+                                      <SliderFilledTrack />
+                                    </SliderTrack>
+                                    <SliderThumb />
+                                  </Slider>
+                                </FormControl>
+                              )}
                             </VStack>
                           </AccordionPanel>
                         </AccordionItem>
@@ -313,6 +494,17 @@ const MagicDesignPage = () => {
                                   <option value="right">Derecha</option>
                                 </Select>
                               </FormControl>
+                              
+                              <FormControl>
+                                <HStack justify="space-between">
+                                  <FormLabel fontSize="xs" mb={0}>Mostrar descripción</FormLabel>
+                                  <Switch 
+                                    size="sm"
+                                    isChecked={designOptions.productShowDescription}
+                                    onChange={(e) => updateDesignOption('productShowDescription', e.target.checked)}
+                                  />
+                                </HStack>
+                              </FormControl>
                             </VStack>
                           </AccordionPanel>
                         </AccordionItem>
@@ -333,11 +525,35 @@ const MagicDesignPage = () => {
                       {/* Preview del menú */}
                       <Box 
                         bg={designOptions.menuBackground}
-                        border={designOptions.menuFrame ? "2px solid" : "1px solid"}
-                        borderColor={designOptions.menuFrame ? "gray.400" : "gray.200"}
-                        borderRadius="lg"
+                        border={
+                          designOptions.menuFrame 
+                            ? designOptions.menuFrameStyle === 'double'
+                              ? `${designOptions.menuFrameDoubleWidth1}px solid ${designOptions.menuFrameColor}`
+                              : `${designOptions.menuFrameWidth}px ${designOptions.menuFrameStyle} ${designOptions.menuFrameColor}`
+                            : "1px solid #e2e8f0"
+                        }
+                        borderRadius={`${designOptions.menuFrameRadius}px`}
+                        margin={designOptions.menuFrame ? `${designOptions.menuFrameMargin}px` : '0'}
                         p={4}
                         minHeight="500px"
+                        position="relative"
+                        sx={
+                          designOptions.menuFrame && designOptions.menuFrameStyle === 'double'
+                            ? {
+                                '&::before': {
+                                  content: '""',
+                                  position: 'absolute',
+                                  top: `${designOptions.menuFrameDoubleWidth1 + designOptions.menuFrameDoubleGap}px`,
+                                  left: `${designOptions.menuFrameDoubleWidth1 + designOptions.menuFrameDoubleGap}px`,
+                                  right: `${designOptions.menuFrameDoubleWidth1 + designOptions.menuFrameDoubleGap}px`,
+                                  bottom: `${designOptions.menuFrameDoubleWidth1 + designOptions.menuFrameDoubleGap}px`,
+                                  border: `${designOptions.menuFrameDoubleWidth2}px solid ${designOptions.menuFrameColor}`,
+                                  borderRadius: `${Math.max(0, designOptions.menuFrameRadius - designOptions.menuFrameDoubleWidth1 - designOptions.menuFrameDoubleGap)}px`,
+                                  pointerEvents: 'none'
+                                }
+                              }
+                            : {}
+                        }
                       >
                         <VStack spacing={4} align="center">
                           <Heading 
@@ -346,6 +562,7 @@ const MagicDesignPage = () => {
                             fontFamily={designOptions.sectionTitleFont}
                             textAlign={designOptions.menuTitleAlign}
                             width="100%"
+                            mt={`${designOptions.menuTitleMargin}px`}
                           >
                             {designOptions.menuTitle || 'Nombre del Menú'}
                           </Heading>
@@ -357,7 +574,7 @@ const MagicDesignPage = () => {
                             borderRadius="md"
                           >
                             <Text 
-                              fontSize="sm" 
+                              fontSize={`${designOptions.sectionTitleSize}px`}
                               fontWeight="bold" 
                               mb={2}
                               fontFamily={designOptions.sectionTitleFont}
@@ -366,7 +583,13 @@ const MagicDesignPage = () => {
                               Sección de ejemplo
                             </Text>
                             
-                            {designOptions.sectionDividers && <Divider mb={3} />}
+                            {designOptions.sectionDividers && (
+                              <Divider 
+                                mb={3} 
+                                borderWidth={`${designOptions.sectionDividerWidth}px`}
+                                borderColor="gray.300"
+                              />
+                            )}
                             
                             <SimpleGrid columns={designOptions.sectionColumns} spacing={2}>
                               {[1, 2].map((item) => (
@@ -375,7 +598,9 @@ const MagicDesignPage = () => {
                                     <Flex justify="space-between" align="start">
                                       <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={1}>
                                         <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
-                                        <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
+                                        {designOptions.productShowDescription && (
+                                          <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
+                                        )}
                                       </VStack>
                                       <Text fontSize="sm" fontWeight="bold" color="green.600">$15.99</Text>
                                     </Flex>
@@ -384,7 +609,9 @@ const MagicDesignPage = () => {
                                   {designOptions.productLayout === 'vertical' && (
                                     <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={2}>
                                       <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
-                                      <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
+                                      {designOptions.productShowDescription && (
+                                        <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
+                                      )}
                                       <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign={designOptions.productTextAlign}>$15.99</Text>
                                     </VStack>
                                   )}
@@ -394,7 +621,9 @@ const MagicDesignPage = () => {
                                       <Box w="100%" h="60px" bg="gray.200" borderRadius="md" />
                                       <VStack spacing={1} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
                                         <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
-                                        <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción</Text>
+                                        {designOptions.productShowDescription && (
+                                          <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción</Text>
+                                        )}
                                         <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign={designOptions.productTextAlign}>$15.99</Text>
                                       </VStack>
                                     </VStack>
