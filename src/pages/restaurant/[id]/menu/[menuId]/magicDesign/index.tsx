@@ -65,6 +65,13 @@ const MagicDesignPage = () => {
     sectionMargin: 20,
     sectionWidth: 100,
     sectionColor: '#f7fafc',
+    sectionColorMode: 'global', // 'global' o 'individual'
+    sectionGlobalColor: '#f7fafc', // color global para todas las secciones
+    sectionIndividualColors: {
+      section1: '#f7fafc',
+      section2: '#e6fffa',
+      section3: '#fef5e7'
+    }, // colores individuales por sección
     sectionColumns: 1,
     sectionTitleFont: 'Arial',
     sectionTitleSize: 16, // tamaño de fuente en px
@@ -373,6 +380,73 @@ const MagicDesignPage = () => {
                               </FormControl>
                               
                               <FormControl>
+                                <FormLabel fontSize="xs">Modo de color</FormLabel>
+                                <Select 
+                                  size="sm"
+                                  value={designOptions.sectionColorMode}
+                                  onChange={(e) => updateDesignOption('sectionColorMode', e.target.value)}
+                                >
+                                  <option value="global">Color global (todas iguales)</option>
+                                  <option value="individual">Colores individuales</option>
+                                </Select>
+                              </FormControl>
+                              
+                              {designOptions.sectionColorMode === 'global' && (
+                                <FormControl>
+                                  <FormLabel fontSize="xs">Color global de secciones</FormLabel>
+                                  <Input 
+                                    size="sm"
+                                    type="color"
+                                    value={designOptions.sectionGlobalColor}
+                                    onChange={(e) => updateDesignOption('sectionGlobalColor', e.target.value)}
+                                  />
+                                </FormControl>
+                              )}
+                              
+                              {designOptions.sectionColorMode === 'individual' && (
+                                <>
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Color Sección 1</FormLabel>
+                                    <Input 
+                                      size="sm"
+                                      type="color"
+                                      value={designOptions.sectionIndividualColors.section1}
+                                      onChange={(e) => updateDesignOption('sectionIndividualColors', {
+                                        ...designOptions.sectionIndividualColors,
+                                        section1: e.target.value
+                                      })}
+                                    />
+                                  </FormControl>
+                                  
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Color Sección 2</FormLabel>
+                                    <Input 
+                                      size="sm"
+                                      type="color"
+                                      value={designOptions.sectionIndividualColors.section2}
+                                      onChange={(e) => updateDesignOption('sectionIndividualColors', {
+                                        ...designOptions.sectionIndividualColors,
+                                        section2: e.target.value
+                                      })}
+                                    />
+                                  </FormControl>
+                                  
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Color Sección 3</FormLabel>
+                                    <Input 
+                                      size="sm"
+                                      type="color"
+                                      value={designOptions.sectionIndividualColors.section3}
+                                      onChange={(e) => updateDesignOption('sectionIndividualColors', {
+                                        ...designOptions.sectionIndividualColors,
+                                        section3: e.target.value
+                                      })}
+                                    />
+                                  </FormControl>
+                                </>
+                              )}
+                              
+                              <FormControl>
                                 <FormLabel fontSize="xs">Columnas</FormLabel>
                                 <Select 
                                   size="sm"
@@ -554,85 +628,98 @@ const MagicDesignPage = () => {
                               }
                             : {}
                         }
-                      >
-                        <VStack spacing={4} align="center">
-                          <Heading 
-                            size="lg" 
-                            color="gray.700"
-                            fontFamily={designOptions.sectionTitleFont}
-                            textAlign={designOptions.menuTitleAlign}
-                            width="100%"
-                            mt={`${designOptions.menuTitleMargin}px`}
-                          >
-                            {designOptions.menuTitle || 'Nombre del Menú'}
-                          </Heading>
-                          
-                          <Box 
-                            width={`${designOptions.sectionWidth}%`} 
-                            p={`${designOptions.sectionMargin}px`} 
-                            bg={designOptions.sectionColor} 
-                            borderRadius="md"
-                          >
-                            <Text 
-                              fontSize={`${designOptions.sectionTitleSize}px`}
-                              fontWeight="bold" 
-                              mb={2}
+                      >                          <VStack spacing={4} align="center">
+                            <Heading 
+                              size="lg" 
+                              color="gray.700"
                               fontFamily={designOptions.sectionTitleFont}
-                              textAlign={designOptions.sectionTitleAlign}
+                              textAlign={designOptions.menuTitleAlign}
+                              width="100%"
+                              mt={`${designOptions.menuTitleMargin}px`}
                             >
-                              Sección de ejemplo
-                            </Text>
+                              {designOptions.menuTitle || 'Nombre del Menú'}
+                            </Heading>
                             
-                            {designOptions.sectionDividers && (
-                              <Divider 
-                                mb={3} 
-                                borderWidth={`${designOptions.sectionDividerWidth}px`}
-                                borderColor="gray.300"
-                              />
-                            )}
-                            
-                            <SimpleGrid columns={designOptions.sectionColumns} spacing={2}>
-                              {[1, 2].map((item) => (
-                                <Box key={item} p={3} bg="white" borderRadius="md" shadow="sm">
-                                  {designOptions.productLayout === 'horizontal' && (
-                                    <Flex justify="space-between" align="start">
-                                      <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={1}>
-                                        <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
-                                        {designOptions.productShowDescription && (
-                                          <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
-                                        )}
-                                      </VStack>
-                                      <Text fontSize="sm" fontWeight="bold" color="green.600">$15.99</Text>
-                                    </Flex>
+                            {/* Múltiples secciones de ejemplo */}
+                            {[1, 2, 3].map((sectionIndex) => {
+                              let sectionBgColor;
+                              
+                              if (designOptions.sectionColorMode === 'global') {
+                                sectionBgColor = designOptions.sectionGlobalColor;
+                              } else {
+                                sectionBgColor = designOptions.sectionIndividualColors[`section${sectionIndex}`];
+                              }
+                              
+                              return (
+                                <Box 
+                                  key={sectionIndex}
+                                  width={`${designOptions.sectionWidth}%`} 
+                                  p={`${designOptions.sectionMargin}px`} 
+                                  bg={sectionBgColor} 
+                                  borderRadius="md"
+                                >
+                                  <Text 
+                                    fontSize={`${designOptions.sectionTitleSize}px`}
+                                    fontWeight="bold" 
+                                    mb={2}
+                                    fontFamily={designOptions.sectionTitleFont}
+                                    textAlign={designOptions.sectionTitleAlign}
+                                  >
+                                    Sección {sectionIndex}
+                                  </Text>
+                                  
+                                  {designOptions.sectionDividers && (
+                                    <Divider 
+                                      mb={3} 
+                                      borderWidth={`${designOptions.sectionDividerWidth}px`}
+                                      borderColor="gray.300"
+                                    />
                                   )}
                                   
-                                  {designOptions.productLayout === 'vertical' && (
-                                    <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={2}>
-                                      <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
-                                      {designOptions.productShowDescription && (
-                                        <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
-                                      )}
-                                      <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign={designOptions.productTextAlign}>$15.99</Text>
-                                    </VStack>
-                                  )}
-                                  
-                                  {designOptions.productLayout === 'card' && (
-                                    <VStack spacing={3} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
-                                      <Box w="100%" h="60px" bg="gray.200" borderRadius="md" />
-                                      <VStack spacing={1} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
-                                        <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
-                                        {designOptions.productShowDescription && (
-                                          <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción</Text>
+                                  <SimpleGrid columns={designOptions.sectionColumns} spacing={2}>
+                                    {[1, 2].map((item) => (
+                                      <Box key={item} p={3} bg="white" borderRadius="md" shadow="sm">
+                                        {designOptions.productLayout === 'horizontal' && (
+                                          <Flex justify="space-between" align="start">
+                                            <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={1}>
+                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
+                                              {designOptions.productShowDescription && (
+                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
+                                              )}
+                                            </VStack>
+                                            <Text fontSize="sm" fontWeight="bold" color="green.600">$15.99</Text>
+                                          </Flex>
                                         )}
-                                        <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign={designOptions.productTextAlign}>$15.99</Text>
-                                      </VStack>
-                                    </VStack>
-                                  )}
+                                        
+                                        {designOptions.productLayout === 'vertical' && (
+                                          <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={2}>
+                                            <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
+                                            {designOptions.productShowDescription && (
+                                              <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
+                                            )}
+                                            <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign={designOptions.productTextAlign}>$15.99</Text>
+                                          </VStack>
+                                        )}
+                                        
+                                        {designOptions.productLayout === 'card' && (
+                                          <VStack spacing={3} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
+                                            <Box w="100%" h="60px" bg="gray.200" borderRadius="md" />
+                                            <VStack spacing={1} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
+                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
+                                              {designOptions.productShowDescription && (
+                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción</Text>
+                                              )}
+                                              <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign={designOptions.productTextAlign}>$15.99</Text>
+                                            </VStack>
+                                          </VStack>
+                                        )}
+                                      </Box>
+                                    ))}
+                                  </SimpleGrid>
                                 </Box>
-                              ))}
-                            </SimpleGrid>
-                          </Box>
-                        </VStack>
+                              );
+                            })}
+                          </VStack>
                       </Box>
                     </VStack>
                   </Box>
