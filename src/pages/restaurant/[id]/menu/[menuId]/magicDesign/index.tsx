@@ -60,6 +60,10 @@ const MagicDesignPage = () => {
     menuFrameDoubleGap: 3, // separación entre líneas dobles en px
     menuBackground: '#ffffff',
     menuTitleAlign: 'center', // left, center, right
+    menuShowNavigation: false, // mostrar/ocultar navegación horizontal
+    menuNavigationStyle: 'pills', // pills, underline, simple
+    menuNavigationColor: '#3182ce', // color de la navegación
+    menuNavigationBackground: '#f7fafc', // color de fondo de la navegación
     
     // Sección
     sectionMargin: 20,
@@ -125,7 +129,7 @@ const MagicDesignPage = () => {
                 </Button>
               </Flex>
 
-              <Card margin={5} height={'100%'} overflowY="hidden">
+              <Card margin={5} height={'calc(100vh - 200px)'} overflow="hidden">
                 <Flex height="100%">
                   {/* Panel izquierdo - Parámetros */}
                   <Box 
@@ -316,6 +320,54 @@ const MagicDesignPage = () => {
                                       </SliderTrack>
                                       <SliderThumb />
                                     </Slider>
+                                  </FormControl>
+                                </>
+                              )}
+                              
+                              <FormControl>
+                                <HStack justify="space-between">
+                                  <FormLabel fontSize="xs" mb={0}>Navegación por secciones</FormLabel>
+                                  <Switch 
+                                    size="sm"
+                                    isChecked={designOptions.menuShowNavigation}
+                                    onChange={(e) => updateDesignOption('menuShowNavigation', e.target.checked)}
+                                  />
+                                </HStack>
+                              </FormControl>
+                              
+                              {designOptions.menuShowNavigation && (
+                                <>
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Estilo de navegación</FormLabel>
+                                    <Select 
+                                      size="sm"
+                                      value={designOptions.menuNavigationStyle}
+                                      onChange={(e) => updateDesignOption('menuNavigationStyle', e.target.value)}
+                                    >
+                                      <option value="pills">Pills (botones redondeados)</option>
+                                      <option value="underline">Subrayado</option>
+                                      <option value="simple">Simple</option>
+                                    </Select>
+                                  </FormControl>
+                                  
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Color de navegación</FormLabel>
+                                    <Input 
+                                      size="sm"
+                                      type="color"
+                                      value={designOptions.menuNavigationColor}
+                                      onChange={(e) => updateDesignOption('menuNavigationColor', e.target.value)}
+                                    />
+                                  </FormControl>
+                                  
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Fondo de navegación</FormLabel>
+                                    <Input 
+                                      size="sm"
+                                      type="color"
+                                      value={designOptions.menuNavigationBackground}
+                                      onChange={(e) => updateDesignOption('menuNavigationBackground', e.target.value)}
+                                    />
                                   </FormControl>
                                 </>
                               )}
@@ -634,13 +686,22 @@ const MagicDesignPage = () => {
                   {/* Panel derecho - Preview */}
                   <Box 
                     width="50%" 
-                    overflowY="auto"
+                    overflow="hidden"
                     p={6}
                     bg="gray.50"
+                    display="flex"
+                    flexDirection="column"
                   >
-                    <VStack spacing={4} align="stretch">
-                      <Heading size="md">📱 Vista Previa</Heading>
-                      
+                    <Heading size="md" mb={4}>📱 Vista Previa</Heading>
+                    
+                    {/* Container del preview con scroll independiente */}
+                    <Box 
+                      flex="1"
+                      overflow="hidden"
+                      display="flex"
+                      flexDirection="column"
+                      minHeight="0"
+                    >
                       {/* Preview del menú */}
                       <Box 
                         bg={designOptions.menuBackground}
@@ -653,9 +714,10 @@ const MagicDesignPage = () => {
                         }
                         borderRadius={`${designOptions.menuFrameRadius}px`}
                         margin={designOptions.menuFrame ? `${designOptions.menuFrameMargin}px` : '0'}
-                        p={4}
-                        minHeight="500px"
+                        height="100%"
                         position="relative"
+                        display="flex"
+                        flexDirection="column"
                         sx={
                           designOptions.menuFrame && designOptions.menuFrameStyle === 'double'
                             ? {
@@ -673,19 +735,133 @@ const MagicDesignPage = () => {
                               }
                             : {}
                         }
-                      >                          <VStack spacing={4} align="center">
-                            <Heading 
-                              size="lg" 
-                              color="gray.700"
-                              fontFamily={designOptions.sectionTitleFont}
-                              textAlign={designOptions.menuTitleAlign}
-                              width="100%"
-                              mt={`${designOptions.menuTitleMargin}px`}
-                            >
-                              {designOptions.menuTitle || 'Nombre del Menú'}
-                            </Heading>
+                      >
+                        {/* Header con título y navegación (fijo solo si hay navegación) */}
+                        <Box 
+                          position={designOptions.menuShowNavigation ? "sticky" : "static"}
+                          top={designOptions.menuShowNavigation ? 0 : "auto"}
+                          bg={designOptions.menuBackground}
+                          zIndex={designOptions.menuShowNavigation ? 10 : "auto"}
+                          pb={4}
+                          pt={4}
+                          borderBottom={designOptions.menuShowNavigation ? "1px solid" : "none"}
+                          borderColor={designOptions.menuShowNavigation ? "gray.100" : "transparent"}
+                        >
+                          {/* Solo mostrar título y navegación en header fijo si la navegación está habilitada */}
+                          {designOptions.menuShowNavigation && (
+                            <VStack spacing={4} align="center">
+                              <Heading 
+                                size="lg" 
+                                color="gray.700"
+                                fontFamily={designOptions.sectionTitleFont}
+                                textAlign={designOptions.menuTitleAlign}
+                                width="100%"
+                                mt={`${designOptions.menuTitleMargin}px`}
+                              >
+                                {designOptions.menuTitle || 'Nombre del Menú'}
+                              </Heading>
+                              
+                              {/* Navegación horizontal por secciones */}
+                              <Box 
+                                w="100%" 
+                                bg={designOptions.menuNavigationBackground}
+                                borderRadius="md"
+                                p={3}
+                              >
+                                <Flex 
+                                  justify="center" 
+                                  align="center" 
+                                  gap={designOptions.menuNavigationStyle === 'pills' ? 2 : 4}
+                                  wrap="wrap"
+                                >
+                                  {['Sección 1', 'Sección 2', 'Sección 3'].map((sectionName, index) => (
+                                    <Box
+                                      key={index}
+                                      px={designOptions.menuNavigationStyle === 'pills' ? 4 : 2}
+                                      py={designOptions.menuNavigationStyle === 'pills' ? 2 : 1}
+                                      bg={designOptions.menuNavigationStyle === 'pills' ? designOptions.menuNavigationColor : 'transparent'}
+                                      color={designOptions.menuNavigationStyle === 'pills' ? 'white' : designOptions.menuNavigationColor}
+                                      borderRadius={designOptions.menuNavigationStyle === 'pills' ? 'full' : 'none'}
+                                      borderBottom={designOptions.menuNavigationStyle === 'underline' ? `2px solid ${designOptions.menuNavigationColor}` : 'none'}
+                                      fontSize="sm"
+                                      fontWeight="medium"
+                                      cursor="pointer"
+                                      transition="all 0.2s"
+                                      onClick={() => {
+                                        const element = document.getElementById(`section-${index + 1}`);
+                                        const container = document.getElementById('menu-scroll-container');
+                                        if (element && container) {
+                                          // Calcular la posición relativa al contenedor
+                                          const containerRect = container.getBoundingClientRect();
+                                          const elementRect = element.getBoundingClientRect();
+                                          const scrollTop = container.scrollTop;
+                                          const offset = elementRect.top - containerRect.top + scrollTop - 20; // 20px de margen superior
+                                          
+                                          container.scrollTo({
+                                            top: offset,
+                                            behavior: 'smooth'
+                                          });
+                                        }
+                                      }}
+                                      _hover={{
+                                        bg: designOptions.menuNavigationStyle === 'pills' 
+                                          ? designOptions.menuNavigationColor 
+                                          : designOptions.menuNavigationStyle === 'simple' 
+                                            ? `${designOptions.menuNavigationColor}20` 
+                                            : 'transparent',
+                                        opacity: designOptions.menuNavigationStyle === 'underline' ? 0.8 : 1
+                                      }}
+                                    >
+                                      {sectionName}
+                                    </Box>
+                                  ))}
+                                </Flex>
+                              </Box>
+                            </VStack>
+                          )}
+                        </Box>
+                        
+                        {/* Contenido con scroll */}
+                        <Box 
+                          id="menu-scroll-container"
+                          p={4} 
+                          flex="1"
+                          overflowY="auto"
+                          overflowX="hidden"
+                          maxHeight="calc(100vh - 300px)"
+                          css={{
+                            scrollBehavior: 'smooth',
+                            '&::-webkit-scrollbar': {
+                              width: '6px',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                              background: '#f1f1f1',
+                              borderRadius: '3px',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                              background: '#c1c1c1',
+                              borderRadius: '3px',
+                            },
+                            '&::-webkit-scrollbar-thumb:hover': {
+                              background: '#a1a1a1',
+                            },
+                          }}
+                        >
+                          <VStack spacing={4} align="center">
+                            {/* Mostrar título aquí solo si la navegación está deshabilitada */}
+                            {!designOptions.menuShowNavigation && (
+                              <Heading 
+                                size="lg" 
+                                color="gray.700"
+                                fontFamily={designOptions.sectionTitleFont}
+                                textAlign={designOptions.menuTitleAlign}
+                                width="100%"
+                                mt={`${designOptions.menuTitleMargin}px`}
+                              >
+                                {designOptions.menuTitle || 'Nombre del Menú'}
+                              </Heading>
+                            )}
                             
-                            {/* Múltiples secciones de ejemplo */}
                             {[1, 2, 3].map((sectionIndex) => {
                               let sectionBgColor;
                               
@@ -698,6 +874,7 @@ const MagicDesignPage = () => {
                               return (
                                 <Box 
                                   key={sectionIndex}
+                                  id={`section-${sectionIndex}`}
                                   width={`${designOptions.sectionWidth}%`} 
                                   p={`${designOptions.sectionMargin}px`} 
                                   bg={sectionBgColor} 
@@ -722,7 +899,7 @@ const MagicDesignPage = () => {
                                   )}
                                   
                                   <SimpleGrid columns={designOptions.sectionColumns} spacing={2}>
-                                    {[1, 2].map((item) => (
+                                    {[1, 2, 3, 4, 5].map((item) => (
                                       <Box 
                                         key={item} 
                                         p={designOptions.productShowContainer ? 3 : 1} 
@@ -771,8 +948,9 @@ const MagicDesignPage = () => {
                               );
                             })}
                           </VStack>
+                        </Box>
                       </Box>
-                    </VStack>
+                    </Box>
                   </Box>
                 </Flex>
               </Card>
