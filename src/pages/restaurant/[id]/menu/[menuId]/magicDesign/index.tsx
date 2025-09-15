@@ -82,7 +82,11 @@ const MagicDesignPage = () => {
     // Productos
     productLayout: 'horizontal', // horizontal, vertical, card
     productTextAlign: 'left', // left, center, right
-    productShowDescription: true // mostrar/ocultar descripción
+    productShowDescription: true, // mostrar/ocultar descripción
+    productShowContainer: true, // mostrar/ocultar contenedor de productos
+    productBackgroundColor: '#ffffff', // color de fondo de los productos
+    productTextColor: '#000000', // color de texto de los productos
+    productPriceColor: '#38a169' // color del precio de los productos
   });
 
   useEffect(() => {
@@ -579,6 +583,47 @@ const MagicDesignPage = () => {
                                   />
                                 </HStack>
                               </FormControl>
+                              
+                              <FormControl>
+                                <HStack justify="space-between">
+                                  <FormLabel fontSize="xs" mb={0}>Mostrar contenedor</FormLabel>
+                                  <Switch 
+                                    size="sm"
+                                    isChecked={designOptions.productShowContainer}
+                                    onChange={(e) => updateDesignOption('productShowContainer', e.target.checked)}
+                                  />
+                                </HStack>
+                              </FormControl>
+                              
+                              <FormControl>
+                                <FormLabel fontSize="xs">Color de fondo del producto</FormLabel>
+                                <Input 
+                                  size="sm"
+                                  type="color"
+                                  value={designOptions.productBackgroundColor}
+                                  onChange={(e) => updateDesignOption('productBackgroundColor', e.target.value)}
+                                />
+                              </FormControl>
+                              
+                              <FormControl>
+                                <FormLabel fontSize="xs">Color de texto del producto</FormLabel>
+                                <Input 
+                                  size="sm"
+                                  type="color"
+                                  value={designOptions.productTextColor}
+                                  onChange={(e) => updateDesignOption('productTextColor', e.target.value)}
+                                />
+                              </FormControl>
+                              
+                              <FormControl>
+                                <FormLabel fontSize="xs">Color del precio</FormLabel>
+                                <Input 
+                                  size="sm"
+                                  type="color"
+                                  value={designOptions.productPriceColor}
+                                  onChange={(e) => updateDesignOption('productPriceColor', e.target.value)}
+                                />
+                              </FormControl>
                             </VStack>
                           </AccordionPanel>
                         </AccordionItem>
@@ -678,26 +723,32 @@ const MagicDesignPage = () => {
                                   
                                   <SimpleGrid columns={designOptions.sectionColumns} spacing={2}>
                                     {[1, 2].map((item) => (
-                                      <Box key={item} p={3} bg="white" borderRadius="md" shadow="sm">
+                                      <Box 
+                                        key={item} 
+                                        p={designOptions.productShowContainer ? 3 : 1} 
+                                        bg={designOptions.productShowContainer ? designOptions.productBackgroundColor : "transparent"} 
+                                        borderRadius={designOptions.productShowContainer ? "md" : "none"} 
+                                        shadow={designOptions.productShowContainer ? "sm" : "none"}
+                                      >
                                         {designOptions.productLayout === 'horizontal' && (
                                           <Flex justify="space-between" align="start">
                                             <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={1}>
-                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
+                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign} color={designOptions.productTextColor}>Producto {item}</Text>
                                               {designOptions.productShowDescription && (
                                                 <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
                                               )}
                                             </VStack>
-                                            <Text fontSize="sm" fontWeight="bold" color="green.600">$15.99</Text>
+                                            <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor}>$15.99</Text>
                                           </Flex>
                                         )}
                                         
                                         {designOptions.productLayout === 'vertical' && (
                                           <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={2}>
-                                            <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
+                                            <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign} color={designOptions.productTextColor}>Producto {item}</Text>
                                             {designOptions.productShowDescription && (
                                               <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
                                             )}
-                                            <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign={designOptions.productTextAlign}>$15.99</Text>
+                                            <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign}>$15.99</Text>
                                           </VStack>
                                         )}
                                         
@@ -705,11 +756,11 @@ const MagicDesignPage = () => {
                                           <VStack spacing={3} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
                                             <Box w="100%" h="60px" bg="gray.200" borderRadius="md" />
                                             <VStack spacing={1} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
-                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign}>Producto {item}</Text>
+                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign} color={designOptions.productTextColor}>Producto {item}</Text>
                                               {designOptions.productShowDescription && (
                                                 <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción</Text>
                                               )}
-                                              <Text fontSize="sm" fontWeight="bold" color="green.600" textAlign={designOptions.productTextAlign}>$15.99</Text>
+                                              <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign}>$15.99</Text>
                                             </VStack>
                                           </VStack>
                                         )}
