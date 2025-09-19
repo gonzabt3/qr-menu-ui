@@ -36,16 +36,61 @@ import BaseCompents from "../../../../../components/BaseCompents";
 import BreadcrumComponent from "../../../../../components/breadcrum";
 import { returnOnlyString } from "../../../../../../common/utils";
 import useMenu from "../../../../../../hooks/useMenu";
+import useFullMenu from "../../../../../../hooks/useFullMenu";
 
 const MagicDesignPage = () => {
   const router = useRouter();
   const id = returnOnlyString(router.query.id);
   const menuId = returnOnlyString(router.query.menuId);
   const ref: any = useRef(null);
-  const { menu, loading } = useMenu(id, menuId);
+  const { menu, loading } = useFullMenu(id, menuId);
+  // Obtener secciones reales del menú (ajustar según la estructura real)
+  const sections = (menu && (menu.sections || menu.menu_sections || menu.secciones)) || [];
 
   // Estados para las opciones de diseño
-  const [designOptions, setDesignOptions] = useState({
+  const [designOptions, setDesignOptions] = useState<{
+    // Menú
+    menuTitle: string;
+    menuTitleMargin: number; // separación del título del borde superior en px
+    menuFrame: boolean;
+    menuFrameStyle: 'solid' | 'dashed' | 'dotted' | 'double'; // solid, dashed, dotted, double
+    menuFrameWidth: number; // grosor en px
+    menuFrameColor: string;
+    menuFrameRadius: number; // border radius
+    menuFrameMargin: number; // separación del marco del borde de la página
+    menuFrameDoubleWidth1: number; // grosor de la primera línea para doble
+    menuFrameDoubleWidth2: number; // grosor de la segunda línea para doble
+    menuFrameDoubleGap: number; // separación entre líneas dobles en px
+    menuBackground: string;
+    menuTitleAlign: 'left' | 'center' | 'right'; // left, center, right
+    menuShowNavigation: boolean; // mostrar/ocultar navegación horizontal
+    menuNavigationStyle: 'pills' | 'underline' | 'simple'; // pills, underline, simple
+    menuNavigationColor: string; // color de la navegación
+    menuNavigationBackground: string; // color de fondo de la navegación
+    
+    // Sección
+    sectionMargin: number;
+    sectionWidth: number;
+    sectionColor: string;
+    sectionColorMode: 'global' | 'individual';
+    sectionGlobalColor: string;
+    sectionIndividualColors: Record<string, string>;
+    sectionColumns: Record<string, number>;
+    sectionTitleFont: string;
+    sectionTitleSize: number; // tamaño de fuente en px
+    sectionDividers: boolean;
+    sectionDividerWidth: number; // ancho del divisor en px
+    sectionTitleAlign: 'left' | 'center' | 'right'; // left, center, right
+    
+    // Productos
+    productLayout: 'horizontal' | 'vertical' | 'card'; // horizontal, vertical, card
+    productTextAlign: 'left' | 'center' | 'right'; // left, center, right
+    productShowDescription: boolean; // mostrar/ocultar descripción
+    productShowContainer: boolean; // mostrar/ocultar contenedor de productos
+    productBackgroundColor: string; // color de fondo de los productos
+    productTextColor: string; // color de texto de los productos
+    productPriceColor: string; // color del precio de los productos
+  }>({
     // Menú
     menuTitle: menu?.name || '',
     menuTitleMargin: 20, // separación del título del borde superior en px
@@ -69,14 +114,10 @@ const MagicDesignPage = () => {
     sectionMargin: 20,
     sectionWidth: 100,
     sectionColor: '#f7fafc',
-    sectionColorMode: 'global', // 'global' o 'individual'
-    sectionGlobalColor: '#f7fafc', // color global para todas las secciones
-    sectionIndividualColors: {
-      section1: '#f7fafc',
-      section2: '#e6fffa',
-      section3: '#fef5e7'
-    }, // colores individuales por sección
-    sectionColumns: 1,
+    sectionColorMode: 'global',
+    sectionGlobalColor: '#f7fafc',
+    sectionIndividualColors: {},
+    sectionColumns: {},
     sectionTitleFont: 'Arial',
     sectionTitleSize: 16, // tamaño de fuente en px
     sectionDividers: true,
@@ -92,6 +133,25 @@ const MagicDesignPage = () => {
     productTextColor: '#000000', // color de texto de los productos
     productPriceColor: '#38a169' // color del precio de los productos
   });
+
+  // Sincronizar opciones de secciones con la data real del menú
+  useEffect(() => {
+    if (sections.length > 0) {
+      const newSectionColumns: Record<string, number> = { ...designOptions.sectionColumns };
+      const newSectionColors: Record<string, string> = { ...designOptions.sectionIndividualColors };
+      sections.forEach((section: any, idx: number) => {
+        const key = section.id?.toString() || `section${idx+1}`;
+        if (!(key in newSectionColumns)) newSectionColumns[key] = 1;
+        if (!(key in newSectionColors)) newSectionColors[key] = '#f7fafc';
+      });
+      setDesignOptions(prev => ({
+        ...prev,
+        sectionColumns: newSectionColumns,
+        sectionIndividualColors: newSectionColors
+      }));
+    }
+    // eslint-disable-next-line
+  }, [sections.length]);
 
   useEffect(() => {
     if (ref.current) {
@@ -461,58 +521,50 @@ const MagicDesignPage = () => {
                               
                               {designOptions.sectionColorMode === 'individual' && (
                                 <>
-                                  <FormControl>
-                                    <FormLabel fontSize="xs">Color Sección 1</FormLabel>
-                                    <Input 
-                                      size="sm"
-                                      type="color"
-                                      value={designOptions.sectionIndividualColors.section1}
-                                      onChange={(e) => updateDesignOption('sectionIndividualColors', {
-                                        ...designOptions.sectionIndividualColors,
-                                        section1: e.target.value
-                                      })}
-                                    />
-                                  </FormControl>
-                                  
-                                  <FormControl>
-                                    <FormLabel fontSize="xs">Color Sección 2</FormLabel>
-                                    <Input 
-                                      size="sm"
-                                      type="color"
-                                      value={designOptions.sectionIndividualColors.section2}
-                                      onChange={(e) => updateDesignOption('sectionIndividualColors', {
-                                        ...designOptions.sectionIndividualColors,
-                                        section2: e.target.value
-                                      })}
-                                    />
-                                  </FormControl>
-                                  
-                                  <FormControl>
-                                    <FormLabel fontSize="xs">Color Sección 3</FormLabel>
-                                    <Input 
-                                      size="sm"
-                                      type="color"
-                                      value={designOptions.sectionIndividualColors.section3}
-                                      onChange={(e) => updateDesignOption('sectionIndividualColors', {
-                                        ...designOptions.sectionIndividualColors,
-                                        section3: e.target.value
-                                      })}
-                                    />
-                                  </FormControl>
+                                  {sections.map((section: any, idx: number) => {
+                                    const key = section.id?.toString() || `section${idx+1}`;
+                                    return (
+                                      <FormControl key={key}>
+                                        <FormLabel fontSize="xs">Color {section.name || `Sección ${idx+1}`}</FormLabel>
+                                        <Input
+                                          size="sm"
+                                          type="color"
+                                          value={designOptions.sectionIndividualColors[key] || '#f7fafc'}
+                                          onChange={(e) => updateDesignOption('sectionIndividualColors', {
+                                            ...designOptions.sectionIndividualColors,
+                                            [key]: e.target.value
+                                          })}
+                                        />
+                                      </FormControl>
+                                    );
+                                  })}
                                 </>
                               )}
                               
                               <FormControl>
-                                <FormLabel fontSize="xs">Columnas</FormLabel>
-                                <Select 
-                                  size="sm"
-                                  value={designOptions.sectionColumns}
-                                  onChange={(e) => updateDesignOption('sectionColumns', parseInt(e.target.value))}
-                                >
-                                  <option value={1}>1 Columna</option>
-                                  <option value={2}>2 Columnas</option>
-                                  <option value={3}>3 Columnas</option>
-                                </Select>
+                                <FormLabel fontSize="xs">Columnas por sección</FormLabel>
+                                <VStack align="stretch" spacing={2}>
+                                  {sections.map((section: any, idx: number) => {
+                                    const key = section.id?.toString() || `section${idx+1}`;
+                                    return (
+                                      <Box key={key}>
+                                        <FormLabel fontSize="xs" mb={1}>{section.name || `Sección ${idx+1}`}</FormLabel>
+                                        <Select
+                                          size="sm"
+                                          value={designOptions.sectionColumns[key] || 1}
+                                          onChange={(e) => updateDesignOption('sectionColumns', {
+                                            ...designOptions.sectionColumns,
+                                            [key]: parseInt(e.target.value)
+                                          })}
+                                        >
+                                          <option value={1}>1 Columna</option>
+                                          <option value={2}>2 Columnas</option>
+                                          <option value={3}>3 Columnas</option>
+                                        </Select>
+                                      </Box>
+                                    );
+                                  })}
+                                </VStack>
                               </FormControl>
                               
                               <FormControl>
@@ -774,9 +826,9 @@ const MagicDesignPage = () => {
                                   gap={designOptions.menuNavigationStyle === 'pills' ? 2 : 4}
                                   wrap="wrap"
                                 >
-                                  {['Sección 1', 'Sección 2', 'Sección 3'].map((sectionName, index) => (
+                                  {sections.map((section: any, index: number) => (
                                     <Box
-                                      key={index}
+                                      key={section.id?.toString() || `section${index+1}`}
                                       px={designOptions.menuNavigationStyle === 'pills' ? 4 : 2}
                                       py={designOptions.menuNavigationStyle === 'pills' ? 2 : 1}
                                       bg={designOptions.menuNavigationStyle === 'pills' ? designOptions.menuNavigationColor : 'transparent'}
@@ -788,15 +840,14 @@ const MagicDesignPage = () => {
                                       cursor="pointer"
                                       transition="all 0.2s"
                                       onClick={() => {
-                                        const element = document.getElementById(`section-${index + 1}`);
+                                        const key = section.id?.toString() || `section${index+1}`;
+                                        const element = document.getElementById(`section-${key}`);
                                         const container = document.getElementById('menu-scroll-container');
                                         if (element && container) {
-                                          // Calcular la posición relativa al contenedor
                                           const containerRect = container.getBoundingClientRect();
                                           const elementRect = element.getBoundingClientRect();
                                           const scrollTop = container.scrollTop;
-                                          const offset = elementRect.top - containerRect.top + scrollTop - 20; // 20px de margen superior
-                                          
+                                          const offset = elementRect.top - containerRect.top + scrollTop - 20;
                                           container.scrollTo({
                                             top: offset,
                                             behavior: 'smooth'
@@ -812,7 +863,7 @@ const MagicDesignPage = () => {
                                         opacity: designOptions.menuNavigationStyle === 'underline' ? 0.8 : 1
                                       }}
                                     >
-                                      {sectionName}
+                                      {section.name || `Sección ${index+1}`}
                                     </Box>
                                   ))}
                                 </Flex>
@@ -862,82 +913,78 @@ const MagicDesignPage = () => {
                               </Heading>
                             )}
                             
-                            {[1, 2, 3].map((sectionIndex) => {
+                            {sections.map((section: any, idx: number) => {
+                              const key = section.id?.toString() || `section${idx+1}`;
                               let sectionBgColor;
-                              
                               if (designOptions.sectionColorMode === 'global') {
                                 sectionBgColor = designOptions.sectionGlobalColor;
                               } else {
-                                sectionBgColor = designOptions.sectionIndividualColors[`section${sectionIndex}`];
+                                sectionBgColor = designOptions.sectionIndividualColors[key] || '#f7fafc';
                               }
-                              
                               return (
-                                <Box 
-                                  key={sectionIndex}
-                                  id={`section-${sectionIndex}`}
-                                  width={`${designOptions.sectionWidth}%`} 
-                                  p={`${designOptions.sectionMargin}px`} 
-                                  bg={sectionBgColor} 
+                                <Box
+                                  key={key}
+                                  id={`section-${key}`}
+                                  width={`${designOptions.sectionWidth}%`}
+                                  p={`${designOptions.sectionMargin}px`}
+                                  bg={sectionBgColor}
                                   borderRadius="md"
                                 >
-                                  <Text 
+                                  <Text
                                     fontSize={`${designOptions.sectionTitleSize}px`}
-                                    fontWeight="bold" 
+                                    fontWeight="bold"
                                     mb={2}
                                     fontFamily={designOptions.sectionTitleFont}
-                                    textAlign={designOptions.sectionTitleAlign}
+                                    textAlign={designOptions.sectionTitleAlign as any}
                                   >
-                                    Sección {sectionIndex}
+                                    {section.name || `Sección ${idx+1}`}
                                   </Text>
-                                  
                                   {designOptions.sectionDividers && (
-                                    <Divider 
-                                      mb={3} 
+                                    <Divider
+                                      mb={3}
                                       borderWidth={`${designOptions.sectionDividerWidth}px`}
                                       borderColor="gray.300"
                                     />
                                   )}
-                                  
-                                  <SimpleGrid columns={designOptions.sectionColumns} spacing={2}>
+                                  <SimpleGrid columns={designOptions.sectionColumns[key] || 1} spacing={2}>
                                     {[1, 2, 3, 4, 5].map((item) => (
-                                      <Box 
-                                        key={item} 
-                                        p={designOptions.productShowContainer ? 3 : 1} 
-                                        bg={designOptions.productShowContainer ? designOptions.productBackgroundColor : "transparent"} 
-                                        borderRadius={designOptions.productShowContainer ? "md" : "none"} 
+                                      <Box
+                                        key={item}
+                                        p={designOptions.productShowContainer ? 3 : 1}
+                                        bg={designOptions.productShowContainer ? designOptions.productBackgroundColor : "transparent"}
+                                        borderRadius={designOptions.productShowContainer ? "md" : "none"}
                                         shadow={designOptions.productShowContainer ? "sm" : "none"}
                                       >
+                                        {/* ...productos de ejemplo... */}
                                         {designOptions.productLayout === 'horizontal' && (
                                           <Flex justify="space-between" align="start">
-                                            <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={1}>
-                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign} color={designOptions.productTextColor}>Producto {item}</Text>
+                                            <VStack align={designOptions.productTextAlign as any} spacing={1}>
+                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>Producto {item}</Text>
                                               {designOptions.productShowDescription && (
-                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
+                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>Descripción del producto</Text>
                                               )}
                                             </VStack>
                                             <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor}>$15.99</Text>
                                           </Flex>
                                         )}
-                                        
                                         {designOptions.productLayout === 'vertical' && (
-                                          <VStack align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'} spacing={2}>
-                                            <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign} color={designOptions.productTextColor}>Producto {item}</Text>
+                                          <VStack align={designOptions.productTextAlign as any} spacing={2}>
+                                            <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>Producto {item}</Text>
                                             {designOptions.productShowDescription && (
-                                              <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción del producto</Text>
+                                              <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>Descripción del producto</Text>
                                             )}
-                                            <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign}>$15.99</Text>
+                                            <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign as any}>$15.99</Text>
                                           </VStack>
                                         )}
-                                        
                                         {designOptions.productLayout === 'card' && (
-                                          <VStack spacing={3} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
+                                          <VStack spacing={3} align={designOptions.productTextAlign as any}>
                                             <Box w="100%" h="60px" bg="gray.200" borderRadius="md" />
-                                            <VStack spacing={1} align={designOptions.productTextAlign === 'center' ? 'center' : designOptions.productTextAlign === 'right' ? 'end' : 'start'}>
-                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign} color={designOptions.productTextColor}>Producto {item}</Text>
+                                            <VStack spacing={1} align={designOptions.productTextAlign as any}>
+                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>Producto {item}</Text>
                                               {designOptions.productShowDescription && (
-                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign}>Descripción</Text>
+                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>Descripción</Text>
                                               )}
-                                              <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign}>$15.99</Text>
+                                              <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign as any}>$15.99</Text>
                                             </VStack>
                                           </VStack>
                                         )}
