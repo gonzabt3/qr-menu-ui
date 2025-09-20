@@ -83,6 +83,7 @@ const MagicDesignPage = () => {
     sectionDividers: boolean;
     sectionDividerWidth: number; // ancho del divisor en px
     sectionTitleAlign: 'left' | 'center' | 'right'; // left, center, right
+    sectionDividerColor: string; // color del divisor
     
     // Productos
     productLayout: 'horizontal' | 'vertical' | 'card'; // horizontal, vertical, card
@@ -125,6 +126,7 @@ const MagicDesignPage = () => {
     sectionDividers: true,
     sectionDividerWidth: 1, // ancho del divisor en px
     sectionTitleAlign: 'left', // left, center, right
+    sectionDividerColor: '#cccccc', // color por defecto del divisor
     
     // Productos
     productLayout: 'horizontal', // horizontal, vertical, card
@@ -624,20 +626,32 @@ const MagicDesignPage = () => {
                               </FormControl>
                               
                               {designOptions.sectionDividers && (
-                                <FormControl>
-                                  <FormLabel fontSize="xs">Ancho del divisor: {designOptions.sectionDividerWidth}px</FormLabel>
-                                  <Slider
-                                    value={designOptions.sectionDividerWidth}
-                                    onChange={(value) => updateDesignOption('sectionDividerWidth', value)}
-                                    min={1}
-                                    max={5}
-                                  >
-                                    <SliderTrack>
-                                      <SliderFilledTrack />
-                                    </SliderTrack>
-                                    <SliderThumb />
-                                  </Slider>
-                                </FormControl>
+                                <>
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Ancho del divisor: {designOptions.sectionDividerWidth}px</FormLabel>
+                                    <Slider
+                                      value={designOptions.sectionDividerWidth}
+                                      onChange={(value) => updateDesignOption('sectionDividerWidth', value)}
+                                      min={1}
+                                      max={5}
+                                    >
+                                      <SliderTrack>
+                                        <SliderFilledTrack />
+                                      </SliderTrack>
+                                      <SliderThumb />
+                                    </Slider>
+                                  </FormControl>
+                                  
+                                  <FormControl>
+                                    <FormLabel fontSize="xs">Color del divisor</FormLabel>
+                                    <Input
+                                      size="sm"
+                                      type="color"
+                                      value={designOptions.sectionDividerColor}
+                                      onChange={(e) => updateDesignOption('sectionDividerColor', e.target.value)}
+                                    />
+                                  </FormControl>
+                                </>
                               )}
                             </VStack>
                           </AccordionPanel>
@@ -945,7 +959,7 @@ const MagicDesignPage = () => {
                                     <Divider
                                       mb={3}
                                       borderWidth={`${designOptions.sectionDividerWidth}px`}
-                                      borderColor="gray.300"
+                                      borderColor={designOptions.sectionDividerColor}
                                     />
                                   )}
                                   <SimpleGrid columns={designOptions.sectionColumns[key] || 1} spacing={2}>
