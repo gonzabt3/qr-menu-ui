@@ -36,7 +36,7 @@ import BaseCompents from "../../../../../components/BaseCompents";
 import BreadcrumComponent from "../../../../../components/breadcrum";
 import { returnOnlyString } from "../../../../../../common/utils";
 import useMenu from "../../../../../../hooks/useMenu";
-import useFullMenu from "../../../../../../hooks/useFullMenu";
+import useFullMenu from '../../../../../../hooks/useFullMenu';
 
 const MagicDesignPage = () => {
   const router = useRouter();
@@ -44,8 +44,10 @@ const MagicDesignPage = () => {
   const menuId = returnOnlyString(router.query.menuId);
   const ref: any = useRef(null);
   const { menu, loading } = useFullMenu(menuId);
+  // Usar el hook para obtener el menú completo con productos
+  const { menu: fullMenu, loading: loadingFullMenu } = useFullMenu(menuId);
   // Obtener secciones reales del menú (ajustar según la estructura real)
-  const sections = (menu && (menu.sections || menu.menu_sections || menu.secciones)) || [];
+  const sections = (fullMenu && fullMenu.sections) || [];
 
   // Estados para las opciones de diseño
   const [designOptions, setDesignOptions] = useState<{
@@ -947,44 +949,43 @@ const MagicDesignPage = () => {
                                     />
                                   )}
                                   <SimpleGrid columns={designOptions.sectionColumns[key] || 1} spacing={2}>
-                                    {[1, 2, 3, 4, 5].map((item) => (
+                                    {(section.products || []).map((product: any, itemIdx: number) => (
                                       <Box
-                                        key={item}
+                                        key={product.id || itemIdx}
                                         p={designOptions.productShowContainer ? 3 : 1}
                                         bg={designOptions.productShowContainer ? designOptions.productBackgroundColor : "transparent"}
                                         borderRadius={designOptions.productShowContainer ? "md" : "none"}
                                         shadow={designOptions.productShowContainer ? "sm" : "none"}
                                       >
-                                        {/* ...productos de ejemplo... */}
                                         {designOptions.productLayout === 'horizontal' && (
                                           <Flex justify="space-between" align="start">
                                             <VStack align={designOptions.productTextAlign as any} spacing={1}>
-                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>Producto {item}</Text>
+                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>{product.name}</Text>
                                               {designOptions.productShowDescription && (
-                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>Descripción del producto</Text>
+                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>{product.description}</Text>
                                               )}
                                             </VStack>
-                                            <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor}>$15.99</Text>
+                                            <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor}>{product.price ? `$${product.price}` : ''}</Text>
                                           </Flex>
                                         )}
                                         {designOptions.productLayout === 'vertical' && (
                                           <VStack align={designOptions.productTextAlign as any} spacing={2}>
-                                            <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>Producto {item}</Text>
+                                            <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>{product.name}</Text>
                                             {designOptions.productShowDescription && (
-                                              <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>Descripción del producto</Text>
+                                              <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>{product.description}</Text>
                                             )}
-                                            <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign as any}>$15.99</Text>
+                                            <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign as any}>{product.price ? `$${product.price}` : ''}</Text>
                                           </VStack>
                                         )}
                                         {designOptions.productLayout === 'card' && (
                                           <VStack spacing={3} align={designOptions.productTextAlign as any}>
                                             <Box w="100%" h="60px" bg="gray.200" borderRadius="md" />
                                             <VStack spacing={1} align={designOptions.productTextAlign as any}>
-                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>Producto {item}</Text>
+                                              <Text fontSize="sm" fontWeight="bold" textAlign={designOptions.productTextAlign as any} color={designOptions.productTextColor}>{product.name}</Text>
                                               {designOptions.productShowDescription && (
-                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>Descripción</Text>
+                                                <Text fontSize="xs" color="gray.600" textAlign={designOptions.productTextAlign as any}>{product.description}</Text>
                                               )}
-                                              <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign as any}>$15.99</Text>
+                                              <Text fontSize="sm" fontWeight="bold" color={designOptions.productPriceColor} textAlign={designOptions.productTextAlign as any}>{product.price ? `$${product.price}` : ''}</Text>
                                             </VStack>
                                           </VStack>
                                         )}
