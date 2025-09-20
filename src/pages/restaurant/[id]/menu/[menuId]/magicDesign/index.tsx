@@ -43,7 +43,7 @@ const MagicDesignPage = () => {
   const id = returnOnlyString(router.query.id);
   const menuId = returnOnlyString(router.query.menuId);
   const ref: any = useRef(null);
-  const { menu, loading } = useFullMenu(id, menuId);
+  const { menu, loading } = useFullMenu(menuId);
   // Obtener secciones reales del menú (ajustar según la estructura real)
   const sections = (menu && (menu.sections || menu.menu_sections || menu.secciones)) || [];
 
