@@ -109,7 +109,12 @@ export default function Page() {
               <Heading>
                 {menu?.name} 
               </Heading>
-              {/* <Button colorScheme="orange" onClick={handlePreviewClick}>Previsualización</Button> */}
+              <Flex gap={2}>
+                <Button colorScheme="blue" onClick={() => router.push(`/restaurant/${id}/menu/${menuId}/design`)}>
+                  Diseñar Menu
+                </Button>
+                {/* <Button colorScheme="orange" onClick={handlePreviewClick}>Previsualización</Button> */}
+              </Flex>
             </Flex>
             <Card margin={5} height={'100%'}  overflowY="scroll">
               <Grid
