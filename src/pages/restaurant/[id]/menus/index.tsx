@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState,  useContext } from "react";
 import MenuCard from './MenuCard';
 import {Center, GridItem } from '@chakra-ui/react'
-import { Heading, Button, SimpleGrid } from '@chakra-ui/react'
+import { Heading, Button, SimpleGrid, Text } from '@chakra-ui/react'
 import { Card } from '@chakra-ui/react'
 import BreadcrumComponent from "../../../components/breadcrum";
 import MenuModal from "./MenuModal";
@@ -61,8 +61,8 @@ export default function Page() {
             ))} 
           </SimpleGrid>
           : 
-          <Center>
-            <Heading color="gray.600">No hay menús</Heading>
+          <Center height="200px">
+            <Text color="gray.500" fontSize="lg" opacity={0.7}>No hay menús</Text>
           </Center>
           }
         </Card>

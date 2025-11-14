@@ -80,8 +80,9 @@ export default function Page() {
           </Button>
           <Card margin={5} height={'100%'}>
             { loading ? <Text>Loading...</Text> : 
+            restaurants && restaurants.length > 0 ? (
             <SimpleGrid columns={[1, 3, 4]} scrollBehavior={'auto'} maxHeight={['100%','100%','100%','100%']}   overflowY="scroll">
-              {(restaurants || []).map((restaurantItem: any, index:any) => (
+              {restaurants.map((restaurantItem: any, index:any) => (
                 <RestaurantCard
                   key={index}
                   restaurant={restaurantItem}
@@ -90,6 +91,11 @@ export default function Page() {
                 />
               ))}
             </SimpleGrid>
+            ) : (
+              <Center height="200px">
+                <Text color="gray.500" fontSize="lg" opacity={0.7}>No hay restaurantes</Text>
+              </Center>
+            )
              }
           </Card>
         </GridItem>
