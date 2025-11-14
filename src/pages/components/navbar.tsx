@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react';
-import MenuIcon from './menuqr.svg';
+import MenuIcon from './menuqr_new.svg';
 import { Box, Button, Flex, Heading, Icon, IconButton, Spacer, Image } from '@chakra-ui/react';
 import { FaStore, FaUser, FaUserCircle } from "react-icons/fa";
 import { useRouter } from 'next/navigation'
@@ -26,9 +26,9 @@ const Navbar = () => {
 
   return (
     <>
-      <Flex alignItems='center' gap='1' margin={5} marginTop={2}>
-        <Box p='2' display="flex" alignItems="center">
-        <Image src={'/menuqr.svg'} boxSize={20} mr={4} alt="Menu QR Icon" />          <Heading size='md'>Menu QR</Heading>
+      <Flex alignItems='center' gap='1' marginX={10} marginY={2} marginTop={1}>
+        <Box p='1' display="flex" alignItems="center">
+        <Image src={'/menuqr_new.svg'} height={9} mr={4} alt="Menu QR Icon" />
         </Box>
         <Spacer />
         { (!user) ?
