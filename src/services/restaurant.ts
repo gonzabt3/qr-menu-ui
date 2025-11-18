@@ -4,9 +4,13 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 export const createRestaurant = async (token : string, values: any) => {
   try {
     const isFormData = values instanceof FormData;
+    
+    // Wrap non-FormData values in restaurant object
+    const payload = isFormData ? values : { restaurant: values };
+    
     const response = await axios.post(
       `${API_BASE_URL}restaurants`,
-      values,
+      payload,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -24,7 +28,11 @@ export const createRestaurant = async (token : string, values: any) => {
 export const updateRestaurant = async (token:string, id: string, values: any) => {
   try {
     const isFormData = values instanceof FormData;
-    const response = await axios.put(`${API_BASE_URL}restaurants/${id}`,values,{
+    
+    // Wrap non-FormData values in restaurant object
+    const payload = isFormData ? values : { restaurant: values };
+    
+    const response = await axios.put(`${API_BASE_URL}restaurants/${id}`,payload,{
       headers: {
         Authorization: `Bearer ${token}`,
         ...(isFormData ? { 'Content-Type': 'multipart/form-data' } : {})
