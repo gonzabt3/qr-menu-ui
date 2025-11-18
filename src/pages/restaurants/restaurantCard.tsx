@@ -1,5 +1,5 @@
 import React from 'react';
-import { CloseButton, Flex, Spacer, Box, Card, CardBody, Stack, Heading, Text, CardFooter, ButtonGroup, Button } from '@chakra-ui/react';
+import { CloseButton, Flex, Spacer, Box, Card, CardBody, Stack, Heading, Text, CardFooter, ButtonGroup, Button, Image } from '@chakra-ui/react';
 import { useRouter } from "next/navigation";
 import { CloseIcon } from '@chakra-ui/icons';
 const RestaurantCard = ({restaurant, openModalForEdit, deleteRestaurant}:any) => {
@@ -22,10 +22,30 @@ const RestaurantCard = ({restaurant, openModalForEdit, deleteRestaurant}:any) =>
       <Box bg='' >
           <Card maxW='xs' margin={3}>
             <CardBody>
-              {/* <Image
-                src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-                borderRadius='lg'
-              /> */}
+              {restaurant?.logo_url ? (
+                <Image
+                  src={restaurant.logo_url}
+                  alt={`${restaurant?.name} logo`}
+                  borderRadius='lg'
+                  height="120px"
+                  width="100%"
+                  objectFit="contain"
+                  backgroundColor="gray.50"
+                  fallbackSrc='/default-restaurant-logo.svg'
+                  mb={3}
+                />
+              ) : (
+                <Image
+                  src='/default-restaurant-logo.svg'
+                  alt="Logo por defecto"
+                  borderRadius='lg'
+                  height="120px"
+                  width="100%"
+                  objectFit="contain"
+                  backgroundColor="gray.50"
+                  mb={3}
+                />
+              )}
               <Stack spacing='1'>
               <Flex direction={'row'}>
                 <Heading size='sm'>{restaurant?.name}</Heading>

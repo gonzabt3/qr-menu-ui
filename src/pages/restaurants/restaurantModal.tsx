@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Formik, Form, Field } from 'formik';
 import {
   Modal,
@@ -14,7 +14,12 @@ import {
   Stack,
   FormErrorMessage,
   Box,
+  Image,
+  Text,
+  Flex,
+  IconButton,
 } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
 import { createRestaurant, updateRestaurant } from '../../services/restaurant';
 import { useAuth0 } from '@auth0/auth0-react';
 import * as Yup from 'yup';
@@ -22,12 +27,67 @@ import * as Yup from 'yup';
 const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
   const [initialValues, setInitialValues] = useState<any>(null);
   const [error, setError] = useState<any>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [removeLogo, setRemoveLogo] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { getAccessTokenSilently } = useAuth0();
 
   const validationSchema = Yup.object({
     name: Yup.string().required('El nombre es obligatorio'),
   });
+
+  const validateFile = (file: File): string | null => {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!validTypes.includes(file.type)) {
+      return 'El formato de archivo debe ser JPG, PNG, GIF o WEBP';
+    }
+
+    if (file.size > maxSize) {
+      return 'El tamaño del archivo no debe superar 5MB';
+    }
+
+    return null;
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const validationError = validateFile(file);
+      if (validationError) {
+        setError(validationError);
+        setSelectedFile(null);
+        setPreviewUrl(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+        return;
+      }
+
+      setError(null);
+      setSelectedFile(file);
+      setRemoveLogo(false);
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setRemoveLogo(true);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
     setError(null);
@@ -36,10 +96,30 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
     try {
       const { id, ...restValues } = values; // Remove the id key from values
 
+      // Create FormData if there's a file to upload
+      const formData = new FormData();
+      
+      // Add all text fields
+      Object.keys(restValues).forEach(key => {
+        if (restValues[key] !== null && restValues[key] !== undefined && restValues[key] !== '') {
+          formData.append(key, restValues[key]);
+        }
+      });
+
+      // Add logo file if selected
+      if (selectedFile) {
+        formData.append('logo', selectedFile);
+      }
+
+      // Add flag to remove logo if requested
+      if (removeLogo && !selectedFile) {
+        formData.append('removeLogo', 'true');
+      }
+
       if (id) {
-        await updateRestaurant(token, { id, ...restValues });
+        await updateRestaurant(token, id, selectedFile || removeLogo ? formData : { id, ...restValues });
       } else {
-        await createRestaurant(token, restValues);
+        await createRestaurant(token, selectedFile ? formData : restValues);
       }
       close();
       refreshList();
@@ -63,6 +143,9 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
         instagram: '',
         email: ''
       });
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      setRemoveLogo(false);
     } else {
       setInitialValues({
         id: restaurant.id,
@@ -73,6 +156,9 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
         instagram: restaurant.instagram,
         email: restaurant.email
       });
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      setRemoveLogo(false);
     }
   }, [restaurant]);
 
@@ -145,6 +231,73 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                         </FormControl>
                       )}
                     </Field>
+
+                    {/* Logo Upload Section */}
+                    <FormControl>
+                      <Text fontSize="sm" fontWeight="medium" mb={2}>
+                        Logo del Restaurante
+                      </Text>
+                      
+                      {/* Current or Preview Logo */}
+                      {(previewUrl || (restaurant?.logo_url && !removeLogo)) && (
+                        <Flex 
+                          direction="column" 
+                          align="center" 
+                          p={4} 
+                          border="1px" 
+                          borderColor="gray.200" 
+                          borderRadius="md"
+                          mb={2}
+                          position="relative"
+                        >
+                          <IconButton
+                            aria-label="Eliminar logo"
+                            icon={<CloseIcon />}
+                            size="sm"
+                            position="absolute"
+                            top={2}
+                            right={2}
+                            onClick={handleRemoveLogo}
+                            colorScheme="red"
+                            variant="ghost"
+                          />
+                          <Image
+                            src={previewUrl || restaurant?.logo_url}
+                            alt="Logo del restaurante"
+                            maxH="150px"
+                            maxW="150px"
+                            objectFit="contain"
+                            fallbackSrc="/default-restaurant-logo.svg"
+                          />
+                          <Text fontSize="xs" color="gray.500" mt={2}>
+                            {previewUrl ? 'Nuevo logo' : 'Logo actual'}
+                          </Text>
+                        </Flex>
+                      )}
+                      
+                      {/* File Input */}
+                      <Input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                        onChange={handleFileChange}
+                        display="none"
+                        id="logo-upload"
+                      />
+                      <Button
+                        as="label"
+                        htmlFor="logo-upload"
+                        cursor="pointer"
+                        colorScheme="gray"
+                        variant="outline"
+                        width="100%"
+                      >
+                        {previewUrl || restaurant?.logo_url ? 'Cambiar logo' : 'Seleccionar logo'}
+                      </Button>
+                      <Text fontSize="xs" color="gray.500" mt={1}>
+                        Formatos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5MB
+                      </Text>
+                    </FormControl>
                   </Stack>
                   {error && (
                   <Box
