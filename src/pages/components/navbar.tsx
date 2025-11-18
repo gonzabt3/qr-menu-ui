@@ -12,6 +12,14 @@ const Navbar = () => {
   const currentUrl = typeof window !== 'undefined' ? window.location.pathname : '';
   const currentPage = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
 
+  const goToHome = () => {
+    if (isAuthenticated) {
+      router.push('/restaurants');
+    } else {
+      router.push('/');
+    }
+  }
+
   const goToProfilePage = () => {
     router.push('/profile')
   }
@@ -27,14 +35,28 @@ const Navbar = () => {
   return (
     <>
       <Flex alignItems='center' gap='1' marginX={10} marginY={2} marginTop={1}>
-        <Box p='1' display="flex" alignItems="center">
+        <Box p='1' display="flex" alignItems="center" cursor="pointer" onClick={goToHome}>
         <Image src={'/menuqr_new.svg'} height={9} mr={4} alt="Menu QR Icon" />
         </Box>
         <Spacer />
         { (!user) ?
           <>
-              <Button  colorScheme='orange' variant='outline'               onClick={goToProfilePage}
-              >Ingresar</Button>
+              <Button  
+                variant='link' 
+                color='gray.600'
+                _hover={{ color: 'gray.900' }}
+                onClick={goToProfilePage}
+              >
+                Ingresar
+              </Button>
+              <Button  
+                colorScheme='orange' 
+                variant='solid'
+                onClick={() => router.push('/demo')}
+                ml={4}
+              >
+                Ver Demostración
+              </Button>
             </>
           :
           <>
