@@ -99,21 +99,21 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
       // Create FormData if there's a file to upload
       const formData = new FormData();
       
-      // Add all text fields
+      // Add all text fields with restaurant[] prefix for Rails
       Object.keys(restValues).forEach(key => {
         if (restValues[key] !== null && restValues[key] !== undefined && restValues[key] !== '') {
-          formData.append(key, restValues[key]);
+          formData.append(`restaurant[${key}]`, restValues[key]);
         }
       });
 
       // Add logo file if selected
       if (selectedFile) {
-        formData.append('logo', selectedFile);
+        formData.append('restaurant[logo]', selectedFile);
       }
 
       // Add flag to remove logo if requested
       if (removeLogo && !selectedFile) {
-        formData.append('removeLogo', 'true');
+        formData.append('restaurant[removeLogo]', 'true');
       }
 
       if (id) {
