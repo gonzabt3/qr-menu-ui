@@ -1,5 +1,5 @@
 import React from 'react';
-import { CloseButton, Flex, Spacer, Box, Card, CardBody, Stack, Heading, Text, CardFooter, ButtonGroup, Button, Icon, Badge, useColorModeValue } from '@chakra-ui/react';
+import { CloseButton, Flex, Box, Card, CardBody, Heading, CardFooter, ButtonGroup, Button, Icon, useColorModeValue } from '@chakra-ui/react';
 import { useRouter } from "next/navigation";
 import { MdRestaurant, MdEdit, MdMenuBook } from 'react-icons/md';
 
@@ -42,26 +42,21 @@ const RestaurantCard = ({restaurant, openModalForEdit, deleteRestaurant}:any) =>
       >
         <Box bgGradient={bgGradient} height='8px' />
         <CardBody pb={3}>
-          <Stack spacing='3'>
-            <Flex direction='row' align='center' justify='space-between'>
-              <Flex align='center' gap={2}>
-                <Icon as={MdRestaurant} color='orange.500' boxSize={5} />
-                <Heading size='md' color={useColorModeValue('gray.800', 'gray.100')}>
-                  {restaurant?.name}
-                </Heading>
-              </Flex>
-              <CloseButton 
-                onClick={hanldeDeleteRestaurant} 
-                size='sm'
-                colorScheme='red'
-                opacity={0.6}
-                _hover={{ opacity: 1 }}
-              />
+          <Flex direction='row' align='center' justify='space-between'>
+            <Flex align='center' gap={2}>
+              <Icon as={MdRestaurant} color='orange.500' boxSize={5} />
+              <Heading size='md' color={useColorModeValue('gray.800', 'gray.100')}>
+                {restaurant?.name}
+              </Heading>
             </Flex>
-            <Badge colorScheme='orange' width='fit-content' fontSize='xs'>
-              Restaurante Activo
-            </Badge>
-          </Stack>
+            <CloseButton 
+              onClick={hanldeDeleteRestaurant} 
+              size='sm'
+              colorScheme='red'
+              opacity={0.6}
+              _hover={{ opacity: 1 }}
+            />
+          </Flex>
         </CardBody>
         <CardFooter pt={0}>
           <ButtonGroup spacing='3' width='100%'>
