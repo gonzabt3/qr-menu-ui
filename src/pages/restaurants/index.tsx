@@ -2,7 +2,7 @@
 'use client'
 import { useRef, useEffect, useState } from "react";
 import RestaurantCard from './restaurantCard';
-import {Center, GridItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react'
+import {Center, GridItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Box, Heading, Icon, VStack } from '@chakra-ui/react'
 import {  Button, SimpleGrid } from '@chakra-ui/react'
 import { Card } from '@chakra-ui/react'
 import RestaurantModal from "./restaurantModal";
@@ -12,6 +12,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import useRestaurants from "./useRestaurant";
 import { useProfile } from "../../hooks/useProfile";
 import router from "next/router";
+import { MdRestaurant, MdAdd } from 'react-icons/md';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
@@ -74,14 +75,36 @@ export default function Page() {
     <div ref={refScreen}>
       <BaseCompents>
         <GridItem area={'nav'}  rowSpan={7} colSpan={5}>
-          <BreadcrumComponent/>
-          <Button onClick={changeIsOpenModal} variant='solid' marginLeft={6} colorScheme='orange' width={['50%','50%','20%','20%']}>
-            Agregar resturant
-          </Button>
-          <Card margin={5} height={'100%'}>
-            { loading ? <Text>Loading...</Text> : 
+          <Box px={6} pt={4}>
+            <BreadcrumComponent/>
+            <Box display='flex' alignItems='center' justifyContent='space-between' flexWrap='wrap' gap={4} mt={4}>
+              <Box display='flex' alignItems='center' gap={3}>
+                <Icon as={MdRestaurant} boxSize={8} color='orange.500' />
+                <Heading size='lg' color='gray.700'>Mis Restaurantes</Heading>
+              </Box>
+              <Button 
+                onClick={changeIsOpenModal} 
+                leftIcon={<Icon as={MdAdd} />}
+                variant='solid' 
+                colorScheme='orange' 
+                size='md'
+                shadow='md'
+                _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
+                transition='all 0.2s'
+              >
+                Agregar Restaurante
+              </Button>
+            </Box>
+          </Box>
+          <Card margin={5} height={'100%'} shadow='lg' borderRadius='xl'>
+            { loading ? 
+              <Center height="300px">
+                <VStack spacing={4}>
+                  <Text fontSize='lg' color='gray.500'>Cargando restaurantes...</Text>
+                </VStack>
+              </Center> : 
             restaurants && restaurants.length > 0 ? (
-            <SimpleGrid columns={[1, 3, 4]} scrollBehavior={'auto'} maxHeight={['100%','100%','100%','100%']}   overflowY="scroll">
+            <SimpleGrid columns={[1, 2, 3, 4]} spacing={4} scrollBehavior={'auto'} maxHeight={['100%','100%','100%','100%']}   overflowY="scroll" p={4}>
               {restaurants.map((restaurantItem: any, index:any) => (
                 <RestaurantCard
                   key={index}
@@ -92,8 +115,21 @@ export default function Page() {
               ))}
             </SimpleGrid>
             ) : (
-              <Center height="200px">
-                <Text color="gray.500" fontSize="lg" opacity={0.7}>No hay restaurantes</Text>
+              <Center height="300px">
+                <VStack spacing={4}>
+                  <Icon as={MdRestaurant} boxSize={16} color='gray.300' />
+                  <Text color="gray.500" fontSize="xl" fontWeight='medium'>No hay restaurantes</Text>
+                  <Text color="gray.400" fontSize="sm">Comienza agregando tu primer restaurante</Text>
+                  <Button 
+                    onClick={changeIsOpenModal} 
+                    leftIcon={<Icon as={MdAdd} />}
+                    colorScheme='orange' 
+                    size='md'
+                    mt={2}
+                  >
+                    Agregar Restaurante
+                  </Button>
+                </VStack>
               </Center>
             )
              }
