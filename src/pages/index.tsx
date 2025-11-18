@@ -86,9 +86,11 @@ export default function Home() {
                                 h="48px"
                                 px={8}
                                 fontSize="md"
-                                colorScheme="orange"
+                                bgGradient="linear(to-r, orange.500, pink.500)"
+                                color="white"
                                 variant="solid"
                                 _hover={{
+                                    bgGradient: "linear(to-r, orange.600, pink.600)",
                                     transform: 'translateY(-2px)',
                                     boxShadow: 'xl'
                                 }}

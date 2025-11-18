@@ -50,10 +50,17 @@ const Navbar = () => {
                 Ingresar
               </Button>
               <Button  
-                colorScheme='orange' 
+                bgGradient="linear(to-r, orange.500, pink.500)"
+                color="white"
                 variant='solid'
                 onClick={() => router.push('/demo')}
                 ml={4}
+                _hover={{
+                  bgGradient: "linear(to-r, orange.600, pink.600)",
+                  transform: 'translateY(-1px)',
+                  boxShadow: 'lg'
+                }}
+                transition="all 0.3s"
               >
                 Ver Demostración
               </Button>
