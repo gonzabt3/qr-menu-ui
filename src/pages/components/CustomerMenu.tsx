@@ -1,6 +1,6 @@
 'use client'
 import React, { useRef, useEffect } from 'react';
-import { Box, Divider, Flex, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import Section from './section';
 
 const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
@@ -30,6 +30,22 @@ const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
                         <Heading fontFamily="'KC Clementine Regular Inked', serif" size="2xl">
                           {menu.restaurantName}
                         </Heading>
+                        {menu.restaurantPhone && (
+                          <Button
+                            as="a"
+                            href={`https://wa.me/${menu.restaurantPhone.replace(/\D/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            colorScheme="green"
+                            leftIcon={<Text>📱</Text>}
+                            size="sm"
+                            bg="green.500"
+                            color="white"
+                            _hover={{ bg: "green.600" }}
+                          >
+                            WhatsApp
+                          </Button>
+                        )}
                       </VStack>
                       {menu.sections.map((section: any) => (
                         <Section key={section.id} section={section} />

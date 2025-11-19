@@ -46,5 +46,6 @@ export const fetchRestaurants = async (token:string, user:any): Promise<any> => 
   })
   .catch((error) => {
     console.error("Hubo un error al hacer la solicitud:", error);
+    return []; // Retornar array vacío en caso de error
   });
 }

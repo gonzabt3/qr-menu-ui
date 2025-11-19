@@ -15,9 +15,10 @@ const useRestaurants = () => {
     setLoading(true); 
     try {
       const data = await fetchRestaurants(token, user);
-      setRestaurants(data);
+      setRestaurants(data || []); // Asegurar que siempre sea un array
     } catch (error) {
       setError(error);
+      setRestaurants([]); // Establecer array vacío en caso de error
     } finally {
       setLoading(false); 
     }
