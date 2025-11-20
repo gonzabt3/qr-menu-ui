@@ -38,3 +38,6 @@ yarn.lock
 cypress.env.json
 
 .config/
+
+# preview/demo files
+public/menu-preview.html
