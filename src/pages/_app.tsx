@@ -43,6 +43,17 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
 
 function FeedbackContainer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  
+  // Solo mostrar feedback en páginas específicas
+  const showFeedback = 
+    router.pathname === "/restaurants" ||
+    router.pathname.startsWith("/restaurant/") ||
+    router.pathname.includes("/menu/");
+  
+  if (!showFeedback) {
+    return null;
+  }
   
   return (
     <>

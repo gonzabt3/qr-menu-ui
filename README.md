@@ -21,7 +21,7 @@ The application includes a user feedback system that allows users to send feedba
 
 ### API Integration
 
-The feedback feature sends a POST request to the `/api/feedback` endpoint with the following format:
+The feedback feature sends a POST request to the `/feedbacks` endpoint with the following format:
 
 **Request:**
 ```json

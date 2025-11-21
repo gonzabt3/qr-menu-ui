@@ -80,7 +80,7 @@ describe('FeedbackModal', () => {
     
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/api/feedback'),
+        expect.stringContaining('/feedbacks'),
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

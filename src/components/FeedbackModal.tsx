@@ -14,7 +14,8 @@ import {
   AlertIcon,
   useToast,
 } from '@chakra-ui/react';
-import { FeedbackRequest, FeedbackResponse } from '../types/feedback';
+import { useAuth0 } from '@auth0/auth0-react';
+import { FeedbackRequest, FeedbackResponse, FeedbackErrorResponse } from '../types/feedback';
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -25,6 +26,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
   const [feedback, setFeedback] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
   const toast = useToast();
 
   const handleClose = () => {
@@ -48,16 +50,29 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
       const apiUrl = process.env.NEXT_PUBLIC_API_SERVER_URL || 'http://localhost:3000';
       const requestBody: FeedbackRequest = { message: feedback };
       
-      const response = await fetch(`${apiUrl}/api/feedback`, {
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+
+      // Si el usuario está autenticado, agregar el token
+      if (isAuthenticated) {
+        try {
+          const accessToken = await getAccessTokenSilently();
+          headers['Authorization'] = `Bearer ${accessToken}`;
+        } catch (tokenError) {
+          console.log('No se pudo obtener el token, enviando sin autenticación:', tokenError);
+        }
+      }
+      
+      const response = await fetch(`${apiUrl}/feedbacks`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
-        throw new Error(`Error del servidor: ${response.status}`);
+        const errorData: FeedbackErrorResponse = await response.json();
+        throw new Error(errorData.errors?.join(', ') || `Error del servidor: ${response.status}`);
       }
 
       const data: FeedbackResponse = await response.json();
