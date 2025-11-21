@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { AppProps } from "next/app";
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import FeedbackButton from '../components/FeedbackButton';
+import FeedbackModal from '../components/FeedbackModal';
 
 const auth0Domain : any = process.env.NEXT_PUBLIC_AUTH_DOMAIN;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
@@ -39,6 +41,17 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function FeedbackContainer() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  
+  return (
+    <>
+      <FeedbackButton onClick={onOpen} />
+      <FeedbackModal isOpen={isOpen} onClose={onClose} />
+    </>
+  );
+}
+
 export default function App({ Component, pageProps }:AppProps) {
   const [isClient, setIsClient] = useState(false)
  
@@ -67,6 +80,7 @@ export default function App({ Component, pageProps }:AppProps) {
           <AuthGuard>
             <DndProvider backend={HTML5Backend}>
               <Component {...pageProps} />
+              <FeedbackContainer />
             </DndProvider>
           </AuthGuard>
         </Auth0Provider>
