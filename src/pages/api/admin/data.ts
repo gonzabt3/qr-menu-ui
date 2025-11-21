@@ -140,9 +140,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const queryParams = new URLSearchParams();
         Object.entries(otherParams).forEach(([key, value]) => {
           if (Array.isArray(value)) {
-            value.forEach(v => queryParams.append(key, v));
+            value.forEach(v => queryParams.append(key, String(v)));
           } else if (value) {
-            queryParams.append(key, value);
+            queryParams.append(key, String(value));
           }
         });
         const queryString = queryParams.toString();
@@ -167,8 +167,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       } catch (error: any) {
         console.error('Error proxying to backend:', error);
         return res.status(502).json({ 
-          error: 'Error connecting to backend',
-          details: error.message 
+          error: 'Error connecting to backend'
         });
       }
     }
@@ -184,8 +183,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error: any) {
     console.error('Error in admin data API:', error);
     return res.status(500).json({ 
-      error: 'Internal server error',
-      details: error.message 
+      error: 'Internal server error'
     });
   }
 }
