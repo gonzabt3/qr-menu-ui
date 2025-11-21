@@ -2,9 +2,11 @@
 import React, { useRef, useEffect } from 'react';
 import { Box, Button, Divider, Flex, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import Section from './section';
+import useMenuDesign from '../../hooks/useMenuDesign';
 
 const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
   const refScreen: any = useRef(null);
+  const { design, loading: designLoading } = useMenuDesign(menu?.id);
 
   useEffect(() => {
     if (refScreen.current) {
@@ -24,10 +26,23 @@ const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
                 <Text textAlign="center">Restaurante no encontrado</Text>
               ) : (
                 <>
-                  <Box bg="#fefaf4" p={8} minH="100vh">
+                  <Box bg={design.backgroundColor} p={8} minH="100vh">
                     <VStack spacing={6} align="start">
                       <VStack align="center" w="full" spacing={3}>
-                        <Heading fontFamily="'KC Clementine Regular Inked', serif" size="2xl">
+                        {design.logoUrl && (
+                          <Box mb={3}>
+                            <img 
+                              src={design.logoUrl} 
+                              alt="Logo" 
+                              style={{ maxHeight: "80px", width: "auto" }} 
+                            />
+                          </Box>
+                        )}
+                        <Heading 
+                          fontFamily={design.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : design.font}
+                          size="2xl"
+                          color={design.primaryColor}
+                        >
                           {menu.restaurantName}
                         </Heading>
                         {menu.restaurantPhone && (
@@ -48,7 +63,7 @@ const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
                         )}
                       </VStack>
                       {menu.sections.map((section: any) => (
-                        <Section key={section.id} section={section} />
+                        <Section key={section.id} section={section} design={design} />
                       ))}
                     </VStack>
                   </Box>

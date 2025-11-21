@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { 
   Box, 
   Card, 
@@ -12,40 +12,62 @@ import {
   Input,
   Button,
   Grid,
-  GridItem,
   VStack,
   HStack,
   Select,
   useToast,
   Text,
-  Center
+  Center,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  Divider,
+  Image
 } from "@chakra-ui/react"
+import { FaLeaf } from "react-icons/fa"
+import { GiWheat } from "react-icons/gi"
+import useMenuDesign from "../hooks/useMenuDesign"
 
 const DESIGN_ENABLED = process.env.NEXT_PUBLIC_DESIGN_ENABLED === 'true'
 
-export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string, restaurantId: string }) {
+export default function MenuDesignTab({ 
+  menuId, 
+  restaurantId, 
+  menu, 
+  sections, 
+  products 
+}: { 
+  menuId: string, 
+  restaurantId: string,
+  menu?: any,
+  sections?: any[],
+  products?: any[]
+}) {
   const toast = useToast()
-  const [design, setDesign] = useState({
-    primaryColor: "#ff7a00",
-    secondaryColor: "#64748b", 
-    backgroundColor: "#ffffff",
-    textColor: "#1f2937",
-    font: "Inter",
-    logoUrl: ""
-  })
+  const { design, saveDesign } = useMenuDesign(menuId)
+  const [localDesign, setLocalDesign] = useState(design)
+
+  useEffect(() => {
+    setLocalDesign(design)
+  }, [design])
 
   const handleSaveDesign = async () => {
     try {
-      // Aquí implementarás la llamada a la API para guardar el diseño
-      console.log("Guardando diseño:", design)
-      
-      toast({
-        title: "Diseño guardado",
-        description: "Los cambios se han aplicado correctamente",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      })
+      const success = await saveDesign(localDesign)
+      if (success) {
+        toast({
+          title: "Diseño guardado",
+          description: "Los cambios se aplicarán en el menú público",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        })
+        // Recargar la página para aplicar los cambios
+        window.location.reload()
+      } else {
+        throw new Error("Error al guardar")
+      }
     } catch (error) {
       toast({
         title: "Error",
@@ -73,7 +95,7 @@ export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string
 
   return (
     <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={6} alignItems="start">
-      {/* Left column: controls (colors + typography) */}
+      {/* Left column: controls */}
       <Box>
         <VStack spacing={6} align="stretch">
           <Card>
@@ -88,16 +110,16 @@ export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string
                     <HStack>
                       <Input
                         type="color"
-                        value={design.primaryColor}
-                        onChange={(e) => setDesign({...design, primaryColor: e.target.value})}
+                        value={localDesign.primaryColor}
+                        onChange={(e) => setLocalDesign({...localDesign, primaryColor: e.target.value})}
                         width="60px"
                         height="40px"
                         padding={0}
                         border="none"
                       />
                       <Input
-                        value={design.primaryColor}
-                        onChange={(e) => setDesign({...design, primaryColor: e.target.value})}
+                        value={localDesign.primaryColor}
+                        onChange={(e) => setLocalDesign({...localDesign, primaryColor: e.target.value})}
                         placeholder="#ff7a00"
                         fontFamily="monospace"
                       />
@@ -111,16 +133,16 @@ export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string
                     <HStack>
                       <Input
                         type="color"
-                        value={design.secondaryColor}
-                        onChange={(e) => setDesign({...design, secondaryColor: e.target.value})}
+                        value={localDesign.secondaryColor}
+                        onChange={(e) => setLocalDesign({...localDesign, secondaryColor: e.target.value})}
                         width="60px"
                         height="40px"
                         padding={0}
                         border="none"
                       />
                       <Input
-                        value={design.secondaryColor}
-                        onChange={(e) => setDesign({...design, secondaryColor: e.target.value})}
+                        value={localDesign.secondaryColor}
+                        onChange={(e) => setLocalDesign({...localDesign, secondaryColor: e.target.value})}
                         placeholder="#64748b"
                         fontFamily="monospace"
                       />
@@ -134,17 +156,17 @@ export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string
                     <HStack>
                       <Input
                         type="color"
-                        value={design.backgroundColor}
-                        onChange={(e) => setDesign({...design, backgroundColor: e.target.value})}
+                        value={localDesign.backgroundColor}
+                        onChange={(e) => setLocalDesign({...localDesign, backgroundColor: e.target.value})}
                         width="60px"
                         height="40px"
                         padding={0}
                         border="none"
                       />
                       <Input
-                        value={design.backgroundColor}
-                        onChange={(e) => setDesign({...design, backgroundColor: e.target.value})}
-                        placeholder="#ffffff"
+                        value={localDesign.backgroundColor}
+                        onChange={(e) => setLocalDesign({...localDesign, backgroundColor: e.target.value})}
+                        placeholder="#fefaf4"
                         fontFamily="monospace"
                       />
                     </HStack>
@@ -157,16 +179,16 @@ export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string
                     <HStack>
                       <Input
                         type="color"
-                        value={design.textColor}
-                        onChange={(e) => setDesign({...design, textColor: e.target.value})}
+                        value={localDesign.textColor}
+                        onChange={(e) => setLocalDesign({...localDesign, textColor: e.target.value})}
                         width="60px"
                         height="40px"
                         padding={0}
                         border="none"
                       />
                       <Input
-                        value={design.textColor}
-                        onChange={(e) => setDesign({...design, textColor: e.target.value})}
+                        value={localDesign.textColor}
+                        onChange={(e) => setLocalDesign({...localDesign, textColor: e.target.value})}
                         placeholder="#1f2937"
                         fontFamily="monospace"
                       />
@@ -186,8 +208,8 @@ export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string
                 <FormControl>
                   <FormLabel>Fuente</FormLabel>
                   <Select 
-                    value={design.font}
-                    onChange={(e) => setDesign({...design, font: e.target.value})}
+                    value={localDesign.font}
+                    onChange={(e) => setLocalDesign({...localDesign, font: e.target.value})}
                   >
                     <option value="Inter">Inter</option>
                     <option value="Roboto">Roboto</option>
@@ -202,8 +224,8 @@ export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string
                 <FormControl>
                   <FormLabel>URL del Logo</FormLabel>
                   <Input
-                    value={design.logoUrl}
-                    onChange={(e) => setDesign({...design, logoUrl: e.target.value})}
+                    value={localDesign.logoUrl}
+                    onChange={(e) => setLocalDesign({...localDesign, logoUrl: e.target.value})}
                     placeholder="https://ejemplo.com/logo.png"
                   />
                 </FormControl>
@@ -228,45 +250,375 @@ export default function MenuDesignTab({ menuId, restaurantId }: { menuId: string
         <VStack spacing={6} align="stretch" position={{ base: 'static', md: 'sticky' }} top={6}>
           <Card>
             <CardHeader>
-              <Heading size="md">👀 Previsualización</Heading>
+              <Heading size="md">👀 Previsualización del Menú</Heading>
             </CardHeader>
             <CardBody>
               <Box 
-                p={4} 
-                borderRadius="md" 
-                border="1px" 
-                borderColor="gray.200"
-                style={{
-                  backgroundColor: design.backgroundColor,
-                  color: design.textColor,
-                  fontFamily: design.font
-                }}
+                bg={localDesign.backgroundColor}
+                p={8} 
+                borderRadius="lg" 
+                border="2px" 
+                borderColor="gray.300"
+                maxHeight="700px"
+                overflowY="auto"
+                minH="500px"
+                boxShadow="xl"
+                position="relative"
               >
-                <VStack spacing={3} align="start">
-                  {design.logoUrl && (
-                    <Box>
-                      <img src={design.logoUrl} alt="Logo" style={{ maxHeight: "60px" }} />
-                    </Box>
+                {/* Etiqueta de "Vista Previa" */}
+                <Box 
+                  position="absolute"
+                  top={2}
+                  right={2}
+                  bg="blue.500"
+                  color="white"
+                  px={3}
+                  py={1}
+                  borderRadius="full"
+                  fontSize="xs"
+                  fontWeight="bold"
+                  zIndex={1}
+                >
+                  VISTA PREVIA
+                </Box>
+
+                <VStack spacing={6} align="start">
+                  {/* Header exactamente igual que CustomerMenu */}
+                  <VStack align="center" w="full" spacing={3}>
+                    {localDesign.logoUrl && (
+                      <Box mb={3}>
+                        <Image 
+                          src={localDesign.logoUrl} 
+                          alt="Logo" 
+                          maxH="80px" 
+                          width="auto"
+                        />
+                      </Box>
+                    )}
+                    <Heading 
+                      fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                      size="2xl"
+                      style={{ color: localDesign.primaryColor }}
+                      textAlign="center"
+                    >
+                      {menu?.restaurantName || menu?.name || "Mi Restaurante"}
+                    </Heading>
+                    {(menu?.restaurantPhone || true) && (
+                      <Button
+                        colorScheme="green"
+                        leftIcon={<Text>📱</Text>}
+                        size="sm"
+                        bg="green.500"
+                        color="white"
+                        _hover={{ bg: "green.600" }}
+                        onClick={() => toast({
+                          title: "Vista Previa",
+                          description: "En el menú real, esto abrirá WhatsApp",
+                          status: "info",
+                          duration: 2000
+                        })}
+                      >
+                        WhatsApp
+                      </Button>
+                    )}
+                  </VStack>
+
+                  {sections && sections.length > 0 ? (
+                    sections.map((section: any) => {
+                      const sectionProducts = products?.filter((product: any) => product.section_id === section.id) || [];
+                      
+                      return (
+                        <Box
+                          key={section.id}
+                          bg="white"
+                          borderRadius="2xl"
+                          boxShadow="lg"
+                          p={6}
+                          w="full"
+                        >
+                          <Accordion defaultIndex={[0]} allowMultiple border="none">
+                            <AccordionItem border="none">
+                              <h2>
+                                <AccordionButton>
+                                  <Center w="full">
+                                    <Heading
+                                      size="lg"
+                                      mb={4}
+                                      fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                      textAlign="center"
+                                      style={{ color: localDesign.textColor }}
+                                    >
+                                      {section.name}
+                                    </Heading>
+                                  </Center>
+                                </AccordionButton>
+                              </h2>
+                              <AccordionPanel padding={0}>
+                                <VStack spacing={6} align="start">
+                                  {sectionProducts.length <= 0 ? (
+                                    <Text style={{ color: localDesign.textColor }}>No hay productos</Text>
+                                  ) : (
+                                    sectionProducts.map((product: any) => (
+                                      <Box key={product.id} w="full">
+                                        <HStack align="start" spacing={4} justify="space-between">
+                                          <VStack align="start" spacing={1} flex={1}>
+                                            <Text 
+                                              fontWeight="bold" 
+                                              fontSize="lg" 
+                                              fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                              style={{ color: localDesign.textColor }}
+                                            >
+                                              {product.name}
+                                            </Text>
+                                            <Text style={{ color: localDesign.secondaryColor }}>
+                                              {product.description}
+                                            </Text>
+                                            <HStack spacing={2}>
+                                              {product.is_vegan && <FaLeaf color="#38A169" title="Vegano" />}
+                                              {product.is_celiac && <GiWheat color="#ED8936" title="Apto Celíacos" />}
+                                            </HStack>
+                                            <Text color={localDesign.primaryColor} fontWeight="bold">
+                                              $ {Math.floor(product.price || 0)}
+                                            </Text>
+                                          </VStack>
+                                          {product.image_url && (
+                                            <Image
+                                              src={product.image_url}
+                                              alt={product.name}
+                                              boxSize="80px"
+                                              borderRadius="full"
+                                              objectFit="cover"
+                                            />
+                                          )}
+                                        </HStack>
+                                        <Divider mt={4} />
+                                      </Box>
+                                    ))
+                                  )}
+                                </VStack>
+                              </AccordionPanel>
+                            </AccordionItem>
+                          </Accordion>
+                        </Box>
+                      );
+                    })
+                  ) : (
+                    // Ejemplo más realista y atractivo
+                    <>
+                      <Box
+                        bg="white"
+                        borderRadius="2xl"
+                        boxShadow="lg"
+                        p={6}
+                        w="full"
+                      >
+                        <Accordion defaultIndex={[0]} allowMultiple border="none">
+                          <AccordionItem border="none">
+                            <h2>
+                              <AccordionButton>
+                                <Center w="full">
+                                  <Heading
+                                    size="lg"
+                                    mb={4}
+                                    fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                    textAlign="center"
+                                    style={{ color: localDesign.textColor }}
+                                  >
+                                    🍕 Entradas
+                                  </Heading>
+                                </Center>
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel padding={0}>
+                              <VStack spacing={6} align="start">
+                                <Box w="full">
+                                  <HStack align="start" spacing={4} justify="space-between">
+                                    <VStack align="start" spacing={1} flex={1}>
+                                      <Text 
+                                        fontWeight="bold" 
+                                        fontSize="lg" 
+                                        fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                        style={{ color: localDesign.textColor }}
+                                      >
+                                        Bruschetta Italiana
+                                      </Text>
+                                      <Text style={{ color: localDesign.secondaryColor }}>
+                                        Pan tostado con tomate fresco, albahaca y aceite de oliva extra virgen
+                                      </Text>
+                                      <HStack spacing={2}>
+                                        <FaLeaf color="#38A169" title="Vegano" />
+                                      </HStack>
+                                      <Text color={localDesign.primaryColor} fontWeight="bold">
+                                        $ 850
+                                      </Text>
+                                    </VStack>
+                                  </HStack>
+                                  <Divider mt={4} />
+                                </Box>
+
+                                <Box w="full">
+                                  <HStack align="start" spacing={4} justify="space-between">
+                                    <VStack align="start" spacing={1} flex={1}>
+                                      <Text 
+                                        fontWeight="bold" 
+                                        fontSize="lg" 
+                                        fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                        style={{ color: localDesign.textColor }}
+                                      >
+                                        Tabla de Quesos
+                                      </Text>
+                                      <Text style={{ color: localDesign.secondaryColor }}>
+                                        Selección de quesos artesanales con frutos secos y mermelada casera
+                                      </Text>
+                                      <HStack spacing={2}>
+                                        <GiWheat color="#ED8936" title="Apto Celíacos" />
+                                      </HStack>
+                                      <Text color={localDesign.primaryColor} fontWeight="bold">
+                                        $ 1200
+                                      </Text>
+                                    </VStack>
+                                  </HStack>
+                                  <Divider mt={4} />
+                                </Box>
+                              </VStack>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        </Accordion>
+                      </Box>
+
+                      <Box
+                        bg="white"
+                        borderRadius="2xl"
+                        boxShadow="lg"
+                        p={6}
+                        w="full"
+                      >
+                        <Accordion defaultIndex={[0]} allowMultiple border="none">
+                          <AccordionItem border="none">
+                            <h2>
+                              <AccordionButton>
+                                <Center w="full">
+                                  <Heading
+                                    size="lg"
+                                    mb={4}
+                                    fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                    textAlign="center"
+                                    style={{ color: localDesign.textColor }}
+                                  >
+                                    🥩 Platos Principales
+                                  </Heading>
+                                </Center>
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel padding={0}>
+                              <VStack spacing={6} align="start">
+                                <Box w="full">
+                                  <HStack align="start" spacing={4} justify="space-between">
+                                    <VStack align="start" spacing={1} flex={1}>
+                                      <Text 
+                                        fontWeight="bold" 
+                                        fontSize="lg" 
+                                        fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                        style={{ color: localDesign.textColor }}
+                                      >
+                                        Bife de Chorizo
+                                      </Text>
+                                      <Text style={{ color: localDesign.secondaryColor }}>
+                                        300gr de bife argentino a la parrilla con papas rústicas y ensalada mixta
+                                      </Text>
+                                      <Text color={localDesign.primaryColor} fontWeight="bold">
+                                        $ 2800
+                                      </Text>
+                                    </VStack>
+                                  </HStack>
+                                  <Divider mt={4} />
+                                </Box>
+
+                                <Box w="full">
+                                  <HStack align="start" spacing={4} justify="space-between">
+                                    <VStack align="start" spacing={1} flex={1}>
+                                      <Text 
+                                        fontWeight="bold" 
+                                        fontSize="lg" 
+                                        fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                        style={{ color: localDesign.textColor }}
+                                      >
+                                        Risotto de Hongos
+                                      </Text>
+                                      <Text style={{ color: localDesign.secondaryColor }}>
+                                        Arroz cremoso con mix de hongos de estación y queso parmesano
+                                      </Text>
+                                      <HStack spacing={2}>
+                                        <FaLeaf color="#38A169" title="Vegano" />
+                                        <GiWheat color="#ED8936" title="Apto Celíacos" />
+                                      </HStack>
+                                      <Text color={localDesign.primaryColor} fontWeight="bold">
+                                        $ 2200
+                                      </Text>
+                                    </VStack>
+                                  </HStack>
+                                  <Divider mt={4} />
+                                </Box>
+                              </VStack>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        </Accordion>
+                      </Box>
+
+                      <Box
+                        bg="white"
+                        borderRadius="2xl"
+                        boxShadow="lg"
+                        p={6}
+                        w="full"
+                      >
+                        <Accordion defaultIndex={[0]} allowMultiple border="none">
+                          <AccordionItem border="none">
+                            <h2>
+                              <AccordionButton>
+                                <Center w="full">
+                                  <Heading
+                                    size="lg"
+                                    mb={4}
+                                    fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                    textAlign="center"
+                                    style={{ color: localDesign.textColor }}
+                                  >
+                                    🍰 Postres
+                                  </Heading>
+                                </Center>
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel padding={0}>
+                              <VStack spacing={6} align="start">
+                                <Box w="full">
+                                  <HStack align="start" spacing={4} justify="space-between">
+                                    <VStack align="start" spacing={1} flex={1}>
+                                      <Text 
+                                        fontWeight="bold" 
+                                        fontSize="lg" 
+                                        fontFamily={localDesign.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : localDesign.font}
+                                        style={{ color: localDesign.textColor }}
+                                      >
+                                        Tiramisú Casero
+                                      </Text>
+                                      <Text style={{ color: localDesign.secondaryColor }}>
+                                        El clásico postre italiano con café, mascarpone y cacao
+                                      </Text>
+                                      <Text color={localDesign.primaryColor} fontWeight="bold">
+                                        $ 950
+                                      </Text>
+                                    </VStack>
+                                  </HStack>
+                                  <Divider mt={4} />
+                                </Box>
+                              </VStack>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        </Accordion>
+                      </Box>
+                    </>
                   )}
-                  <Heading 
-                    size="lg" 
-                    style={{ color: design.primaryColor, fontFamily: design.font }}
-                  >
-                    Nombre del Restaurante
-                  </Heading>
-                  <Box 
-                    p={3} 
-                    borderRadius="md" 
-                    style={{ backgroundColor: design.primaryColor, color: design.backgroundColor }}
-                  >
-                    <Heading size="sm">Sección del Menú</Heading>
-                  </Box>
-                  <Box>
-                    <Heading size="sm" style={{ color: design.textColor }}>Producto de ejemplo</Heading>
-                    <Box style={{ color: design.secondaryColor, fontSize: "14px" }}>
-                      Descripción del producto con los colores aplicados
-                    </Box>
-                  </Box>
                 </VStack>
               </Box>
             </CardBody>

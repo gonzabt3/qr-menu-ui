@@ -194,6 +194,9 @@ export default function Page() {
                           <MenuDesignTab 
                             menuId={menuId}
                             restaurantId={id}
+                            menu={menu}
+                            sections={sections}
+                            products={products}
                           />
                         </TabsContent>
                       )}
