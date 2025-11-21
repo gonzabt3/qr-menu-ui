@@ -5,8 +5,9 @@ import FormMenu from '../formMenu';
 import { Center, Grid, GridItem, Text, Flex, Button, Heading, HStack, VStack } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
-import Sections from "../../../../sections";
-import Products from "../../../../products";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../../../../../components/ui/tabs";
+import MenuContentTab from "../../../../../components/MenuContentTab";
+import MenuDesignTab from "../../../../../components/MenuDesignTab";
 import QRCode from "react-qr-code";
 import * as htmlToImage from "html-to-image";
 import BaseCompents from "../../../../components/BaseCompents";
@@ -16,6 +17,7 @@ import { returnOnlyString } from "../../../../../common/utils";
 import useProducts from "../../../../../hooks/useProducts";
 import WiFiQRModal from "../../../../../components/WiFiQRModal";
 const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
+const DESIGN_ENABLED = process.env.NEXT_PUBLIC_DESIGN_ENABLED === 'true';
 
 const createMenuUrl = async (menu:any) => {
   return `${FRONTEND_URL}/qr/${menu.restaurant_id}`;
@@ -166,14 +168,37 @@ export default function Page() {
                 </GridItem>
                 <GridItem colSpan={4}>
                   <CardBody>
-                    <Heading as='h2' size='md'>Secciones</Heading>
+                    <Tabs defaultValue="contenido">
+                      <TabsList>
+                        <TabsTrigger value="contenido">📋 Contenido</TabsTrigger>
+                        {DESIGN_ENABLED && (
+                          <TabsTrigger value="diseño">🎨 Diseño</TabsTrigger>
+                        )}
+                      </TabsList>
+                      
+                      <TabsContent value="contenido">
+                        <MenuContentTab
+                          sections={sections}
+                          products={products}
+                          menu={menu}
+                          handleRemoveSection={handleRemoveSection}
+                          handleRemoveProduct={handleRemoveProduct}
+                          getSections={() => getSections()}
+                          getProducts={getProducts}
+                          handleReorderSection={handleReorderSection}
+                        />
+                      </TabsContent>
+                      
+                      {DESIGN_ENABLED && (
+                        <TabsContent value="diseño">
+                          <MenuDesignTab 
+                            menuId={menuId}
+                            restaurantId={id}
+                          />
+                        </TabsContent>
+                      )}
+                    </Tabs>
                   </CardBody>
-                </GridItem>
-                <GridItem colSpan={3} >
-                  <Sections sections={sections} handleRemoveSection={handleRemoveSection} getSections={() => getSections()} handleReorderSection={handleReorderSection}/>
-                </GridItem>
-                <GridItem colSpan={4}  >
-                  <Products products={products} sections={sections} menu={menu} handleRemoveProduct={handleRemoveProduct} getProducts={getProducts}/>
                 </GridItem>
               </Grid>
             </Card>
