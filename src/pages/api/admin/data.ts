@@ -136,14 +136,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // If BACKEND_URL is configured, proxy the request
     if (backendUrl) {
       try {
-        // Build query string from remaining params
-        const queryString = new URLSearchParams(otherParams as Record<string, string>).toString();
+        // Build query string from remaining params - handle both string and string[] values
+        const queryParams = new URLSearchParams();
+        Object.entries(otherParams).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            value.forEach(v => queryParams.append(key, v));
+          } else if (value) {
+            queryParams.append(key, value);
+          }
+        });
+        const queryString = queryParams.toString();
         const targetUrl = `${backendUrl}/admin/${type}${queryString ? `?${queryString}` : ''}`;
 
+        // Include user email in header for backend authorization
         const response = await fetch(targetUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            'X-Admin-Email': userEmail,
+            'X-User-Email': userEmail,
           },
         });
 
