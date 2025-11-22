@@ -1,5 +1,5 @@
-import { Flex,Heading,Spacer,IconButton, Box } from "@chakra-ui/react";
-import { CloseIcon, EditIcon } from '@chakra-ui/icons';
+import { Flex,Heading,Spacer,IconButton, Box, Text, HStack } from "@chakra-ui/react";
+import { CloseIcon, EditIcon, DragHandleIcon } from '@chakra-ui/icons';
 import { useDrag, useDrop } from "react-dnd";
 import type { Identifier, XYCoord } from 'dnd-core'
 import { useRef } from "react";
@@ -9,11 +9,15 @@ const ItemTypes = {
 }
 
 const style = {
-  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
+  border: '1px solid',
+  borderColor: '#E2E8F0',
+  padding: '1rem',
+  marginBottom: '0.75rem',
   backgroundColor: 'white',
   cursor: 'move',
+  borderRadius: '12px',
+  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+  transition: 'all 0.2s',
 }
 
 export interface CardProps {
@@ -111,17 +115,70 @@ const Section = ({section, onEdit, onDelete, id, text, index, moveCard}:any) => 
     }),
   })
 
-  const opacity = isDragging ? 0 : 1
+  const opacity = isDragging ? 0.5 : 1
   drag(drop(ref))
 
   return(
     <>
-      <Box borderRadius='md' w={['100%','50%']} px={1} border="1px solid grey" ref={ref} style={{ ...style, opacity }}  data-handler-id={handlerId}>
-        <Flex margin={1} >
-          <Heading alignContent={'center'} margin={1} size={'md'}>{section?.name}</Heading>
-          <Spacer/>
-          <IconButton onClick={() => editHandle()} aria-label="Editar" margin='1' size={'sm'} icon={<EditIcon />} />
-          <IconButton onClick={() => handleDelete()} aria-label="Close" margin='1' size={'sm'} icon={<CloseIcon />} />
+      <Box 
+        w={['100%','70%']} 
+        px={4} 
+        py={3}
+        ref={ref} 
+        style={{ ...style, opacity }}  
+        data-handler-id={handlerId}
+        _hover={{ 
+          boxShadow: '0 4px 12px 0 rgba(0, 0, 0, 0.15)',
+          transform: 'translateY(-2px)',
+          borderColor: 'blue.300'
+        }}
+      >
+        <Flex alignItems="center" gap={3}>
+          <Box 
+            color="gray.400" 
+            cursor="grab"
+            _active={{ cursor: 'grabbing' }}
+            p={1}
+          >
+            <DragHandleIcon boxSize={5} />
+          </Box>
+          
+          <Box 
+            bg="blue.100" 
+            color="blue.700" 
+            px={3} 
+            py={1} 
+            borderRadius="full"
+            fontWeight="bold"
+            fontSize="sm"
+          >
+            Sección
+          </Box>
+          
+          <Heading size="md" color="gray.800" flex="1">
+            {section?.name}
+          </Heading>
+          
+          <HStack spacing={2}>
+            <IconButton 
+              onClick={() => editHandle()} 
+              aria-label="Editar" 
+              size="sm"
+              icon={<EditIcon />}
+              colorScheme="blue"
+              variant="ghost"
+              _hover={{ bg: 'blue.100' }}
+            />
+            <IconButton 
+              onClick={() => handleDelete()} 
+              aria-label="Eliminar" 
+              size="sm"
+              icon={<CloseIcon />}
+              colorScheme="red"
+              variant="ghost"
+              _hover={{ bg: 'red.100' }}
+            />
+          </HStack>
         </Flex>
       </Box>
     </>

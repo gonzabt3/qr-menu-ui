@@ -89,12 +89,18 @@ const Sections = ({sections, handleRemoveSection, getSections, handleReorderSect
         <Button
           justifyContent={'center'}
           margin={'2'}
-          width={['45%','30%']}
-          onClick={openModal}>
-            Agregar Seccion
+          width={['100%','250px']}
+          onClick={openModal}
+          colorScheme="blue"
+          size="lg"
+          boxShadow="md"
+          _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
+          transition="all 0.2s"
+        >
+          ➕ Agregar Sección
         </Button>
         {sectionsInOrder && sectionsInOrder.length > 0 ? (
-          <List display="flex" flexDirection={'column'}>
+          <List display="flex" flexDirection={'column'} mt={4}>
             {sectionsInOrder.map((section: any, index: number) => {
               if (!section) {
                 console.error('Sección no definida en el índice:', index);
@@ -123,8 +129,16 @@ const Sections = ({sections, handleRemoveSection, getSections, handleReorderSect
             })}
           </List>
         ) : (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100px">
-            <Text>No hay secciones</Text>
+          <Box 
+            display="flex" 
+            justifyContent="center" 
+            alignItems="center" 
+            height="150px"
+            bg="gray.50"
+            borderRadius="lg"
+            mt={4}
+          >
+            <Text color="gray.500" fontSize="lg">No hay secciones creadas</Text>
           </Box>
         )}
       </Flex>

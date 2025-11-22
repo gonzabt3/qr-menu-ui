@@ -2,7 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import BreadcrumComponent from '../../../../components/breadcrum';
 import FormMenu from '../formMenu';
-import { Center, Grid, GridItem, Text, Flex, Button, Heading, HStack, VStack } from '@chakra-ui/react'
+import { Center, Grid, GridItem, Text, Flex, Button, Heading, HStack, VStack, Box, Divider } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 import Sections from "../../../../sections";
@@ -108,79 +108,154 @@ export default function Page() {
       <BaseCompents>
       <GridItem area={'nav'}  rowSpan={8} colSpan={5}>
         {menu ? (
-          <>
-            <BreadcrumComponent />
-            <Flex justifyContent="space-between" alignItems="center" marginLeft={6} marginRight={6}>
-              <Heading>
-                {menu?.name} 
-              </Heading>
-              {/* <Button colorScheme="orange" onClick={handlePreviewClick}>Previsualización</Button> */}
-            </Flex>
-            <Card margin={5} height={'100%'}  overflowY="scroll">
-              <Grid
-                h='100%'
-                templateRows='repeat(5, 1fr)'
-                templateColumns='repeat(3, 1fr)'
-                gap={4}
+          <Box bg="gray.50" minH="100vh" pb={8}>
+            <Box bg="white" boxShadow="sm" mb={6} py={4}>
+              <BreadcrumComponent />
+              <Flex justifyContent="space-between" alignItems="center" mx={6} mt={3}>
+                <Heading size="lg" color="gray.800" fontWeight="bold">
+                  {menu?.name}
+                </Heading>
+              </Flex>
+            </Box>
+            
+            <Box maxW="7xl" mx="auto" px={6}>
+              <Card 
+                bg="white" 
+                boxShadow="lg" 
+                borderRadius="xl" 
+                overflow="hidden"
+                border="1px"
+                borderColor="gray.200"
               >
-                <GridItem rowSpan={5} colSpan={3} >
-                  <CardHeader>
-                    <Heading as='h2' size='md'>Menu</Heading>
-                  </CardHeader>
-                </GridItem>
-                <GridItem colStart={1} rowSpan={5} colSpan={[2]}>
-                  <FormMenu menu={menu} menuId={menu?.id} updateMenu={updateMenu}/>
-                </GridItem>
-                <GridItem colStart={3} rowSpan={5} colSpan={1}>
-                  {menuUrl &&
-                   <VStack spacing={4}>
-                     <div style={{ height: "auto", margin: "0 auto", maxWidth: 150, width: "100%" }}>
-                        <QRCode
-                          ref={qrCodeRef}
-                          size={256}
-                          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                          value={menuUrl}
-                          viewBox={`0 0 256 256`}
-                        />
-                      <Button 
-                        onClick={downloadQr}
-                        style={{ marginTop: '10px' }}
-                        size="sm"
-                        width="100%"
-                        >Descargar QR Menú</Button>
-                    </div>
+                <CardHeader bg="gradient.100" py={4}>
+                  <Heading as='h2' size='lg' color="gray.800" fontWeight="semibold">
+                    📋 Configuración del Menú
+                  </Heading>
+                </CardHeader>
+                
+                <CardBody>
+                  <Grid
+                    templateColumns={{ base: '1fr', lg: '2fr 1fr' }}
+                    gap={8}
+                  >
+                    <GridItem>
+                      <FormMenu menu={menu} menuId={menu?.id} updateMenu={updateMenu}/>
+                    </GridItem>
                     
-                    <WiFiQRModal 
-                      trigger={
-                        <Button 
-                          colorScheme="blue" 
-                          size="sm"
-                          width="150px"
-                        >
-                          🔗 QR WiFi
-                        </Button>
+                    <GridItem>
+                      {menuUrl &&
+                       <VStack 
+                         spacing={4} 
+                         align="stretch"
+                         bg="gray.50"
+                         p={6}
+                         borderRadius="xl"
+                         border="1px"
+                         borderColor="gray.200"
+                       >
+                         <Heading size="sm" color="gray.700" textAlign="center" mb={2}>
+                           Código QR del Menú
+                         </Heading>
+                         <Box 
+                           bg="white" 
+                           p={4} 
+                           borderRadius="lg" 
+                           boxShadow="md"
+                           display="flex"
+                           justifyContent="center"
+                         >
+                           <div style={{ height: "auto", margin: "0 auto", maxWidth: 180, width: "100%" }}>
+                              <QRCode
+                                ref={qrCodeRef}
+                                size={256}
+                                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                value={menuUrl}
+                                viewBox={`0 0 256 256`}
+                              />
+                            </div>
+                          </Box>
+                          <Button 
+                            onClick={downloadQr}
+                            colorScheme="orange"
+                            size="md"
+                            width="100%"
+                            boxShadow="sm"
+                          >
+                            📥 Descargar QR Menú
+                          </Button>
+                        
+                          <WiFiQRModal 
+                            trigger={
+                              <Button 
+                                colorScheme="blue" 
+                                size="md"
+                                width="100%"
+                                variant="outline"
+                              >
+                                🔗 Generar QR WiFi
+                              </Button>
+                            }
+                          />
+                       </VStack>
                       }
-                    />
-                   </VStack>
-                  }
-                </GridItem>
-                <GridItem colSpan={4}>
-                  <CardBody>
-                    <Heading as='h2' size='md'>Secciones</Heading>
-                  </CardBody>
-                </GridItem>
-                <GridItem colSpan={3} >
+                    </GridItem>
+                  </Grid>
+                </CardBody>
+              </Card>
+
+              <Divider my={8} />
+
+              <Card 
+                bg="white" 
+                boxShadow="lg" 
+                borderRadius="xl" 
+                overflow="hidden"
+                border="1px"
+                borderColor="gray.200"
+                mb={6}
+              >
+                <CardHeader bg="blue.50" py={4}>
+                  <Heading as='h2' size='lg' color="gray.800" fontWeight="semibold">
+                    📑 Secciones
+                  </Heading>
+                </CardHeader>
+                <CardBody>
                   <Sections sections={sections} handleRemoveSection={handleRemoveSection} getSections={() => getSections()} handleReorderSection={handleReorderSection}/>
-                </GridItem>
-                <GridItem colSpan={4}  >
-                  <Products products={products} sections={sections} menu={menu} handleRemoveProduct={handleRemoveProduct} getProducts={getProducts}/>
-                </GridItem>
-              </Grid>
-            </Card>
-          </>
+                </CardBody>
+              </Card>
+
+              <Card 
+                bg="white" 
+                boxShadow="lg" 
+                borderRadius="xl" 
+                overflow="hidden"
+                border="1px"
+                borderColor="gray.200"
+              >
+                <Products products={products} sections={sections} menu={menu} handleRemoveProduct={handleRemoveProduct} getProducts={getProducts}/>
+              </Card>
+            </Box>
+          </Box>
         ) : (
-          <Center>
-            <Text>Cargando...</Text>
+          <Center h="100vh" bg="gray.50">
+            <VStack spacing={4}>
+              <Box 
+                w="16" 
+                h="16" 
+                borderRadius="full" 
+                border="4px solid"
+                borderColor="orange.500"
+                borderTopColor="transparent"
+                animation="spin 1s linear infinite"
+                sx={{
+                  '@keyframes spin': {
+                    '0%': { transform: 'rotate(0deg)' },
+                    '100%': { transform: 'rotate(360deg)' },
+                  },
+                }}
+              />
+              <Text fontSize="lg" color="gray.600" fontWeight="medium">Cargando menú...</Text>
+            </VStack>
           </Center>
         )}
       </GridItem>
