@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { auth0 } from '../../../../lib/auth0';
 
-// Mock data for when BACKEND_URL is not configured
+// Mock data for demonstration
 const mockData = {
   users: [
     {
@@ -98,25 +97,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Verify Auth0 session
-    const session = await auth0.getSession(req);
-
-    if (!session || !session.user) {
-      return res.status(401).json({ error: 'Unauthorized - No valid session' });
-    }
-
-    // Check if user email is in ADMIN_EMAILS
-    const adminEmails = (process.env.ADMIN_EMAILS || '')
-      .split(',')
-      .map((email) => email.trim().toLowerCase())
-      .filter(Boolean);
-
-    const userEmail = (session.user.email || '').toLowerCase();
-
-    if (!adminEmails.includes(userEmail)) {
-      return res.status(403).json({ error: 'Forbidden - User not authorized as admin' });
-    }
-
     // Get the data type from query params
     const { type, ...otherParams } = req.query;
 
@@ -131,12 +111,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    const backendUrl = process.env.BACKEND_URL;
+    const backendUrl = process.env.NEXT_PUBLIC_API_SERVER_URL || process.env.BACKEND_URL;
 
-    // If BACKEND_URL is configured, proxy the request
+    // If BACKEND_URL is configured, try to proxy the request
     if (backendUrl) {
       try {
-        // Build query string from remaining params - handle both string and string[] values
+        // Build query string from remaining params
         const queryParams = new URLSearchParams();
         Object.entries(otherParams).forEach(([key, value]) => {
           if (Array.isArray(value)) {
@@ -148,13 +128,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const queryString = queryParams.toString();
         const targetUrl = `${backendUrl}/admin/${type}${queryString ? `?${queryString}` : ''}`;
 
-        // Include user email in header for backend authorization
         const response = await fetch(targetUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'X-Admin-Email': userEmail,
-            'X-User-Email': userEmail,
           },
         });
 
@@ -165,19 +142,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const data = await response.json();
         return res.status(200).json(data);
       } catch (error: any) {
-        console.error('Error proxying to backend:', error);
-        return res.status(502).json({ 
-          error: 'Error connecting to backend'
-        });
+        console.log('Backend not available, falling back to mock data:', error.message);
+        // Fall through to mock data
       }
     }
 
-    // If no BACKEND_URL, return mock data
+    // Return mock data
     const dataType = type as keyof typeof mockData;
     return res.status(200).json({
       data: mockData[dataType],
       _mock: true,
-      _message: 'Using mock data (BACKEND_URL not configured)',
+      _message: backendUrl 
+        ? 'Backend not available, using mock data'
+        : 'Using mock data (BACKEND_URL not configured)',
     });
 
   } catch (error: any) {

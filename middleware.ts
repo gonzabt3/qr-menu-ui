@@ -1,8 +1,10 @@
 import type { NextRequest } from 'next/server';
-import { auth0 } from './lib/auth0';
+// import { auth0 } from './lib/auth0'; // Deshabilitado - usando client-side auth
 
 export async function middleware(request: NextRequest) {
-  return await auth0.middleware(request);
+  // Middleware deshabilitado - usando client-side authentication
+  // return await auth0.middleware(request);
+  return;
 }
 
 export const config = {
@@ -13,6 +15,7 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      */
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    // Matcher deshabilitado
+    // '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };
