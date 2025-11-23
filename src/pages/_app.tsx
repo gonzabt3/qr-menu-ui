@@ -8,6 +8,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import FeedbackButton from '../components/FeedbackButton';
 import FeedbackModal from '../components/FeedbackModal';
+import ChatWidgetButton from '../components/ChatWidgetButton';
+import ChatModal from '../components/ChatModal';
 
 const auth0Domain : any = process.env.NEXT_PUBLIC_AUTH_DOMAIN;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
@@ -63,6 +65,34 @@ function FeedbackContainer() {
   );
 }
 
+function ChatWidgetContainer() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  
+  // Check if AI chat is enabled via environment variable
+  const isAIChatEnabled = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED === 'true';
+  
+  if (!isAIChatEnabled) {
+    return null;
+  }
+  
+  // Show chat widget in menu pages where customers view products
+  const showChatWidget = 
+    router.pathname.includes("/menu/") ||
+    router.pathname.startsWith("/[restaurantName]");
+  
+  if (!showChatWidget) {
+    return null;
+  }
+  
+  return (
+    <>
+      <ChatWidgetButton onClick={onOpen} />
+      <ChatModal isOpen={isOpen} onClose={onClose} />
+    </>
+  );
+}
+
 export default function App({ Component, pageProps }:AppProps) {
   const [isClient, setIsClient] = useState(false)
  
@@ -92,6 +122,7 @@ export default function App({ Component, pageProps }:AppProps) {
             <DndProvider backend={HTML5Backend}>
               <Component {...pageProps} />
               <FeedbackContainer />
+              <ChatWidgetContainer />
             </DndProvider>
           </AuthGuard>
         </Auth0Provider>
