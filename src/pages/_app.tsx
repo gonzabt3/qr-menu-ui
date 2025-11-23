@@ -79,7 +79,7 @@ function ChatWidgetContainer() {
   // Show chat widget in menu pages where customers view products
   const showChatWidget = 
     router.pathname.includes("/menu/") ||
-    router.pathname.startsWith("/[restaurantName]");
+    router.asPath.match(/^\/[^/]+$/) !== null; // Match customer-facing restaurant menu pages
   
   if (!showChatWidget) {
     return null;

@@ -7,8 +7,8 @@ export class ChatService {
   private baseUrl: string;
 
   constructor() {
-    // Use NEXT_PUBLIC_API_URL if available, otherwise default to API_SERVER_URL
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_API_SERVER_URL || 'http://localhost:3000';
+    // Use NEXT_PUBLIC_API_SERVER_URL for consistency with feedback service
+    const apiUrl = process.env.NEXT_PUBLIC_API_SERVER_URL || 'http://localhost:3000';
     // Remove trailing slash if present
     this.baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
   }
@@ -36,7 +36,7 @@ export class ChatService {
       const errorData: ChatErrorResponse = await response.json().catch(() => ({
         error: `HTTP error ${response.status}`,
       }));
-      throw new Error(errorData.error || `Error del servidor: ${response.status}`);
+      throw new Error(errorData.error || `Server error: ${response.status}`);
     }
 
     return await response.json();

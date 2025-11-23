@@ -60,12 +60,15 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
     if (currentPath.includes('/menu/')) {
       // We're in a menu view, navigate to the product
       const pathParts = currentPath.split('/');
-      const restaurantId = pathParts[2];
-      const menuId = pathParts[4];
-      router.push(`/restaurant/${restaurantId}/menu/${menuId}?product=${productId}`);
-      handleClose();
+      // Expected format: /restaurant/[id]/menu/[menuId]
+      if (pathParts.length >= 5) {
+        const restaurantId = pathParts[2];
+        const menuId = pathParts[4];
+        router.push(`/restaurant/${restaurantId}/menu/${menuId}?product=${productId}`);
+        handleClose();
+      }
     } else {
-      // Not in menu context, just show the product ID
+      // Not in menu context, just log for now
       console.log('Product clicked:', productId);
     }
   };

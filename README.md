@@ -107,7 +107,7 @@ The chat widget sends a POST request to the `/chat` endpoint with the following 
 
 **Configuration:**
 
-- The API endpoint URL is configured via `NEXT_PUBLIC_API_URL` (preferred) or `NEXT_PUBLIC_API_SERVER_URL`.
+- The API endpoint URL is configured via `NEXT_PUBLIC_API_SERVER_URL` (same as feedback feature).
 - If not set, it defaults to `http://localhost:3000`.
 - For cross-origin API requests, ensure CORS is properly configured on the backend.
 
