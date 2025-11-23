@@ -17,7 +17,11 @@ import {
   Select,
   useToast,
   Text,
-  Center
+  Image,
+  AspectRatio,
+  Flex,
+  Center,
+  Switch
 } from "@chakra-ui/react"
 import useMenuDesign from "../hooks/useMenuDesign"
 import CustomerMenu from "../pages/components/CustomerMenu"
@@ -29,17 +33,20 @@ export default function MenuDesignTab({
   restaurantId, 
   menu, 
   sections, 
-  products 
+  products,
+  restaurant
 }: { 
   menuId: string, 
   restaurantId: string,
   menu?: any,
   sections?: any[],
-  products?: any[]
+  products?: any[],
+  restaurant?: any
 }) {
   const toast = useToast()
   const { design, saveDesign } = useMenuDesign(menuId)
   const [localDesign, setLocalDesign] = useState(design)
+  const [showRestaurantImage, setShowRestaurantImage] = useState(!!restaurant?.logo_url)
 
   useEffect(() => {
     setLocalDesign(design)
@@ -266,6 +273,160 @@ export default function MenuDesignTab({
 
           <Card>
             <CardHeader>
+              <Heading size="md">🖼️ Imagen del Restaurante</Heading>
+            </CardHeader>
+            <CardBody>
+              <VStack spacing={4} align="stretch">
+                <FormControl display="flex" alignItems="center" justifyContent="space-between">
+                  <FormLabel htmlFor="show-restaurant-image" mb="0">
+                    Mostrar logo del restaurante en el menú
+                  </FormLabel>
+                  <Switch
+                    id="show-restaurant-image"
+                    isChecked={showRestaurantImage}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowRestaurantImage(e.target.checked)}
+                    colorScheme="orange"
+                  />
+                </FormControl>
+                
+                {restaurant?.logo_url && showRestaurantImage && (
+                  <Flex direction="column" align="center" gap={3}>
+                    <Text fontSize="sm" color="gray.600">
+                      Se mostrará arriba del nombre del restaurante, centrada y redonda
+                    </Text>
+                    <AspectRatio width="120px" ratio={1}>
+                      <Image 
+                        src={restaurant.logo_url}
+                        alt="Logo del restaurante"
+                        borderRadius="full"
+                        objectFit="cover"
+                        border="2px solid"
+                        borderColor="gray.200"
+                      />
+                    </AspectRatio>
+                  </Flex>
+                )}
+                
+                {!restaurant?.logo_url && (
+                  <Text fontSize="sm" color="gray.500">
+                    No hay logo configurado. Puedes agregar uno en la configuración del restaurante.
+                  </Text>
+                )}
+              </VStack>
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <Heading size="md">📞 Información de Contacto</Heading>
+            </CardHeader>
+            <CardBody>
+              <VStack spacing={4} align="stretch">
+                <Text fontSize="sm" color="gray.600" mb={2}>
+                  Configura qué botones de contacto mostrar en el menú
+                </Text>
+                
+                <FormControl display="flex" alignItems="center" justifyContent="space-between">
+                  <VStack align="start" spacing={0}>
+                    <FormLabel htmlFor="show-whatsapp" mb="0">
+                      WhatsApp
+                    </FormLabel>
+                    <Text fontSize="xs" color="gray.500">
+                      Botón verde para contacto directo
+                    </Text>
+                  </VStack>
+                  <Switch
+                    id="show-whatsapp"
+                    isChecked={localDesign.showWhatsApp}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                      setLocalDesign({...localDesign, showWhatsApp: e.target.checked})}
+                    colorScheme="green"
+                  />
+                </FormControl>
+
+                <FormControl display="flex" alignItems="center" justifyContent="space-between">
+                  <VStack align="start" spacing={0}>
+                    <FormLabel htmlFor="show-instagram" mb="0">
+                      Instagram
+                    </FormLabel>
+                    <Text fontSize="xs" color="gray.500">
+                      Enlace al perfil de Instagram
+                    </Text>
+                  </VStack>
+                  <Switch
+                    id="show-instagram"
+                    isChecked={localDesign.showInstagram}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                      setLocalDesign({...localDesign, showInstagram: e.target.checked})}
+                    colorScheme="pink"
+                  />
+                </FormControl>
+
+                <FormControl display="flex" alignItems="center" justifyContent="space-between">
+                  <VStack align="start" spacing={0}>
+                    <FormLabel htmlFor="show-phone" mb="0">
+                      Teléfono
+                    </FormLabel>
+                    <Text fontSize="xs" color="gray.500">
+                      Botón para llamada directa
+                    </Text>
+                  </VStack>
+                  <Switch
+                    id="show-phone"
+                    isChecked={localDesign.showPhone}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                      setLocalDesign({...localDesign, showPhone: e.target.checked})}
+                    colorScheme="blue"
+                  />
+                </FormControl>
+
+                <FormControl display="flex" alignItems="center" justifyContent="space-between">
+                  <VStack align="start" spacing={0}>
+                    <FormLabel htmlFor="show-maps" mb="0">
+                      Google Maps
+                    </FormLabel>
+                    <Text fontSize="xs" color="gray.500">
+                      Ubicación en Google Maps
+                    </Text>
+                  </VStack>
+                  <Switch
+                    id="show-maps"
+                    isChecked={localDesign.showMaps}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                      setLocalDesign({...localDesign, showMaps: e.target.checked})}
+                    colorScheme="gray"
+                  />
+                </FormControl>
+
+                <Text fontSize="xs" color="gray.500" mt={2}>
+                  Los botones solo aparecerán si el restaurante tiene la información de contacto configurada
+                </Text>
+                
+                {restaurant && (
+                  <Box bg="gray.50" p={3} borderRadius="md" mt={3}>
+                    <Text fontSize="sm" fontWeight="semibold" mb={2}>Contactos disponibles:</Text>
+                    <VStack spacing={1} align="start">
+                      {restaurant.phone && (
+                        <Text fontSize="xs" color="gray.600">✅ Teléfono/WhatsApp: {restaurant.phone}</Text>
+                      )}
+                      {restaurant.instagram && (
+                        <Text fontSize="xs" color="gray.600">✅ Instagram: @{restaurant.instagram}</Text>
+                      )}
+                      {restaurant.address && (
+                        <Text fontSize="xs" color="gray.600">✅ Dirección: {restaurant.address}</Text>
+                      )}
+                      {!restaurant.phone && !restaurant.instagram && !restaurant.address && (
+                        <Text fontSize="xs" color="gray.500">No hay información de contacto configurada</Text>
+                      )}
+                    </VStack>
+                  </Box>
+                )}
+              </VStack>
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <Heading size="md">✏️ Tipografía y Logo</Heading>
             </CardHeader>
             <CardBody>
@@ -350,6 +511,9 @@ export default function MenuDesignTab({
                   menu={previewMenuData}
                   loading={false}
                   showErrorNotFound={false}
+                  previewDesign={localDesign}
+                  restaurant={restaurant}
+                  showRestaurantLogo={showRestaurantImage}
                 />
               </Box>
             </CardBody>

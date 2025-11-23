@@ -7,6 +7,10 @@ interface MenuDesign {
   textColor: string;
   font: string;
   logoUrl: string;
+  showWhatsApp: boolean;
+  showInstagram: boolean;
+  showPhone: boolean;
+  showMaps: boolean;
 }
 
 const DEFAULT_DESIGN: MenuDesign = {
@@ -15,7 +19,11 @@ const DEFAULT_DESIGN: MenuDesign = {
   backgroundColor: "#fefaf4", 
   textColor: "#1f2937",
   font: "Inter",
-  logoUrl: ""
+  logoUrl: "",
+  showWhatsApp: true,
+  showInstagram: true,
+  showPhone: true,
+  showMaps: false
 };
 
 const useMenuDesign = (menuId: string) => {

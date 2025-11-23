@@ -9,7 +9,7 @@ export enum CustomerMenuQueryType {
 }  
 
 const useCustomerMenu = (value: string, type: CustomerMenuQueryType) =>  {
-  const [customerMenu, setCustomerMenu] = useState(false);
+  const [customerMenu, setCustomerMenu] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
 

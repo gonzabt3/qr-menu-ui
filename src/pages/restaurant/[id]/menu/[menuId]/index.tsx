@@ -15,6 +15,7 @@ import useMenu from "../../../../../hooks/useMenu";
 import useSections from "../../../../../hooks/useSections";
 import { returnOnlyString } from "../../../../../common/utils";
 import useProducts from "../../../../../hooks/useProducts";
+import useRestaurant from "../../../../../hooks/useRestaurant";
 import WiFiQRModal from "../../../../../components/WiFiQRModal";
 const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
 const DESIGN_ENABLED = process.env.NEXT_PUBLIC_DESIGN_ENABLED === 'true';
@@ -32,6 +33,7 @@ export default function Page() {
   const qrCodeRef :any= useRef(null);
   const [menuUrl, setMenuUrl] : any = useState('');
   const {menu, getMenu, updateMenu} = useMenu(id, menuId);
+  const {restaurant, loading: loadingRestaurant} = useRestaurant(id);
   const {errorSections, sections, loadingSections, getSections, removeSection, reorderSections} = useSections(id, menuId)
   const {
     products,
@@ -197,6 +199,7 @@ export default function Page() {
                             menu={menu}
                             sections={sections}
                             products={products}
+                            restaurant={restaurant}
                           />
                         </TabsContent>
                       )}
