@@ -2,7 +2,6 @@
 import { useRouter } from 'next/router';
 import useCustomerMenu from "../../../hooks/useCustomerMenu";
 import { CustomerMenuQueryType } from '../../../hooks/useCustomerMenu';
-import useMenuDesign from '../../../hooks/useMenuDesign';
 import CustomerMenu from '../../components/CustomerMenu';
 
 export default function Menu() {
@@ -10,8 +9,8 @@ export default function Menu() {
   const restaurantId = router.query.restaurantId as string;
   const { customerMenu, loading, error } = useCustomerMenu(restaurantId, CustomerMenuQueryType.QR);
   
-  // Obtener el diseño del menú si existe
-  const { design } = useMenuDesign(customerMenu?.id);
+  // Usar configuración de diseño del menú si está disponible
+  const design = customerMenu?.design_configuration || null;
 
   return (
     <CustomerMenu 
@@ -20,7 +19,7 @@ export default function Menu() {
       showErrorNotFound={error}
       previewDesign={design}
       restaurant={customerMenu?.restaurant}
-      showRestaurantLogo={true} // Por defecto mostrar logo en menú público
+      showRestaurantLogo={design?.showRestaurantLogo !== false} // Usar configuración del diseño
     />  
   );
 }

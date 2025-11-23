@@ -44,9 +44,8 @@ export default function MenuDesignTab({
   restaurant?: any
 }) {
   const toast = useToast()
-  const { design, saveDesign } = useMenuDesign(menuId)
+  const { design, saveDesign } = useMenuDesign(menuId, restaurantId)
   const [localDesign, setLocalDesign] = useState(design)
-  const [showRestaurantImage, setShowRestaurantImage] = useState(!!restaurant?.logo_url)
 
   useEffect(() => {
     setLocalDesign(design)
@@ -58,13 +57,11 @@ export default function MenuDesignTab({
       if (success) {
         toast({
           title: "Diseño guardado",
-          description: "Los cambios se aplicarán en el menú público",
+          description: "Los cambios se han aplicado correctamente",
           status: "success",
           duration: 3000,
           isClosable: true,
         })
-        // Recargar la página para aplicar los cambios
-        window.location.reload()
       } else {
         throw new Error("Error al guardar")
       }
@@ -283,13 +280,14 @@ export default function MenuDesignTab({
                   </FormLabel>
                   <Switch
                     id="show-restaurant-image"
-                    isChecked={showRestaurantImage}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowRestaurantImage(e.target.checked)}
+                    isChecked={localDesign.showRestaurantLogo}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                      setLocalDesign({...localDesign, showRestaurantLogo: e.target.checked})}
                     colorScheme="orange"
                   />
                 </FormControl>
                 
-                {restaurant?.logo_url && showRestaurantImage && (
+                {restaurant?.logo_url && localDesign.showRestaurantLogo && (
                   <Flex direction="column" align="center" gap={3}>
                     <Text fontSize="sm" color="gray.600">
                       Se mostrará arriba del nombre del restaurante, centrada y redonda
@@ -425,6 +423,7 @@ export default function MenuDesignTab({
             </CardBody>
           </Card>
 
+          {/* 
           <Card>
             <CardHeader>
               <Heading size="md">✏️ Tipografía y Logo</Heading>
@@ -458,6 +457,7 @@ export default function MenuDesignTab({
               </VStack>
             </CardBody>
           </Card>
+          */}
 
           <Box textAlign="left">
             <Button 
@@ -513,7 +513,7 @@ export default function MenuDesignTab({
                   showErrorNotFound={false}
                   previewDesign={localDesign}
                   restaurant={restaurant}
-                  showRestaurantLogo={showRestaurantImage}
+                  showRestaurantLogo={localDesign.showRestaurantLogo}
                 />
               </Box>
             </CardBody>

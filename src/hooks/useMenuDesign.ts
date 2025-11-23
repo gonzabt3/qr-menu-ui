@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useAuth0 } from "@auth0/auth0-react";
+import axios from 'axios';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface MenuDesign {
   primaryColor: string;
@@ -11,6 +15,7 @@ interface MenuDesign {
   showInstagram: boolean;
   showPhone: boolean;
   showMaps: boolean;
+  showRestaurantLogo: boolean;
 }
 
 const DEFAULT_DESIGN: MenuDesign = {
@@ -23,53 +28,78 @@ const DEFAULT_DESIGN: MenuDesign = {
   showWhatsApp: true,
   showInstagram: true,
   showPhone: true,
-  showMaps: false
+  showMaps: false,
+  showRestaurantLogo: true
 };
 
-const useMenuDesign = (menuId: string) => {
+const useMenuDesign = (menuId: string, restaurantId?: string) => {
+  const { getAccessTokenSilently } = useAuth0();
   const [design, setDesign] = useState<MenuDesign>(DEFAULT_DESIGN);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
-    // Por ahora usamos valores por defecto
-    // Aquí iría la llamada a la API para obtener el diseño guardado
     const loadDesign = async () => {
-      try {
-        // TODO: Llamada a la API
-        // const response = await fetch(`/api/menus/${menuId}/design`);
-        // const savedDesign = await response.json();
-        // setDesign({ ...DEFAULT_DESIGN, ...savedDesign });
-        
+      if (!menuId || !restaurantId) {
         setDesign(DEFAULT_DESIGN);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const token = await getAccessTokenSilently();
+        const response = await axios.get(
+          `${API_BASE_URL}restaurants/${restaurantId}/menus/${menuId}/design_configuration`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        setDesign(response.data);
+        setError(null);
       } catch (error) {
         console.error('Error loading design:', error);
         setDesign(DEFAULT_DESIGN);
+        setError(error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (menuId) {
-      loadDesign();
-    }
-  }, [menuId]);
+    loadDesign();
+  }, [menuId, restaurantId, getAccessTokenSilently]);
 
   const updateDesign = (newDesign: Partial<MenuDesign>) => {
     setDesign(prev => ({ ...prev, ...newDesign }));
   };
 
   const saveDesign = async (designToSave: Partial<MenuDesign>) => {
+    if (!menuId || !restaurantId) {
+      console.error('menuId and restaurantId are required to save design');
+      return false;
+    }
+
     try {
-      // TODO: Llamada a la API para guardar
-      // await fetch(`/api/menus/${menuId}/design`, {
-      //   method: 'POST',
-      //   body: JSON.stringify(designToSave)
-      // });
+      const token = await getAccessTokenSilently();
+      const response = await axios.put(
+        `${API_BASE_URL}restaurants/${restaurantId}/menus/${menuId}/design_configuration`,
+        { design: designToSave },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
       
-      updateDesign(designToSave);
+      setDesign(response.data);
+      setError(null);
       return true;
     } catch (error) {
       console.error('Error saving design:', error);
+      setError(error);
       return false;
     }
   };
@@ -77,6 +107,7 @@ const useMenuDesign = (menuId: string) => {
   return {
     design,
     loading,
+    error,
     updateDesign,
     saveDesign
   };
