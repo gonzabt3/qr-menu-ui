@@ -68,10 +68,8 @@ function ChatWidgetContainer() {
   const router = useRouter();
   const aiChatEnabled = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED === 'true';
   
-  // Only show on customer-facing pages (menu pages)
-  const showOnPage = 
-    router.pathname.startsWith("/[restaurantName]") ||
-    router.pathname === "/[restaurantName]";
+  // Only show on customer-facing menu pages (using route instead of pathname)
+  const showOnPage = router.route === "/[restaurantName]";
   
   if (!aiChatEnabled || !showOnPage) {
     return null;

@@ -68,16 +68,19 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       content: inputValue.trim(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
     setError(null);
 
     try {
-      const conversationHistory: ChatMessage[] = messages.map(msg => ({
+      // Build conversation history including the current message
+      const conversationHistory: ChatMessage[] = [...messages, userMessage].map(msg => ({
         role: msg.role,
         content: msg.content,
       }));
+
+      // Add user message to display immediately
+      setMessages(prev => [...prev, userMessage]);
 
       const response = await sendChatMessage({
         question: userMessage.content,
