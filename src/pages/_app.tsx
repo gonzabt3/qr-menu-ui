@@ -8,6 +8,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import FeedbackButton from '../components/FeedbackButton';
 import FeedbackModal from '../components/FeedbackModal';
+import ChatWidget from '../components/ChatWidget';
 
 const auth0Domain : any = process.env.NEXT_PUBLIC_AUTH_DOMAIN;
 const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
@@ -63,6 +64,25 @@ function FeedbackContainer() {
   );
 }
 
+function ChatWidgetContainer() {
+  const router = useRouter();
+  const aiChatEnabled = process.env.NEXT_PUBLIC_AI_CHAT_ENABLED === 'true';
+  
+  // Only show on customer-facing pages (menu pages)
+  const showOnPage = 
+    router.pathname.startsWith("/[restaurantName]") ||
+    router.pathname === "/[restaurantName]";
+  
+  if (!aiChatEnabled || !showOnPage) {
+    return null;
+  }
+  
+  // Extract restaurant name from URL if available
+  const restaurantName = router.query.restaurantName as string | undefined;
+  
+  return <ChatWidget restaurantName={restaurantName} />;
+}
+
 export default function App({ Component, pageProps }:AppProps) {
   const [isClient, setIsClient] = useState(false)
  
@@ -92,6 +112,7 @@ export default function App({ Component, pageProps }:AppProps) {
             <DndProvider backend={HTML5Backend}>
               <Component {...pageProps} />
               <FeedbackContainer />
+              <ChatWidgetContainer />
             </DndProvider>
           </AuthGuard>
         </Auth0Provider>
