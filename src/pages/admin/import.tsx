@@ -36,6 +36,11 @@ const AdminImport: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lat: center.lat, lng: center.lng, radius })
       })
+      
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`)
+      }
+      
       const json = await res.json()
       setResult(json)
     } catch (e) {
@@ -59,7 +64,13 @@ const AdminImport: React.FC = () => {
 
       <div style={{ marginTop: 12 }}>
         <label>Radius (meters): </label>
-        <input type="number" value={radius} onChange={e => setRadius(Number(e.target.value))} />
+        <input 
+          type="number" 
+          value={radius} 
+          onChange={e => setRadius(Number(e.target.value))} 
+          min="100"
+          max="50000"
+        />
         <button onClick={handleImport} disabled={loading} style={{ marginLeft: 8 }}>
           {loading ? 'Importando...' : 'Importar desde Google Places'}
         </button>
