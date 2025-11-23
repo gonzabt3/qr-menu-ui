@@ -35,6 +35,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 yarn.lock
+package-lock.json
 cypress.env.json
 
 .config/

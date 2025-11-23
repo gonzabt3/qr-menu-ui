@@ -52,6 +52,109 @@ The API endpoint URL is configured via the `NEXT_PUBLIC_API_SERVER_URL` environm
 
 **Note:** Make sure the backend API endpoint is properly configured and running to receive feedback submissions.
 
+## AI Chat Widget Feature
+
+The application includes an AI-powered chat widget that helps customers find menu options by asking natural language questions.
+
+### How to Use
+
+1. **Enable the Feature**: Set `NEXT_PUBLIC_AI_CHAT_ENABLED=true` in your environment variables
+2. **Chat Button**: A floating circular button with a chat icon appears in the bottom-right corner of customer-facing menu pages
+3. **Opening the Modal**: Click the chat button to open the AI chat interface
+4. **Ask Questions**: Type questions like "¿qué puedo comer?" or "¿tienen opciones veganas?"
+5. **View References**: The AI will respond with suggestions and provide clickable links to specific products
+6. **Session Only**: Conversations are kept in memory during the session and are not persisted
+
+### Configuration
+
+**Environment Variables:**
+
+- `NEXT_PUBLIC_AI_CHAT_ENABLED`: Set to `true` to enable the AI chat widget, `false` or leave unset to disable
+- `NEXT_PUBLIC_API_URL`: The base URL for the backend API (e.g., `http://localhost:3000`)
+- `NEXT_PUBLIC_AI_CHAT_LOGS`: (Optional) Set to `true` to enable console logging for debugging
+
+**Example .env configuration:**
+```bash
+NEXT_PUBLIC_AI_CHAT_ENABLED=true
+NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_AI_CHAT_LOGS=false
+```
+
+### API Integration
+
+The AI chat widget sends POST requests to the `/ai/chat` endpoint with the following format:
+
+**Request:**
+```json
+{
+  "question": "¿qué puedo comer?",
+  "conversation_history": [
+    {
+      "role": "user",
+      "content": "previous question"
+    },
+    {
+      "role": "assistant",
+      "content": "previous answer"
+    }
+  ],
+  "top_k": 5,
+  "locale": "es"
+}
+```
+
+**Expected Response:**
+```json
+{
+  "answer": "Te recomiendo estas opciones...",
+  "references": [
+    {
+      "product_id": "123",
+      "name": "Pizza Margherita",
+      "relevance_score": 0.95
+    }
+  ]
+}
+```
+
+### Testing the Feature Manually
+
+1. Set the environment variables:
+   ```bash
+   export NEXT_PUBLIC_AI_CHAT_ENABLED=true
+   export NEXT_PUBLIC_API_URL=http://localhost:3000
+   ```
+
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+3. Navigate to a restaurant menu page (e.g., `http://localhost:3001/restaurant-name`)
+
+4. Click the AI chat button in the bottom-right corner
+
+5. Test with questions like:
+   - "¿qué puedo comer?"
+   - "¿tienen opciones veganas?"
+   - "¿qué postres tienen?"
+
+### Testing with curl
+
+You can test the backend endpoint directly:
+
+```bash
+curl -X POST http://localhost:3000/ai/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "question": "¿qué puedo comer?",
+    "top_k": 5,
+    "locale": "es"
+  }'
+```
+
+**Note:** The backend must have the `FEATURE_AI_CHAT_ENABLED` flag enabled. Refer to the backend repository (gonzabt3/qr-menu) for configuration details.
+
 ## Deploy as Node Web Service
 
 Click the button below to deploy this app on Render.
