@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.13.0",
     "@material-ui/icons": "^4.11.3",
     "@mercadopago/sdk-react": "^0.0.19",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@testing-library/react-hooks": "^8.0.1",
     "@types/jest": "^29.5.14",
     "@types/qrcode": "^1.5.5",

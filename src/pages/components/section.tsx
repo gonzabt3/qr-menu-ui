@@ -3,7 +3,7 @@
 import { Accordion, AccordionItem, AccordionButton, AccordionPanel, Box, Heading, Text, VStack, Center } from "@chakra-ui/react";
 import Product from "./product";
 
-const Section = ({ section }: any) => {
+const Section = ({ section, design }: any) => {
   return (
     <Box
       bg="white" // Fondo blanco
@@ -20,8 +20,9 @@ const Section = ({ section }: any) => {
                 <Heading
                   size="lg"
                   mb={4}
-                  fontFamily="'KC Clementine Regular Inked', serif"
+                  fontFamily={design?.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : design?.font || "'KC Clementine Regular Inked', serif"}
                   textAlign="center" // Asegura que el texto esté centrado
+                  color={design?.textColor || "black"}
                 >
                   {section?.name}
                 </Heading>
@@ -31,10 +32,10 @@ const Section = ({ section }: any) => {
           <AccordionPanel padding={0}>
             <VStack spacing={6} align="start">
               {section.products.length <= 0 ? (
-                <Text>No hay productos</Text>
+                <Text color={design?.textColor || "black"}>No hay productos</Text>
               ) : (
                 section.products.map((product: any) => (
-                  <Product product={product} key={product.id} />
+                  <Product product={product} key={product.id} design={design} />
                 ))
               )}
             </VStack>

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { FaLeaf } from "react-icons/fa";
 import { GiWheat } from "react-icons/gi";
 
-const Product = ({ product }: any) => {
+const Product = ({ product, design }: any) => {
   const [urlImagePath, setUrlImagePath] = useState<any>("");
 
   useEffect(() => {
@@ -22,16 +22,21 @@ const Product = ({ product }: any) => {
         <Box key={product.name} w="full">
           <HStack align="start" spacing={4} justify="space-between">
             <VStack align="start" spacing={1} flex={1}>
-              <Text fontWeight="bold" fontSize="lg" fontFamily="'KC Clementine Regular Inked', serif">
+              <Text 
+                fontWeight="bold" 
+                fontSize="lg" 
+                fontFamily={design?.font === 'Inter' ? "'KC Clementine Regular Inked', serif" : design?.font || "'KC Clementine Regular Inked', serif"}
+                color={design?.textColor || "black"}
+              >
                 {product.name}
               </Text>
-              <Text>{product.description}</Text>
+              <Text color={design?.secondaryColor || "gray.600"}>{product.description}</Text>
               {/* Iconos vegano y celíaco debajo de la descripción */}
               <HStack spacing={2}>
                 {product.is_vegan && <FaLeaf color="#38A169" title="Vegano" />}
                 {product.is_celiac && <GiWheat color="#ED8936" title="Apto Celíacos" />}
               </HStack>
-              <Text color="orange.600" fontWeight="bold">
+              <Text color={design?.primaryColor || "orange.600"} fontWeight="bold">
                 $ {Math.floor(product.price)}
               </Text>
             </VStack>
