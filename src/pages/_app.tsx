@@ -14,6 +14,22 @@ const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
 const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE;
 const redirectUri = process.env.NEXT_PUBLIC_AUTH0_CALLBACK_URL;
 
+// Debug logs para verificar variables de entorno
+console.log('Auth0 Environment Variables:');
+console.log('Domain:', auth0Domain);
+console.log('Client ID:', auth0ClientId);
+console.log('Audience:', audience);
+console.log('Redirect URI:', redirectUri);
+
+// Verificar que todas las variables requeridas estén presentes
+if (!auth0Domain || !auth0ClientId || !audience || !redirectUri) {
+  console.error('❌ Missing required Auth0 environment variables:');
+  console.error('NEXT_PUBLIC_AUTH_DOMAIN:', auth0Domain);
+  console.error('NEXT_PUBLIC_AUTH_CLIENT_ID:', auth0ClientId);  
+  console.error('NEXT_PUBLIC_AUTH0_AUDIENCE:', audience);
+  console.error('NEXT_PUBLIC_AUTH0_CALLBACK_URL:', redirectUri);
+}
+
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const router = useRouter();
