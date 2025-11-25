@@ -1,12 +1,14 @@
 'use client'
 
 import { Box, HStack, VStack, Image, Text, Divider } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { FaLeaf } from "react-icons/fa";
 import { GiWheat } from "react-icons/gi";
+import { trackProductTap, getSessionId } from "../../services/metrics";
 
 const Product = ({ product }: any) => {
   const [urlImagePath, setUrlImagePath] = useState<any>("");
+  const hasTrackedRef = useRef(false);
 
   useEffect(() => {
     const getImageUrl = async () => {
@@ -16,10 +18,36 @@ const Product = ({ product }: any) => {
     getImageUrl();
   }, [product]);
 
+  const handleProductTap = useCallback((event: React.PointerEvent) => {
+    // Prevent duplicate tracking for the same interaction
+    if (hasTrackedRef.current) return;
+    hasTrackedRef.current = true;
+    
+    // Reset after a short delay to allow subsequent taps
+    setTimeout(() => {
+      hasTrackedRef.current = false;
+    }, 300);
+
+    if (product?.id) {
+      const sessionId = getSessionId();
+      trackProductTap(product.id.toString(), sessionId);
+    }
+  }, [product]);
+
   return (
     <>
       {product ? (
-        <Box key={product.name} w="full">
+        <Box 
+          key={product.name} 
+          w="full"
+          onPointerDown={handleProductTap}
+          cursor="pointer"
+          _hover={{ bg: "gray.50" }}
+          transition="background 0.2s"
+          borderRadius="md"
+          p={2}
+          m={-2}
+        >
           <HStack align="start" spacing={4} justify="space-between">
             <VStack align="start" spacing={1} flex={1}>
               <Text fontWeight="bold" fontSize="lg" fontFamily="'KC Clementine Regular Inked', serif">

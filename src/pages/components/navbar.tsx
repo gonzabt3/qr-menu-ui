@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import MenuIcon from './menuqr_new.svg';
 import { Box, Button, Flex, Heading, Icon, IconButton, Spacer, Image } from '@chakra-ui/react';
-import { FaStore, FaUser, FaUserCircle } from "react-icons/fa";
+import { FaStore, FaUser, FaUserCircle, FaChartLine } from "react-icons/fa";
 import { useRouter } from 'next/navigation'
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -26,6 +26,10 @@ const Navbar = () => {
 
   const goToRestaurantsPage = () => {
     router.push('/restaurants')
+  }
+
+  const goToDashboard = () => {
+    router.push('/dashboard')
   }
 
   const signOut = () => {
@@ -91,6 +95,15 @@ const Navbar = () => {
             currentPage === '' &&
             <Button onClick={goToRestaurantsPage} colorScheme='orange' variant='outline'>Mis Restaurantes</Button>
             }
+            <IconButton
+              colorScheme='blue'
+              variant='solid'
+              aria-label="Dashboard de Métricas"
+              icon={<FaChartLine />}
+              onClick={goToDashboard}
+              title="Dashboard de Métricas"
+              mr={2}
+            />
             <Button  onClick={signOut} colorScheme='orange' variant='outline'>Salir</Button>
           </>
         }          
