@@ -12,6 +12,7 @@ interface CountryDetectionResult {
 }
 
 const ARGENTINA_COUNTRY_CODES = ['AR', 'ARG'];
+const GEOLOCATION_TIMEOUT_MS = 10000; // 10 second timeout
 
 /**
  * Hook to detect user's country and determine the appropriate payment gateway.
@@ -30,9 +31,16 @@ const useCountryDetection = (): CountryDetectionResult => {
     setLoading(true);
     setError(null);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), GEOLOCATION_TIMEOUT_MS);
+
     try {
       // Using ipapi.co for free IP-based geolocation
-      const response = await fetch('https://ipapi.co/json/');
+      const response = await fetch('https://ipapi.co/json/', {
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
       
       if (!response.ok) {
         throw new Error('Failed to detect country');
@@ -47,8 +55,11 @@ const useCountryDetection = (): CountryDetectionResult => {
         throw new Error('Country not found in response');
       }
     } catch (err) {
-      console.error('Country detection failed:', err);
-      setError(err instanceof Error ? err.message : 'Failed to detect country');
+      clearTimeout(timeoutId);
+      const errorMessage = err instanceof Error 
+        ? (err.name === 'AbortError' ? 'Request timeout' : err.message)
+        : 'Failed to detect country';
+      setError(errorMessage);
       // Default to null - will fall back to Stripe
       setCountryCode(null);
       setCountry(null);

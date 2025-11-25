@@ -1,6 +1,5 @@
 import { Box, Button, Center, Modal, ModalContent, ModalOverlay, ModalHeader, ModalBody, ModalCloseButton, Text, Alert, AlertIcon } from "@chakra-ui/react"
 import { useState } from "react"
-import { putSubscription } from "../../services/user"
 import { useAuth0 } from "@auth0/auth0-react"
 
 const STRIPE_PUBLISHABLE_KEY: string = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "";
@@ -33,9 +32,10 @@ const ButtonWithStripeDialog = ({ updateUserInfo }: ButtonWithStripeDialogProps)
 
     try {
       const token = await getAccessTokenSilently();
+      const encodedEmail = encodeURIComponent(user.email);
       
       // Call backend to create Stripe checkout session
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}users/${user.email}/create-stripe-session`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}users/${encodedEmail}/create-stripe-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,14 +54,14 @@ const ButtonWithStripeDialog = ({ updateUserInfo }: ButtonWithStripeDialogProps)
 
       const { url } = await response.json();
       
-      // Redirect to Stripe Checkout URL
+      // Redirect to Stripe Checkout URL - using window.location.href is required 
+      // because Stripe Checkout returns an external URL that must be opened directly
       if (url) {
         window.location.href = url;
       } else {
         throw new Error('No se recibió URL de checkout');
       }
     } catch (err) {
-      console.error('Stripe checkout failed:', err);
       setError(err instanceof Error ? err.message : 'Error al procesar el pago');
       setLoading(false);
     }
