@@ -4,9 +4,11 @@ import { CardBody, Flex, Spacer, Box, List, ListItem, Stack, Heading, Text, Card
 import Product from './Product';
 import useProducts from '../../hooks/useProducts';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 
 const Products = ({ menu, products, sections, handleRemoveProduct, getProducts }: any) => {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { id } = router.query;
   const { menuId } = router.query;
   const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +41,7 @@ const Products = ({ menu, products, sections, handleRemoveProduct, getProducts }
     <>
       <Card>
         <CardBody>
-          <Heading as='h2' size='md'>Productos</Heading>
+          <Heading as='h2' size='md'>{t('products.title')}</Heading>
         </CardBody>
         <Flex direction={'column'}>
           <Button
@@ -48,7 +50,7 @@ const Products = ({ menu, products, sections, handleRemoveProduct, getProducts }
             width={['45%', '30%']}
             onClick={changeIsOpenModal}
             color="orange" variant="solid">
-            Nuevo Producto
+            {t('products.newProduct')}
           </Button>
           {(products.length > 0) ?
             <List display="flex" flexDirection={'column'}>
@@ -59,7 +61,7 @@ const Products = ({ menu, products, sections, handleRemoveProduct, getProducts }
               ))}
             </List> :
             <Box display="flex" justifyContent="center" alignItems="center" height="100px">
-              <Text>No hay productos</Text>
+              <Text>{t('products.noProducts')}</Text>
             </Box>
           }
         </Flex>

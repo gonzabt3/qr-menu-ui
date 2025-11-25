@@ -3,6 +3,8 @@ import SectionModal from './SectionModal'
 import { useCallback, useEffect, useState } from 'react';
 import Section from './Section';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+
 interface Section {
   readonly id: string;
   readonly menuId: string;
@@ -10,6 +12,7 @@ interface Section {
 
 const Sections = ({sections, handleRemoveSection, getSections, handleReorderSection}:any) => {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { id } = router.query;
   const { menuId } = router.query;
   const [isOpen, setIsOpen] = useState(false)
@@ -91,7 +94,7 @@ const Sections = ({sections, handleRemoveSection, getSections, handleReorderSect
           margin={'2'}
           width={['45%','30%']}
           onClick={openModal}>
-            Agregar Seccion
+            {t('sections.addSection')}
         </Button>
         {sectionsInOrder && sectionsInOrder.length > 0 ? (
           <List display="flex" flexDirection={'column'}>
@@ -124,7 +127,7 @@ const Sections = ({sections, handleRemoveSection, getSections, handleReorderSect
           </List>
         ) : (
           <Box display="flex" justifyContent="center" alignItems="center" height="100px">
-            <Text>No hay secciones</Text>
+            <Text>{t('sections.noSections')}</Text>
           </Box>
         )}
       </Flex>
