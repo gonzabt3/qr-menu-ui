@@ -5,9 +5,14 @@ import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import { FaCheckCircle } from "react-icons/fa";
 import router from "next/router";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetStaticProps } from 'next';
+import i18nConfig from '../../next-i18next.config.js';
 
 export default function Pricing() {
     const { isAuthenticated } = useAuth0();
+    const { t } = useTranslation('common');
 
     const handleCreateEditMenu = () => {
         if (isAuthenticated) {
@@ -33,7 +38,7 @@ export default function Pricing() {
                             color="gray.800"
                             mb={6}
                         >
-                            Un solo precio
+                            {t('pricing.onePrice')}
                         </Heading>
                         <Text 
                             fontSize={['lg', 'xl']} 
@@ -41,7 +46,7 @@ export default function Pricing() {
                             maxW="600px"
                             mx="auto"
                         >
-                            Un solo plan que incluye todo lo que necesitas para gestionar tus menús digitales
+                            {t('pricing.onePriceDescription')}
                         </Text>
                     </Box>
 
@@ -75,41 +80,41 @@ export default function Pricing() {
                                 fontSize="sm"
                                 fontWeight="600"
                             >
-                                Plan Premium
+                                {t('pricing.premiumPlan')}
                             </Box>
                             
                             <CardBody pt={12} textAlign="center">
                                 <Stack spacing={6}>
                                     {/* Título del Plan */}
                                     <Heading size="lg" color="gray.800" fontWeight="700">
-                                        Plan Premium
+                                        {t('pricing.premiumPlan')}
                                     </Heading>
                                     
                                     {/* Características */}
                                     <Stack spacing={4} align="center">
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">Restaurantes ilimitados</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.unlimitedRestaurants')}</Text>
                                         </Flex>
                                         
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">Menús ilimitados</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.unlimitedMenus')}</Text>
                                         </Flex>
                                         
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">Actualización en tiempo real</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.realTimeUpdate')}</Text>
                                         </Flex>
                                         
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">Fotos de los productos</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.productPhotos')}</Text>
                                         </Flex>
                                         
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">30 días gratis</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.freeTrial')}</Text>
                                         </Flex>
                                     </Stack>
                                     
@@ -118,7 +123,7 @@ export default function Pricing() {
                                         <Text fontSize="4xl" fontWeight="800" color="gray.800">
                                             $4000
                                             <Text as="span" fontSize="lg" color="gray.600" fontWeight="400">
-                                                /mes
+                                                {t('pricing.perMonth')}
                                             </Text>
                                         </Text>
                                     </Box>
@@ -135,7 +140,7 @@ export default function Pricing() {
                                         transition="all 0.3s"
                                         onClick={handleCreateEditMenu}
                                     >
-                                        Empezar ahora
+                                        {t('pricing.startNow')}
                                     </Button>
                                 </Stack>
                             </CardBody>
@@ -148,3 +153,11 @@ export default function Pricing() {
         </>
     );
 }
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'es', ['common'], i18nConfig)),
+        },
+    };
+};

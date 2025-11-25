@@ -2,9 +2,11 @@ import React from 'react';
 import { CloseButton, Flex, Box, Card, CardBody, Heading, CardFooter, ButtonGroup, Button, Icon, useColorModeValue } from '@chakra-ui/react';
 import { useRouter } from "next/navigation";
 import { MdRestaurant, MdEdit, MdMenuBook } from 'react-icons/md';
+import { useTranslation } from 'next-i18next';
 
 const RestaurantCard = ({restaurant, openModalForEdit, deleteRestaurant}:any) => {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const bgGradient = useColorModeValue(
     'linear(to-br, orange.50, orange.100)',
     'linear(to-br, gray.700, gray.800)'
@@ -69,7 +71,7 @@ const RestaurantCard = ({restaurant, openModalForEdit, deleteRestaurant}:any) =>
               flex={1}
               _hover={{ bg: 'orange.50' }}
             >
-              Editar
+              {t('restaurants.edit')}
             </Button>
             <Button 
               onClick={handleMenu}
@@ -79,7 +81,7 @@ const RestaurantCard = ({restaurant, openModalForEdit, deleteRestaurant}:any) =>
               size='sm'
               flex={1}
             >
-              Menús
+              {t('restaurants.menus')}
             </Button>
           </ButtonGroup>
         </CardFooter>

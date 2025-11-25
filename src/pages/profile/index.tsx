@@ -22,10 +22,16 @@ import { Card } from "@chakra-ui/icons";
 import SubscriptionStatus from "./SubscriptionStatus";
 import { unsubscribe } from "diagnostics_channel";
 import { postUnsubscribe } from "../../services/user";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetServerSideProps } from 'next';
+import i18nConfig from '../../../next-i18next.config.js';
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const Profile = () => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
+  const { t } = useTranslation('common');
   const router = useRouter();
   const { isOpen, onOpen, onClose } :any = useDisclosure(); // Controla el estado del modal
   const [inputValue, setInputValue] :any= useState(""); // Estado para el valor del input
@@ -106,26 +112,26 @@ const Profile = () => {
   gap={6}
 >
   <Card margin={5} height={'100%'} padding={5}>
-    <Heading size={'md'} mb={4}>Editar Perfil</Heading>
-    <Heading size={'sm'}>Email: {user?.email}</Heading>
+    <Heading size={'md'} mb={4}>{t('profile.editProfile')}</Heading>
+    <Heading size={'sm'}>{t('profile.email')}: {user?.email}</Heading>
     <ProfileInfoDialog user={user}/>
   </Card>
   <Card margin={5} height={'100%'} padding={5}>
-    <Heading size={'md'} mb={4}>Subscripción</Heading>
+    <Heading size={'md'} mb={4}>{t('profile.subscription')}</Heading>
     <Flex alignItems="center">
-      <Heading size="sm">Estado de pago:</Heading>
+      <Heading size="sm">{t('profile.paymentStatus')}:</Heading>
       <SubscriptionStatus isSubscribed={userInfo?.subscribed} />
     </Flex>
     {userInfo?.subscribed ?      
-      <Button onClick={() => unsubscribe()}>Desuscribirse</Button>
+      <Button onClick={() => unsubscribe()}>{t('profile.unsubscribe')}</Button>
     : <ButtonWithMercadoPagoDialog  updateUserInfo={checkFirstLogin} />}
     {success ? <Center h="200px">
       <Box textAlign="center">
         <Text fontSize="2xl" fontWeight="bold" color="orange.500">
-          Desuscripcion exitosa!
+          {t('profile.unsubscribeSuccess')}
         </Text>
         <Text mt={4} color="gray.600">
-          Gracias vuelve pronto!
+          {t('profile.unsubscribeMessage')}
         </Text>
       </Box>
     </Center>: null}
@@ -134,11 +140,19 @@ const Profile = () => {
         </GridItem>
       </BaseCompents>
       <Flex justifyContent="center" mt={10} style={{ marginTop: 'auto' }}>
-        <Link href="/terms" mx={2} color="gray.500">Términos de uso</Link>
-        <Link href={`mailto: info@menuqr.ai`} as="a" mx={2} color="gray.500">Contacto</Link>
+        <Link href="/terms" mx={2} color="gray.500">{t('profile.termsOfUse')}</Link>
+        <Link href={`mailto: info@menuqr.ai`} as="a" mx={2} color="gray.500">{t('profile.contact')}</Link>
       </Flex>
     </div>
   )
 }
 
 export default Profile;
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'es', ['common'], i18nConfig)),
+    },
+  };
+};

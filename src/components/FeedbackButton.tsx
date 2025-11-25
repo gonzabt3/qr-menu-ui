@@ -1,15 +1,18 @@
 import React from 'react';
 import { IconButton } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
+import { useTranslation } from 'next-i18next';
 
 interface FeedbackButtonProps {
   onClick: () => void;
 }
 
 const FeedbackButton: React.FC<FeedbackButtonProps> = ({ onClick }) => {
+  const { t } = useTranslation('common');
+  
   return (
     <IconButton
-      aria-label="Abrir formulario de feedback"
+      aria-label={t('feedback.openFeedbackForm')}
       icon={<ChatIcon />}
       onClick={onClick}
       position="fixed"

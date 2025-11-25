@@ -2,9 +2,11 @@
 import React, { useRef, useEffect } from 'react';
 import { Box, Button, Divider, Flex, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import Section from './section';
+import { useTranslation } from 'next-i18next';
 
 const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
   const refScreen: any = useRef(null);
+  const { t } = useTranslation('common');
 
   useEffect(() => {
     if (refScreen.current) {
@@ -17,11 +19,11 @@ const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
       <GridItem area={'nav'} rowSpan={7} colSpan={5}>
         <Box padding={0} height={'100%'}>
           {loading ? (
-            <Text textAlign="center">Cargando...</Text>
+            <Text textAlign="center">{t('customerMenu.loading')}</Text>
           ) : (
             <>
               {showErrorNotFound || menu == null ? (
-                <Text textAlign="center">Restaurante no encontrado</Text>
+                <Text textAlign="center">{t('customerMenu.notFound')}</Text>
               ) : (
                 <>
                   <Box bg="#fefaf4" p={8} minH="100vh">

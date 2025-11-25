@@ -13,6 +13,11 @@ import useRestaurants from "./useRestaurant";
 import { useProfile } from "../../hooks/useProfile";
 import router from "next/router";
 import { MdRestaurant, MdAdd } from 'react-icons/md';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetServerSideProps } from 'next';
+import i18nConfig from '../../../next-i18next.config.js';
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
@@ -24,6 +29,7 @@ export default function Page() {
   const [restaurant, setRestaurant] = useState(null);
   const { profile,  isLoadingProfile, errorProfile } = useProfile();
   const [isFirstTimeDialogOpen, setIsFirstTimeDialogOpen] = useState(false);
+  const { t } = useTranslation('common');
 
   useEffect(() => {
     if (refScreen.current) {
@@ -80,7 +86,7 @@ export default function Page() {
             <Box display='flex' alignItems='center' justifyContent='space-between' flexWrap='wrap' gap={4} mt={4}>
               <Box display='flex' alignItems='center' gap={3}>
                 <Icon as={MdRestaurant} boxSize={8} color='orange.500' />
-                <Heading size='lg' color='gray.700'>Mis Restaurantes</Heading>
+                <Heading size='lg' color='gray.700'>{t('restaurants.title')}</Heading>
               </Box>
               <Button 
                 onClick={changeIsOpenModal} 
@@ -92,7 +98,7 @@ export default function Page() {
                 _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
                 transition='all 0.2s'
               >
-                Agregar Restaurante
+                {t('restaurants.addRestaurant')}
               </Button>
             </Box>
           </Box>
@@ -100,7 +106,7 @@ export default function Page() {
             { loading ? 
               <Center height="300px">
                 <VStack spacing={4}>
-                  <Text fontSize='lg' color='gray.500'>Cargando restaurantes...</Text>
+                  <Text fontSize='lg' color='gray.500'>{t('restaurants.loadingRestaurants')}</Text>
                 </VStack>
               </Center> : 
             restaurants && restaurants.length > 0 ? (
@@ -118,8 +124,8 @@ export default function Page() {
               <Center height="300px">
                 <VStack spacing={4}>
                   <Icon as={MdRestaurant} boxSize={16} color='gray.300' />
-                  <Text color="gray.500" fontSize="xl" fontWeight='medium'>No hay restaurantes</Text>
-                  <Text color="gray.400" fontSize="sm">Comienza agregando tu primer restaurante</Text>
+                  <Text color="gray.500" fontSize="xl" fontWeight='medium'>{t('restaurants.noRestaurants')}</Text>
+                  <Text color="gray.400" fontSize="sm">{t('restaurants.startAdding')}</Text>
                   <Button 
                     onClick={changeIsOpenModal} 
                     leftIcon={<Icon as={MdAdd} />}
@@ -127,7 +133,7 @@ export default function Page() {
                     size='md'
                     mt={2}
                   >
-                    Agregar Restaurante
+                    {t('restaurants.addRestaurant')}
                   </Button>
                 </VStack>
               </Center>
@@ -140,20 +146,18 @@ export default function Page() {
       <Modal isOpen={isFirstTimeDialogOpen} onClose={() => setIsFirstTimeDialogOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Bienvenido!</ModalHeader>
+          <ModalHeader>{t('welcome.title')}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Text>
-              ¡Gracias por unirte a nosotros! Nuestra aplicación te permite crear menús QR. 
-              Puedes gestionar múltiples restaurantes, cada uno con varios menús (solo uno puede estar activo a la vez). 
-              Además, puedes añadir productos y secciones a tus menús para ofrecer una experiencia completa a tus clientes.
+              {t('welcome.message1')}
             </Text>
             <Text mt={4}>
-              Para empezar, necesitas suscribirte, pero no te preocupes, ¡tienes un mes gratis para probar todas nuestras funcionalidades!
+              {t('welcome.message2')}
             </Text>
             <Center mt={4} mb={4}>
               <Button colorScheme="orange" onClick={handleStartFreeMonth}>
-                Comenzar mes gratis
+                {t('welcome.startFreeTrial')}
               </Button>
             </Center>
           </ModalBody>
@@ -162,4 +166,12 @@ export default function Page() {
     </div>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'es', ['common'], i18nConfig)),
+    },
+  };
+};
 

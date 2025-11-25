@@ -6,6 +6,7 @@ import { ChakraProvider, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { appWithTranslation, useTranslation } from 'next-i18next';
 import FeedbackButton from '../components/FeedbackButton';
 import FeedbackModal from '../components/FeedbackModal';
 
@@ -16,6 +17,7 @@ const redirectUri = process.env.NEXT_PUBLIC_AUTH0_CALLBACK_URL;
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const { t } = useTranslation('common');
   const router = useRouter();
 
   useEffect(() => {
@@ -35,7 +37,7 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
   }, [isAuthenticated, isLoading, loginWithRedirect, router]);
 
   if (isLoading) {
-    return <div>Cargando...</div>; // Muestra un indicador de carga mientras se verifica la autenticación
+    return <div>{t('loading')}</div>;
   }
 
   return <>{children}</>;
@@ -63,7 +65,7 @@ function FeedbackContainer() {
   );
 }
 
-export default function App({ Component, pageProps }:AppProps) {
+function App({ Component, pageProps }:AppProps) {
   const [isClient, setIsClient] = useState(false)
  
   useEffect(() => {
@@ -102,3 +104,5 @@ export default function App({ Component, pageProps }:AppProps) {
     )
     ;
 }
+
+export default appWithTranslation(App);

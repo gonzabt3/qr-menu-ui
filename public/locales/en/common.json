@@ -1,0 +1,202 @@
+{
+  "loading": "Loading...",
+  "navbar": {
+    "login": "Login",
+    "viewDemo": "View Demo",
+    "myRestaurants": "My Restaurants",
+    "logout": "Logout"
+  },
+  "footer": {
+    "usefulContent": "Useful Content",
+    "features": "Features",
+    "pricing": "Pricing",
+    "legal": "Legal",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "contactUs": "Contact Us",
+    "whatsapp": "WhatsApp",
+    "allRightsReserved": "© 2025 Menu QR. All rights reserved."
+  },
+  "home": {
+    "heroTitle": "Manage all your menus in one place.",
+    "heroTitleHighlight": "Easy and fast.",
+    "heroSubtitle": "Increase your sales by up to 30% and eliminate printing costs. More than 500 restaurants already trust us.",
+    "viewDemo": "View Demo",
+    "manageYourself": "Manage it yourself",
+    "manageYourselfDescription": "Create your menus and update them in real time without depending on anyone"
+  },
+  "pricing": {
+    "premiumPlan": "Premium Plan",
+    "unlimitedRestaurants": "Unlimited restaurants",
+    "unlimitedMenus": "Unlimited menus",
+    "realTimeUpdate": "Real-time updates",
+    "productPhotos": "Product photos",
+    "freeTrial": "30 days free",
+    "perMonth": "/month",
+    "startNow": "Start now",
+    "onePrice": "One price",
+    "onePriceDescription": "One plan that includes everything you need to manage your digital menus"
+  },
+  "restaurants": {
+    "title": "My Restaurants",
+    "addRestaurant": "Add Restaurant",
+    "loadingRestaurants": "Loading restaurants...",
+    "noRestaurants": "No restaurants",
+    "startAdding": "Start by adding your first restaurant",
+    "edit": "Edit",
+    "menus": "Menus"
+  },
+  "restaurantModal": {
+    "title": "New Restaurant",
+    "name": "Name",
+    "description": "Description",
+    "address": "Address",
+    "phone": "Phone",
+    "instagramUser": "Instagram username",
+    "email": "Email",
+    "logo": "Restaurant Logo",
+    "deleteLogo": "Delete logo",
+    "currentLogo": "Current logo",
+    "newLogo": "New logo",
+    "changeLogo": "Change logo",
+    "selectLogo": "Select logo",
+    "logoFormats": "Formats: JPG, PNG, GIF, WEBP. Max size: 5MB",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "nameRequired": "Name is required",
+    "nameExists": "Restaurant name already exists",
+    "invalidFormat": "File format must be JPG, PNG, GIF or WEBP",
+    "fileTooLarge": "File size must not exceed 5MB"
+  },
+  "menus": {
+    "title": "Restaurant Menus",
+    "addMenu": "Add Menu",
+    "loadingMenus": "Loading menus...",
+    "noMenus": "No menus",
+    "startCreating": "Start by creating your first menu",
+    "edit": "Edit",
+    "activeMenu": "Active Menu",
+    "markAsFavorite": "Mark as favorite"
+  },
+  "menuModal": {
+    "title": "New Menu",
+    "name": "Name",
+    "description": "Description",
+    "type": "Type",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "nameRequired": "Name is required"
+  },
+  "menuEdit": {
+    "menu": "Menu",
+    "downloadQRMenu": "Download QR Menu",
+    "wifiQR": "🔗 WiFi QR",
+    "sections": "Sections"
+  },
+  "sections": {
+    "addSection": "Add Section",
+    "noSections": "No sections"
+  },
+  "sectionModal": {
+    "title": "New Section",
+    "name": "Name",
+    "description": "Description",
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "nameRequired": "Name is required"
+  },
+  "products": {
+    "title": "Products",
+    "newProduct": "New Product",
+    "noProducts": "No products"
+  },
+  "productModal": {
+    "title": "New Product",
+    "name": "Name",
+    "description": "Description",
+    "price": "Price",
+    "selectSection": "Select a section",
+    "vegan": "Vegan",
+    "celiac": "Celiac-friendly",
+    "noImages": "No images",
+    "deleteImage": "Delete image",
+    "save": "Save",
+    "cancel": "Cancel",
+    "nameRequired": "Name is required",
+    "priceRequired": "Price is required",
+    "pricePositive": "Price must be a positive number",
+    "sectionRequired": "Section is required"
+  },
+  "profile": {
+    "editProfile": "Edit Profile",
+    "email": "Email",
+    "subscription": "Subscription",
+    "paymentStatus": "Payment status",
+    "unsubscribe": "Unsubscribe",
+    "pay": "Pay",
+    "unsubscribeSuccess": "Unsubscription successful!",
+    "unsubscribeMessage": "Thank you, come back soon!",
+    "subscriptionSuccess": "Subscription successful!",
+    "subscriptionMessage": "Thank you for subscribing!",
+    "termsOfUse": "Terms of use",
+    "contact": "Contact"
+  },
+  "welcome": {
+    "title": "Welcome!",
+    "message1": "Thank you for joining us! Our application allows you to create QR menus. You can manage multiple restaurants, each with several menus (only one can be active at a time). Additionally, you can add products and sections to your menus to offer a complete experience to your customers.",
+    "message2": "To get started, you need to subscribe, but don't worry, you have a free month to try all our features!",
+    "startFreeTrial": "Start free trial"
+  },
+  "customerMenu": {
+    "loading": "Loading...",
+    "notFound": "Restaurant not found"
+  },
+  "feedback": {
+    "openFeedbackForm": "Open feedback form",
+    "sendUsYourFeedback": "Send us your feedback",
+    "yourFeedback": "Your feedback...",
+    "pleaseEnterFeedback": "Please enter your feedback before submitting",
+    "close": "Close",
+    "send": "Send",
+    "sending": "Sending...",
+    "feedbackSent": "Feedback sent",
+    "feedbackReceived": "Thank you for your feedback. We have received it correctly.",
+    "errorSending": "Error sending",
+    "errorSendingMessage": "There was a problem sending your feedback. Please try again.",
+    "couldNotSend": "Could not send feedback."
+  },
+  "wifiQr": {
+    "title": "Generate WiFi QR",
+    "networkName": "Network name (SSID)",
+    "networkNamePlaceholder": "Your WiFi name",
+    "securityType": "Security type",
+    "wpaWpa2": "WPA/WPA2",
+    "wep": "WEP",
+    "noPassword": "No password",
+    "password": "Password",
+    "passwordPlaceholder": "WiFi password",
+    "networkNameRequired": "Network name is required",
+    "passwordRequired": "Password is required",
+    "scanToConnect": "Scan to connect to",
+    "close": "Close",
+    "generateQR": "Generate QR",
+    "download": "Download",
+    "downloading": "Downloading...",
+    "downloadError": "Error downloading file"
+  },
+  "terms": {
+    "title": "Terms and Conditions",
+    "content": "TERMS AND CONDITIONS OF USE OF MENUQR.AI\n\nLast updated: March 30, 2025\n\nWelcome to MenuQR.ai, a platform that allows users to create and manage personalized QR menus. By accessing and using our application, you agree to comply with the terms and conditions set forth in this document. If you do not agree with these terms, please do not use the application.\n\n\"User\" refers to the person who uses the MenuQR.ai application to create or access QR menus. \"Menu Creator\" is the user who creates and manages a QR menu on the platform. \"Application\" refers to the MenuQR.ai application and its associated services.\n\nMenuQR.ai allows menu creators to generate and manage menus in QR format, which can be scanned by other users to view the content. Creators have the ability to update, modify, and manage their QR menu content autonomously.\n\nTo use MenuQR.ai services, users must have access to a device compatible with the application (such as a mobile phone or tablet), be of legal age or have the consent of a legal guardian, and have a stable Internet connection.\n\nTo create and manage a QR menu, users must register in the application by providing accurate and complete personal information. Registration may include name, email address, and other requested data. The user agrees to maintain the confidentiality of their account and to immediately notify any unauthorized use of their account.\n\nMenu creators are responsible for all content they upload to the platform, including text, images, and other media. The content must be appropriate and not violate third-party rights. The use of the platform for illegal or unauthorized purposes is prohibited, such as the distribution of defamatory, obscene content, or content that infringes intellectual property rights.\n\nAll rights to the technology and design of MenuQR.ai are the property of [Company name or owner]. Users do not have the right to copy, modify, distribute, or create derivative works from the application without the express consent of MenuQR.ai. QR menus created by users will remain the property of the creators, but MenuQR.ai reserves the right to use them for promotional purposes or service improvement.\n\nMenuQR.ai is committed to protecting the privacy of its users and complying with Law 25,326 on Personal Data Protection of Argentina. For more details on how we handle personal information, please see our [Privacy Policy].\n\nMenuQR.ai will not be liable for direct, indirect, incidental, or consequential damages arising from the use of the application. It also does not guarantee the uninterrupted availability of the service and reserves the right to suspend or interrupt access to the platform for maintenance or improvements.\n\nMenuQR.ai reserves the right to modify these terms and conditions at any time. Any changes will be posted on this page, and registered users will be notified. Continued use of the application implies acceptance of such changes.\n\nThese terms are governed by the laws of the Argentine Republic. In case of disputes, users submit to the jurisdiction of the competent courts of [City], Argentina.\n\nFor any questions or inquiries about these terms and conditions, you can contact us through our email: info@qrmenu.ai."
+  },
+  "breadcrumb": {
+    "restaurants": "Restaurants",
+    "menus": "Menus"
+  },
+  "languageSelector": {
+    "es": "Español",
+    "en": "English"
+  }
+}

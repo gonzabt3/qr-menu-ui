@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { FeedbackRequest, FeedbackResponse, FeedbackErrorResponse } from '../types/feedback';
+import { useTranslation } from 'next-i18next';
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { t } = useTranslation('common');
   const toast = useToast();
 
   const handleClose = () => {
@@ -39,7 +41,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
   const handleSubmit = async () => {
     // Validate input
     if (!feedback.trim()) {
-      setError('Por favor ingresa tu feedback antes de enviar');
+      setError(t('feedback.pleaseEnterFeedback'));
       return;
     }
 
@@ -79,8 +81,8 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
 
       // Show success message
       toast({
-        title: 'Feedback enviado',
-        description: 'Gracias por tu feedback. Lo hemos recibido correctamente.',
+        title: t('feedback.feedbackSent'),
+        description: t('feedback.feedbackReceived'),
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -91,11 +93,11 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
       handleClose();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
-      setError(`No se pudo enviar el feedback. ${errorMessage}`);
+      setError(`${t('feedback.couldNotSend')} ${errorMessage}`);
       
       toast({
-        title: 'Error al enviar',
-        description: 'Hubo un problema al enviar tu feedback. Por favor intenta nuevamente.',
+        title: t('feedback.errorSending'),
+        description: t('feedback.errorSendingMessage'),
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -122,7 +124,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Envíanos tu feedback</ModalHeader>
+        <ModalHeader>{t('feedback.sendUsYourFeedback')}</ModalHeader>
         <ModalCloseButton isDisabled={isLoading} />
         
         <ModalBody>
@@ -131,7 +133,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Tu feedback..."
+              placeholder={t('feedback.yourFeedback')}
               size="md"
               minHeight="150px"
               isDisabled={isLoading}
@@ -154,15 +156,15 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
             onClick={handleClose}
             isDisabled={isLoading}
           >
-            Cerrar
+            {t('feedback.close')}
           </Button>
           <Button 
             colorScheme="blue" 
             onClick={handleSubmit}
             isLoading={isLoading}
-            loadingText="Enviando..."
+            loadingText={t('feedback.sending')}
           >
-            Enviar
+            {t('feedback.send')}
           </Button>
         </ModalFooter>
       </ModalContent>
