@@ -5,6 +5,128 @@ This example shows the most basic idea behind Next. We have 2 pages: `src/pages/
 
 The app in this repo is deployed at https://next-js.onrender.com.
 
+## Payment Integration
+
+The application supports two payment gateways based on the user's geographic location:
+
+- **MercadoPago**: Used for users detected in Argentina
+- **Stripe**: Used for all other countries (default)
+
+### How It Works
+
+1. **Country Detection**: When a user visits the profile/subscription page, their country is automatically detected using IP geolocation (via ipapi.co).
+2. **Gateway Selection**: Based on the detected country:
+   - Argentina (AR) → MercadoPago payment form
+   - All other countries → Stripe Checkout redirect
+3. **Fallback**: If country detection fails, the system defaults to Stripe.
+
+### Architecture
+
+```
+src/
+├── hooks/
+│   └── useCountryDetection.ts    # Country detection hook with gateway selection
+├── pages/profile/
+│   ├── PaymentGateway.tsx        # Unified payment gateway component
+│   ├── ButtonWithMercadoPagoDialog.tsx  # MercadoPago payment component
+│   └── ButtonWithStripeDialog.tsx       # Stripe payment component
+└── services/
+    └── user.ts                   # User/subscription service
+```
+
+### Environment Variables
+
+Configure these environment variables for payment processing:
+
+```env
+# MercadoPago (Argentina)
+NEXT_PUBLIC_MERCADOPAGO_FRONTEND_KEY=your_mercadopago_public_key
+
+# Stripe (International)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
+
+# Subscription price (in cents/minor units)
+NEXT_PUBLIC_PRICE=4000
+
+# Frontend URL (for Stripe redirects)
+NEXT_PUBLIC_FRONTEND_URL=http://localhost:3001
+
+# API URL (for backend communication)
+NEXT_PUBLIC_API_URL=http://localhost:3000/
+```
+
+### Backend API Requirements
+
+#### MercadoPago
+The existing MercadoPago integration expects the backend to handle payment processing via:
+- `POST /users/{email}/subscribe` - Process subscription with MercadoPago payment info
+
+#### Stripe
+The Stripe integration requires a backend endpoint to create Checkout sessions:
+
+**Endpoint:** `POST /users/{email}/create-stripe-session`
+
+**Request:**
+```json
+{
+  "priceAmount": 4000,
+  "successUrl": "http://localhost:3001/profile?payment=success",
+  "cancelUrl": "http://localhost:3001/profile?payment=cancelled"
+}
+```
+
+**Response:**
+```json
+{
+  "url": "https://checkout.stripe.com/session/..."
+}
+```
+
+### Local Development & Testing
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Set environment variables:**
+   Copy `.env` and configure your payment gateway keys.
+
+3. **Test Country Detection:**
+   - The country detection uses ipapi.co which works based on your IP
+   - For testing different countries, you can modify the `useCountryDetection.ts` hook temporarily
+   - Or use a VPN to simulate different countries
+
+4. **Test Payment Flows:**
+   - **MercadoPago**: Use MercadoPago test cards (see MercadoPago docs)
+   - **Stripe**: Use Stripe test cards like `4242 4242 4242 4242`
+
+5. **Run tests:**
+   ```bash
+   npx jest src/hooks/useCountryDetection.test.ts
+   ```
+
+### Extending to New Countries/Gateways
+
+The payment system is designed to be modular. To add a new payment gateway:
+
+1. Create a new payment button component (e.g., `ButtonWithNewGatewayDialog.tsx`)
+2. Update `useCountryDetection.ts` to include the new gateway type
+3. Update `PaymentGateway.tsx` to render the new component based on country
+
+Example for adding a new gateway:
+
+```typescript
+// In useCountryDetection.ts
+export type PaymentGateway = 'mercadopago' | 'stripe' | 'newgateway';
+
+const getPaymentGateway = (): PaymentGateway => {
+  if (countryCode === 'AR') return 'mercadopago';
+  if (countryCode === 'XX') return 'newgateway'; // New country
+  return 'stripe';
+};
+```
+
 ## Feedback Feature
 
 The application includes a user feedback system that allows users to send feedback from any page.

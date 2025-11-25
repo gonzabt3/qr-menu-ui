@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useEffect, useState, useCallback } from "react";
-import ButtonWithMercadoPagoDialog from "./ButtonWithMercadoPagoDialog";
+import PaymentGateway from "./PaymentGateway";
 import BaseCompents from "../components/BaseCompents";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/router";
@@ -118,7 +118,7 @@ const Profile = () => {
     </Flex>
     {userInfo?.subscribed ?      
       <Button onClick={() => unsubscribe()}>Desuscribirse</Button>
-    : <ButtonWithMercadoPagoDialog  updateUserInfo={checkFirstLogin} />}
+    : <PaymentGateway updateUserInfo={checkFirstLogin} />}
     {success ? <Center h="200px">
       <Box textAlign="center">
         <Text fontSize="2xl" fontWeight="bold" color="orange.500">
