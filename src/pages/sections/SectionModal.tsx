@@ -16,13 +16,15 @@ import {
 } from '@chakra-ui/react';
 import useSection from '../../hooks/useSection';
 import * as Yup from 'yup';
+import { useTranslation } from 'next-i18next';
 
 const SectionModal = ({ close, closeAndRefresh, isOpen, restaurantId, menuId, section }: any) => {
   const [initialValues, setInitialValues] = useState<any>(null);
   const { loading, error, updateSection, createSection } = useSection(restaurantId, menuId, section?.id);
+  const { t } = useTranslation('common');
 
   const validationSchema = Yup.object({
-    name: Yup.string().required('El nombre es obligatorio'),
+    name: Yup.string().required(t('sectionModal.nameRequired')),
   });
 
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
@@ -68,14 +70,14 @@ const SectionModal = ({ close, closeAndRefresh, isOpen, restaurantId, menuId, se
           >
             {({ isSubmitting }) => (
               <Form>
-                <ModalHeader>Nueva Sección</ModalHeader>
+                <ModalHeader>{t('sectionModal.title')}</ModalHeader>
                 <ModalCloseButton onClick={handleOnClose} />
                 <ModalBody>
                   <Stack spacing={4}>
                     <Field name="name">
                       {({ field, form }: any) => (
                         <FormControl isInvalid={form.errors.name && form.touched.name}>
-                          <Input {...field} type="text" placeholder="Nombre" />
+                          <Input {...field} type="text" placeholder={t('sectionModal.name')} />
                           <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                         </FormControl>
                       )}
@@ -83,7 +85,7 @@ const SectionModal = ({ close, closeAndRefresh, isOpen, restaurantId, menuId, se
                     <Field name="description">
                       {({ field, form }: any) => (
                         <FormControl isInvalid={form.errors.description && form.touched.description}>
-                          <Input {...field} type="text" placeholder="Descripción" />
+                          <Input {...field} type="text" placeholder={t('sectionModal.description')} />
                           <FormErrorMessage>{form.errors.description}</FormErrorMessage>
                         </FormControl>
                       )}
@@ -92,9 +94,9 @@ const SectionModal = ({ close, closeAndRefresh, isOpen, restaurantId, menuId, se
                 </ModalBody>
                 <ModalFooter>
                   <Button colorScheme='orange' mr={3} type="submit" isDisabled={isSubmitting}>
-                    {isSubmitting ? 'Guardando...' : 'Guardar'}
+                    {isSubmitting ? t('sectionModal.saving') : t('sectionModal.save')}
                   </Button>
-                  <Button variant='ghost' onClick={handleOnClose}>Cancelar</Button>
+                  <Button variant='ghost' onClick={handleOnClose}>{t('sectionModal.cancel')}</Button>
                 </ModalFooter>
               </Form>
             )}

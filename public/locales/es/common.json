@@ -76,7 +76,7 @@
     "noMenus": "No hay menús",
     "startCreating": "Comienza creando tu primer menú",
     "edit": "Editar",
-    "activeMenu": "Menú Activo",
+    "activeMenu": "⭐ Menú Activo",
     "markAsFavorite": "Marcar como favorito"
   },
   "menuModal": {
@@ -93,7 +93,10 @@
     "menu": "Menu",
     "downloadQRMenu": "Descargar QR Menú",
     "wifiQR": "🔗 QR WiFi",
-    "sections": "Secciones"
+    "sections": "Secciones",
+    "name": "Nombre",
+    "description": "Descripción",
+    "save": "Guardar"
   },
   "sections": {
     "addSection": "Agregar Seccion",
@@ -142,7 +145,18 @@
     "subscriptionSuccess": "Subscription exitosa!",
     "subscriptionMessage": "Gracias por subscribirse!",
     "termsOfUse": "Términos de uso",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "editData": "Editar Datos",
+    "profileForm": "Formulario",
+    "name": "Nombre",
+    "surname": "Apellido", 
+    "nameEnter": "Ingresa tu nombre",
+    "surnameEnter": "Ingresa tu apellido",
+    "phone": "Teléfono",
+    "phoneEnter": "Ingresa tu teléfono",
+    "birthday": "Fecha de nacimiento",
+    "save": "Guardar",
+    "cancel": "Cancelar"
   },
   "welcome": {
     "title": "Bienvenido!",

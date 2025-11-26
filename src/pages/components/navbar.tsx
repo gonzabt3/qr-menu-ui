@@ -14,6 +14,9 @@ const Navbar = () => {
   const router = useRouter();
   const currentUrl = typeof window !== 'undefined' ? window.location.pathname : '';
   const currentPage = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
+  
+  // Verificar si estamos en una página de restaurant/menú
+  const isInRestaurantSection = currentUrl.includes('/restaurant/') || currentUrl.includes('/restaurants');
 
   const goToHome = () => {
     if (isAuthenticated) {
@@ -84,7 +87,7 @@ const Navbar = () => {
             />         
             }
             {
-            currentPage === 'restaurants' &&
+            (currentPage === 'restaurants' || isInRestaurantSection) &&
             <IconButton
               colorScheme='orange' 
               variant='outline'

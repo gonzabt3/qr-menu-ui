@@ -3,6 +3,7 @@ import {  Button, Input, ModalContent, ModalHeader, ModalBody, ModalFooter, Moda
 import axios from "axios";
 import Head from "next/head";
 import { useState } from "react";
+import { useTranslation } from 'next-i18next';
 
 interface ProfileInfoDialogProps {
   user: any;
@@ -45,6 +46,7 @@ const ProfileInfoDialog = ({user}:ProfileInfoDialogProps) => {
   const [phone, setPhone] = useState("");
   const [birthday, setBirthday] = useState("");
   const {getAccessTokenSilently} = useAuth0();
+  const { t } = useTranslation('common');
   
 
   const handleUpdate = async () => {
@@ -69,45 +71,45 @@ const ProfileInfoDialog = ({user}:ProfileInfoDialogProps) => {
 
   return(
     <>
-    <Button onClick={() => setOpen(true)}>Editar Datos</Button>
+    <Button onClick={() => setOpen(true)}>{t('profile.editData')}</Button>
 
 <Modal isOpen={open} onClose={() => console.log("close")}>
 <ModalOverlay />
   <ModalContent>
     <ModalHeader>
-      <h1>Formulario</h1>
+      <h1>{t('profile.profileForm')}</h1>
     </ModalHeader>
     <ModalBody>
       <form>
         <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="nombre">Nombre</label>
+          <label htmlFor="nombre">{t('profile.name')}</label>
           <Input
             id="nombre"
-            placeholder="Ingresa tu nombre"
+            placeholder={t('profile.nameEnter')}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="apellido">Apellido</label>
+          <label htmlFor="apellido">{t('profile.surname')}</label>
           <Input
             id="apellido"
-            placeholder="Ingresa tu apellido"
+            placeholder={t('profile.surnameEnter')}
             value={surname}
             onChange={(e) => setSurname(e.target.value)}
           />
         </div>
         <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="telefono">Teléfono</label>
+          <label htmlFor="telefono">{t('profile.phone')}</label>
           <Input
             id="telefono"
-            placeholder="Ingresa tu teléfono"
+            placeholder={t('profile.phoneEnter')}
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
         </div>
         <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="fechaNacimiento">Fecha de nacimiento</label>
+          <label htmlFor="fechaNacimiento">{t('profile.birthday')}</label>
           <Input
             id="fechaNacimiento"
             type="date"
@@ -118,8 +120,8 @@ const ProfileInfoDialog = ({user}:ProfileInfoDialogProps) => {
       </form>
     </ModalBody>
     <ModalFooter>
-        <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
-      <Button onClick={handleUpdate}>Guardar</Button>
+        <Button variant="outline" onClick={() => setOpen(false)}>{t('profile.cancel')}</Button>
+      <Button onClick={handleUpdate}>{t('profile.save')}</Button>
     </ModalFooter>
   </ModalContent>
 </Modal>

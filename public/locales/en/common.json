@@ -76,7 +76,7 @@
     "noMenus": "No menus",
     "startCreating": "Start by creating your first menu",
     "edit": "Edit",
-    "activeMenu": "Active Menu",
+    "activeMenu": "⭐ Active Menu",
     "markAsFavorite": "Mark as favorite"
   },
   "menuModal": {
@@ -93,7 +93,10 @@
     "menu": "Menu",
     "downloadQRMenu": "Download QR Menu",
     "wifiQR": "🔗 WiFi QR",
-    "sections": "Sections"
+    "sections": "Sections",
+    "name": "Name",
+    "description": "Description",
+    "save": "Save"
   },
   "sections": {
     "addSection": "Add Section",
@@ -142,7 +145,18 @@
     "subscriptionSuccess": "Subscription successful!",
     "subscriptionMessage": "Thank you for subscribing!",
     "termsOfUse": "Terms of use",
-    "contact": "Contact"
+    "contact": "Contact",
+    "editData": "Edit Data",
+    "profileForm": "Form",
+    "name": "Name",
+    "surname": "Surname",
+    "nameEnter": "Enter your name", 
+    "surnameEnter": "Enter your surname",
+    "phone": "Phone",
+    "phoneEnter": "Enter your phone",
+    "birthday": "Birthday",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "welcome": {
     "title": "Welcome!",
