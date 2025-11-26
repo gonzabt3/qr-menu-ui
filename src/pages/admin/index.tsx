@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useRouter } from 'next/router';
 import { 
   Box, Button, Container, Heading, Text, VStack, HStack, Code, useToast, Spinner, Alert, AlertIcon, 
-  Badge, Table, Thead, Tbody, Tr, Th, Td, TableContainer 
+  Badge, Table, Thead, Tbody, Tr, Th, Td, TableContainer, SimpleGrid, Icon
 } from '@chakra-ui/react';
 import { adminApi, type Restaurant, type Feedback, type AdminUser } from '../../../lib/adminApi';
 
@@ -10,6 +11,7 @@ type DataType = 'users' | 'restaurants' | 'feedback';
 
 export default function AdminPage() {
   const { user, isAuthenticated, isLoading: authLoading, getAccessTokenSilently } = useAuth0();
+  const router = useRouter();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [currentType, setCurrentType] = useState<DataType | null>(null);
@@ -265,34 +267,97 @@ export default function AdminPage() {
           </Text>
         </Box>
 
+        {/* Herramientas Administrativas */}
+        <Box borderWidth="1px" borderRadius="lg" p={6} bg="blue.50">
+          <Heading as="h2" size="md" mb={4} color="blue.700">
+            🛠️ Herramientas Administrativas
+          </Heading>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+            <Button
+              colorScheme="blue"
+              size="lg"
+              height="80px"
+              onClick={() => router.push('/admin/import')}
+              leftIcon={<span style={{ fontSize: '24px' }}>🏪</span>}
+              flexDirection="column"
+              bg="white"
+              _hover={{ bg: 'blue.50', transform: 'translateY(-2px)' }}
+              _active={{ transform: 'translateY(0)' }}
+              transition="all 0.2s"
+              border="1px solid"
+              borderColor="blue.200"
+            >
+              <Text fontWeight="bold" mb={1}>Importar Restaurantes</Text>
+              <Text fontSize="sm" color="gray.600" textAlign="center">
+                Buscar e importar desde Google Places
+              </Text>
+            </Button>
+            
+            <Button
+              colorScheme="green"
+              size="lg"
+              height="80px"
+              onClick={() => fetchData('restaurants')}
+              leftIcon={<span style={{ fontSize: '24px' }}>🍽️</span>}
+              flexDirection="column"
+              bg="white"
+              _hover={{ bg: 'green.50', transform: 'translateY(-2px)' }}
+              _active={{ transform: 'translateY(0)' }}
+              transition="all 0.2s"
+              border="1px solid"
+              borderColor="green.200"
+            >
+              <Text fontWeight="bold" mb={1}>Ver Restaurantes</Text>
+              <Text fontSize="sm" color="gray.600" textAlign="center">
+                Gestionar restaurantes existentes
+              </Text>
+            </Button>
+            
+            <Button
+              colorScheme="purple"
+              size="lg"
+              height="80px"
+              onClick={() => fetchData('users')}
+              leftIcon={<span style={{ fontSize: '24px' }}>👥</span>}
+              flexDirection="column"
+              bg="white"
+              _hover={{ bg: 'purple.50', transform: 'translateY(-2px)' }}
+              _active={{ transform: 'translateY(0)' }}
+              transition="all 0.2s"
+              border="1px solid"
+              borderColor="purple.200"
+            >
+              <Text fontWeight="bold" mb={1}>Gestionar Usuarios</Text>
+              <Text fontSize="sm" color="gray.600" textAlign="center">
+                Ver y administrar usuarios
+              </Text>
+            </Button>
+          </SimpleGrid>
+        </Box>
+
         <Box borderWidth="1px" borderRadius="lg" p={6} bg="gray.50">
           <Heading as="h2" size="md" mb={4}>
-            Cargar Datos del Backend
+            📊 Datos Adicionales
           </Heading>
           <HStack spacing={4} mb={4}>
             <Button
-              colorScheme="blue"
-              onClick={() => fetchData('users')}
-              isLoading={loading && currentType === 'users'}
-              loadingText="Cargando..."
-            >
-              Usuarios
-            </Button>
-            <Button
-              colorScheme="green"
-              onClick={() => fetchData('restaurants')}
-              isLoading={loading && currentType === 'restaurants'}
-              loadingText="Cargando..."
-            >
-              Restaurantes
-            </Button>
-            <Button
-              colorScheme="purple"
+              colorScheme="orange"
               onClick={() => fetchData('feedback')}
               isLoading={loading && currentType === 'feedback'}
               loadingText="Cargando..."
+              leftIcon={<span>💬</span>}
             >
-              Feedback
+              Ver Feedback
+            </Button>
+            <Button
+              variant="outline"
+              colorScheme="gray"
+              onClick={() => {
+                setData(null);
+                setCurrentType(null);
+              }}
+            >
+              Limpiar Vista
             </Button>
           </HStack>
           
