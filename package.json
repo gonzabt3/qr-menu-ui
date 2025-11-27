@@ -5,7 +5,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "railway:build": "yarn install --frozen-lockfile && yarn build",
+    "railway:start": "yarn start"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
