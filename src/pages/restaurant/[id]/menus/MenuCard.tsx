@@ -5,6 +5,7 @@ import { StarIcon } from '@chakra-ui/icons';
 import { MdEdit, MdMenuBook, MdDescription } from 'react-icons/md';
 import { favoriteMenu } from '../../../../services/menu';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useTranslation } from 'next-i18next';
 
 const StarOutlineIcon = createIcon({
   displayName: 'StarOutlineIcon',
@@ -21,6 +22,7 @@ const StarOutlineIcon = createIcon({
 
 const MenuCard = ({menu, deleteMenu, refreshMenus}:any) => {
   const { isAuthenticated, loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
+  const { t } = useTranslation('common');
   const router = useRouter();
   const id : any = useParams()?.id;
   const bgGradient = useColorModeValue(
@@ -83,7 +85,7 @@ const MenuCard = ({menu, deleteMenu, refreshMenus}:any) => {
             
             {menu.favorite && (
               <Badge colorScheme='yellow' width='fit-content' fontSize='xs'>
-                ⭐ Menú Activo
+                {t('menus.activeMenu')}
               </Badge>
             )}
             
@@ -115,7 +117,7 @@ const MenuCard = ({menu, deleteMenu, refreshMenus}:any) => {
               size='sm'
               flex={1}
             >
-              Editar
+              {t('menus.edit')}
             </Button>
             { menu.favorite ?
               <IconButton
@@ -128,7 +130,7 @@ const MenuCard = ({menu, deleteMenu, refreshMenus}:any) => {
               />             
             : 
               <IconButton
-                aria-label="Marcar como favorito"
+                aria-label={t('menus.markAsFavorite')}
                 icon={<StarOutlineIcon />}
                 variant="outline"
                 colorScheme="yellow"

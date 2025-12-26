@@ -23,6 +23,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { createRestaurant, updateRestaurant } from '../../services/restaurant';
 import { useAuth0 } from '@auth0/auth0-react';
 import * as Yup from 'yup';
+import { useTranslation } from 'next-i18next';
 
 const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
   const [initialValues, setInitialValues] = useState<any>(null);
@@ -31,11 +32,12 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [removeLogo, setRemoveLogo] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation('common');
 
   const { getAccessTokenSilently } = useAuth0();
 
   const validationSchema = Yup.object({
-    name: Yup.string().required('El nombre es obligatorio'),
+    name: Yup.string().required(t('restaurantModal.nameRequired')),
   });
 
   const validateFile = (file: File): string | null => {
@@ -43,11 +45,11 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
     const maxSize = 5 * 1024 * 1024; // 5MB
 
     if (!validTypes.includes(file.type)) {
-      return 'El formato de archivo debe ser JPG, PNG, GIF o WEBP';
+      return t('restaurantModal.invalidFormat');
     }
 
     if (file.size > maxSize) {
-      return 'El tamaño del archivo no debe superar 5MB';
+      return t('restaurantModal.fileTooLarge');
     }
 
     return null;
@@ -126,7 +128,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
     } catch (error) {
       console.error('Error submitting form:', error);
       if (error instanceof Error && (error as any).response?.data?.error === "Restaurant name must be unique") {
-        setError('El nombre del restaurante ya existe');
+        setError(t('restaurantModal.nameExists'));
       }
       setSubmitting(false);
   }
@@ -179,14 +181,14 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
           >
             {({ isSubmitting }) => (
               <Form>
-                <ModalHeader>Nuevo Restaurant</ModalHeader>
+                <ModalHeader>{t('restaurantModal.title')}</ModalHeader>
                 <ModalCloseButton onClick={handleOnClose} />
                 <ModalBody>
                   <Stack spacing={4}>
                     <Field name="name">
                       {({ field, form }: any) => (
                         <FormControl isInvalid={form.errors.name && form.touched.name}>
-                          <Input {...field} type="text" placeholder="Nombre" />
+                          <Input {...field} type="text" placeholder={t('restaurantModal.name')} />
                           <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                         </FormControl>
                       )}
@@ -194,7 +196,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                     <Field name="description">
                       {({ field, form }: any) => (
                         <FormControl isInvalid={form.errors.description && form.touched.description}>
-                          <Input {...field} type="text" placeholder="Descripción" />
+                          <Input {...field} type="text" placeholder={t('restaurantModal.description')} />
                           <FormErrorMessage>{form.errors.description}</FormErrorMessage>
                         </FormControl>
                       )}
@@ -202,7 +204,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                     <Field name="address">
                       {({ field, form }: any) => (
                         <FormControl isInvalid={form.errors.address && form.touched.address}>
-                          <Input {...field} type="text" placeholder="Dirección" />
+                          <Input {...field} type="text" placeholder={t('restaurantModal.address')} />
                           <FormErrorMessage>{form.errors.address}</FormErrorMessage>
                         </FormControl>
                       )}
@@ -210,7 +212,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                     <Field name="phone">
                       {({ field, form }: any) => (
                         <FormControl isInvalid={form.errors.phone && form.touched.phone}>
-                          <Input {...field} type="text" placeholder="Teléfono" />
+                          <Input {...field} type="text" placeholder={t('restaurantModal.phone')} />
                           <FormErrorMessage>{form.errors.phone}</FormErrorMessage>
                         </FormControl>
                       )}
@@ -218,7 +220,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                     <Field name="instagram">
                       {({ field, form }: any) => (
                         <FormControl isInvalid={form.errors.instagram && form.touched.instagram}>
-                          <Input {...field} type="text" placeholder="Instagram usuario" />
+                          <Input {...field} type="text" placeholder={t('restaurantModal.instagramUser')} />
                           <FormErrorMessage>{form.errors.instagram}</FormErrorMessage>
                         </FormControl>
                       )}
@@ -226,7 +228,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                     <Field name="email">
                       {({ field, form }: any) => (
                         <FormControl isInvalid={form.errors.email && form.touched.email}>
-                          <Input {...field} type="text" placeholder="Email" />
+                          <Input {...field} type="text" placeholder={t('restaurantModal.email')} />
                           <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                         </FormControl>
                       )}
@@ -235,7 +237,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                     {/* Logo Upload Section */}
                     <FormControl>
                       <Text fontSize="sm" fontWeight="medium" mb={2}>
-                        Logo del Restaurante
+                        {t('restaurantModal.logo')}
                       </Text>
                       
                       {/* Current or Preview Logo */}
@@ -251,7 +253,7 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                           position="relative"
                         >
                           <IconButton
-                            aria-label="Eliminar logo"
+                            aria-label={t('restaurantModal.deleteLogo')}
                             icon={<CloseIcon />}
                             size="sm"
                             position="absolute"
@@ -263,14 +265,14 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                           />
                           <Image
                             src={previewUrl || restaurant?.logo_url}
-                            alt="Logo del restaurante"
+                            alt={t('restaurantModal.logo')}
                             maxH="150px"
                             maxW="150px"
                             objectFit="contain"
                             fallbackSrc="/default-restaurant-logo.svg"
                           />
                           <Text fontSize="xs" color="gray.500" mt={2}>
-                            {previewUrl ? 'Nuevo logo' : 'Logo actual'}
+                            {previewUrl ? t('restaurantModal.newLogo') : t('restaurantModal.currentLogo')}
                           </Text>
                         </Flex>
                       )}
@@ -292,10 +294,10 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                         variant="outline"
                         width="100%"
                       >
-                        {previewUrl || restaurant?.logo_url ? 'Cambiar logo' : 'Seleccionar logo'}
+                        {previewUrl || restaurant?.logo_url ? t('restaurantModal.changeLogo') : t('restaurantModal.selectLogo')}
                       </Button>
                       <Text fontSize="xs" color="gray.500" mt={1}>
-                        Formatos: JPG, PNG, GIF, WEBP. Tamaño máximo: 5MB
+                        {t('restaurantModal.logoFormats')}
                       </Text>
                     </FormControl>
                   </Stack>
@@ -318,9 +320,9 @@ const RestaurantModal = ({ isOpen, close, restaurant, refreshList }: any) => {
                 </ModalBody>
                 <ModalFooter>
                   <Button colorScheme='orange' mr={3} type="submit" isDisabled={isSubmitting}>
-                    {isSubmitting ? 'Guardando...' : 'Guardar'}
+                    {isSubmitting ? t('restaurantModal.saving') : t('restaurantModal.save')}
                   </Button>
-                  <Button variant='ghost' onClick={handleOnClose}>Cancelar</Button>
+                  <Button variant='ghost' onClick={handleOnClose}>{t('restaurantModal.cancel')}</Button>
                 </ModalFooter>
               </Form>
             )}

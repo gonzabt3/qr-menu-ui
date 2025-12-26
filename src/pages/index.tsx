@@ -6,6 +6,11 @@ import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import { FaUtensils, FaConciergeBell, FaMoneyBillWave, FaChartLine, FaMobileAlt, FaUsers, FaQrcode, FaStore, FaCheckCircle } from "react-icons/fa";
 import router from "next/router";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetStaticProps } from 'next';
+import i18nConfig from '../../next-i18next.config.js';
+
 const PRICE: number = parseFloat(process.env.NEXT_PUBLIC_PRICE || "0");
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -13,6 +18,7 @@ const auth0ClientId :any = process.env.NEXT_PUBLIC_AUTH_CLIENT_ID;
 
 export default function Home() {
     const { isAuthenticated, loginWithRedirect, user, logout } = useAuth0();
+    const { t } = useTranslation('common');
 
     const handleCreateEditMenu = () => {
         if (isAuthenticated) {
@@ -63,9 +69,9 @@ export default function Home() {
                                 lineHeight="1.1"
                                 mb={6}
                             >
-                                Maneja todos tus menus en un solo lugar.
+                                {t('home.heroTitle')}
                                 <Text as="span" display="block" bgGradient="linear(to-r, orange.500, pink.500)" bgClip="text">
-                                    Facil y rapido.
+                                    {t('home.heroTitleHighlight')}
                                 </Text>
                             </Heading>
                             
@@ -76,8 +82,7 @@ export default function Home() {
                                 mb={8}
                                 maxW="600px"
                             >
-                                Aumenta tus ventas hasta un 30% y elimina los costos de impresión. 
-                                Más de 500 restaurantes ya confían en nosotros.
+                                {t('home.heroSubtitle')}
                             </Text>
                             
                             {/* Demo Button */}
@@ -97,7 +102,7 @@ export default function Home() {
                                 transition="all 0.3s"
                                 onClick={() => window.open('https://www.menuqr.ai/figacita', '_blank')}
                             >
-                                Ver Demostración
+                                {t('home.viewDemo')}
                             </Button>
                         </Box>
 
@@ -163,7 +168,7 @@ export default function Home() {
                         textAlign="center"
                         mb={8}
                     >
-                        Manejalo vos mismo
+                        {t('home.manageYourself')}
                     </Heading>
                     
                     <Text 
@@ -173,7 +178,7 @@ export default function Home() {
                         maxW="4xl"
                         mx="auto"
                     >
-                        Crear tus menus y actualizalos en tiempo real sin depender de nadie
+                        {t('home.manageYourselfDescription')}
                     </Text>
                 </Container>
             </Box>
@@ -211,41 +216,41 @@ export default function Home() {
                                 fontSize="sm"
                                 fontWeight="600"
                             >
-                                Plan Premium
+                                {t('pricing.premiumPlan')}
                             </Box>
                             
                             <CardBody pt={12} textAlign="center">
                                 <Stack spacing={6}>
                                     {/* Título del Plan */}
                                     <Heading size="lg" color="gray.800" fontWeight="700">
-                                        Plan Premium
+                                        {t('pricing.premiumPlan')}
                                     </Heading>
                                     
                                     {/* Características */}
                                     <Stack spacing={4} align="center">
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">Restaurantes ilimitados</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.unlimitedRestaurants')}</Text>
                                         </Flex>
                                         
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">Menús ilimitados</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.unlimitedMenus')}</Text>
                                         </Flex>
                                         
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">Actualización en tiempo real</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.realTimeUpdate')}</Text>
                                         </Flex>
                                         
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">Fotos de los productos</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.productPhotos')}</Text>
                                         </Flex>
                                         
                                         <Flex align="center" gap={3}>
                                             <Icon as={FaCheckCircle} color="green.500" boxSize={5} />
-                                            <Text color="gray.700" fontSize="md">30 días gratis</Text>
+                                            <Text color="gray.700" fontSize="md">{t('pricing.freeTrial')}</Text>
                                         </Flex>
                                     </Stack>
                                     
@@ -254,7 +259,7 @@ export default function Home() {
                                         <Text fontSize="4xl" fontWeight="800" color="gray.800">
                                             $4000
                                             <Text as="span" fontSize="lg" color="gray.600" fontWeight="400">
-                                                /mes
+                                                {t('pricing.perMonth')}
                                             </Text>
                                         </Text>
                                     </Box>
@@ -271,7 +276,7 @@ export default function Home() {
                                         transition="all 0.3s"
                                         onClick={handleCreateEditMenu}
                                     >
-                                        Empezar ahora
+                                        {t('pricing.startNow')}
                                     </Button>
                                 </Stack>
                             </CardBody>
@@ -284,3 +289,11 @@ export default function Home() {
         </>
     );
 }
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'es', ['common'], i18nConfig)),
+        },
+    };
+};

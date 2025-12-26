@@ -12,9 +12,14 @@ import BaseCompents from "../../../components/BaseCompents";
 import useMenus from "./useMenus";
 import { returnOnlyString } from "../../../../common/utils";
 import { MdMenuBook, MdAdd } from 'react-icons/md';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetServerSideProps } from 'next';
+import i18nConfig from '../../../../../next-i18next.config.js';
 
 export default function Page() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const id  = returnOnlyString(router.query.id);
   const refScreen : any = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -55,7 +60,7 @@ export default function Page() {
           <Box display='flex' alignItems='center' justifyContent='space-between' flexWrap='wrap' gap={4} mt={4}>
             <Box display='flex' alignItems='center' gap={3}>
               <Icon as={MdMenuBook} boxSize={8} color='orange.500' />
-              <Heading size='lg' color='gray.700'>Menús del Restaurante</Heading>
+              <Heading size='lg' color='gray.700'>{t('menus.title')}</Heading>
             </Box>
             <Button 
               onClick={changeIsOpenModal} 
@@ -67,7 +72,7 @@ export default function Page() {
               _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
               transition='all 0.2s'
             >
-              Agregar Menú
+              {t('menus.addMenu')}
             </Button>
           </Box>
         </Box>
@@ -75,7 +80,7 @@ export default function Page() {
         {loading ? 
           <Center height="300px">
             <VStack spacing={4}>
-              <Text fontSize='lg' color='gray.500'>Cargando menús...</Text>
+              <Text fontSize='lg' color='gray.500'>{t('menus.loadingMenus')}</Text>
             </VStack>
           </Center> :
         menus.length != 0 ?
@@ -88,8 +93,8 @@ export default function Page() {
           <Center height="300px">
             <VStack spacing={4}>
               <Icon as={MdMenuBook} boxSize={16} color='gray.300' />
-              <Text color="gray.500" fontSize="xl" fontWeight='medium'>No hay menús</Text>
-              <Text color="gray.400" fontSize="sm">Comienza creando tu primer menú</Text>
+              <Text color="gray.500" fontSize="xl" fontWeight='medium'>{t('menus.noMenus')}</Text>
+              <Text color="gray.400" fontSize="sm">{t('menus.startCreating')}</Text>
               <Button 
                 onClick={changeIsOpenModal} 
                 leftIcon={<Icon as={MdAdd} />}
@@ -97,7 +102,7 @@ export default function Page() {
                 size='md'
                 mt={2}
               >
-                Agregar Menú
+                {t('menus.addMenu')}
               </Button>
             </VStack>
           </Center>
@@ -115,3 +120,11 @@ export default function Page() {
     </div>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'es', ['common'], i18nConfig)),
+    },
+  };
+};

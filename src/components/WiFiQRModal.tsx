@@ -19,6 +19,7 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react';
+import { useTranslation } from 'next-i18next';
 
 interface WiFiQRModalProps {
   trigger: React.ReactElement<{ onClick?: () => void }>;
@@ -30,6 +31,7 @@ const WiFiQRModal: React.FC<WiFiQRModalProps> = ({
   apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation('common');
   const [wifiData, setWifiData] = useState({
     ssid: '',
     password: '',
@@ -54,12 +56,12 @@ const WiFiQRModal: React.FC<WiFiQRModalProps> = ({
 
   const generateQR = () => {
     if (!wifiData.ssid.trim()) {
-      setError('El nombre de red es requerido');
+      setError(t('wifiQr.networkNameRequired'));
       return;
     }
 
     if (wifiData.auth !== 'nopass' && !wifiData.password.trim()) {
-      setError('La contraseña es requerida');
+      setError(t('wifiQr.passwordRequired'));
       return;
     }
 
@@ -93,7 +95,7 @@ const WiFiQRModal: React.FC<WiFiQRModalProps> = ({
         URL.revokeObjectURL(link.href);
       } catch (error) {
         console.error('Error downloading QR:', error);
-        setError('Error al descargar el archivo');
+        setError(t('wifiQr.downloadError'));
       } finally {
         setIsDownloading(false);
       }
@@ -109,40 +111,40 @@ const WiFiQRModal: React.FC<WiFiQRModalProps> = ({
       <Modal isOpen={isOpen} onClose={handleModalClose} size="md">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Generar QR WiFi</ModalHeader>
+          <ModalHeader>{t('wifiQr.title')}</ModalHeader>
           <ModalCloseButton />
           
           <ModalBody>
             <VStack spacing={4}>
               <FormControl>
-                <FormLabel>Nombre de red (SSID)</FormLabel>
+                <FormLabel>{t('wifiQr.networkName')}</FormLabel>
                 <Input
                   value={wifiData.ssid}
                   onChange={(e) => setWifiData(prev => ({ ...prev, ssid: e.target.value }))}
-                  placeholder="Nombre de tu WiFi"
+                  placeholder={t('wifiQr.networkNamePlaceholder')}
                 />
               </FormControl>
 
               <FormControl>
-                <FormLabel>Tipo de seguridad</FormLabel>
+                <FormLabel>{t('wifiQr.securityType')}</FormLabel>
                 <Select
                   value={wifiData.auth}
                   onChange={(e) => setWifiData(prev => ({ ...prev, auth: e.target.value }))}
                 >
-                  <option value="WPA">WPA/WPA2</option>
-                  <option value="WEP">WEP</option>
-                  <option value="nopass">Sin contraseña</option>
+                  <option value="WPA">{t('wifiQr.wpaWpa2')}</option>
+                  <option value="WEP">{t('wifiQr.wep')}</option>
+                  <option value="nopass">{t('wifiQr.noPassword')}</option>
                 </Select>
               </FormControl>
 
               {wifiData.auth !== 'nopass' && (
                 <FormControl>
-                  <FormLabel>Contraseña</FormLabel>
+                  <FormLabel>{t('wifiQr.password')}</FormLabel>
                   <Input
                     type="password"
                     value={wifiData.password}
                     onChange={(e) => setWifiData(prev => ({ ...prev, password: e.target.value }))}
-                    placeholder="Contraseña del WiFi"
+                    placeholder={t('wifiQr.passwordPlaceholder')}
                   />
                 </FormControl>
               )}
@@ -158,7 +160,7 @@ const WiFiQRModal: React.FC<WiFiQRModalProps> = ({
                 <VStack>
                   <Image src={qrUrl} alt="WiFi QR" maxW="200px" />
                   <Text fontSize="sm" color="gray.600" textAlign="center">
-                    Escanea para conectarte a {wifiData.ssid}
+                    {t('wifiQr.scanToConnect')} {wifiData.ssid}
                   </Text>
                 </VStack>
               )}
@@ -167,20 +169,20 @@ const WiFiQRModal: React.FC<WiFiQRModalProps> = ({
 
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={handleModalClose}>
-              Cerrar
+              {t('wifiQr.close')}
             </Button>
             {!qrUrl ? (
               <Button colorScheme="blue" onClick={generateQR}>
-                Generar QR
+                {t('wifiQr.generateQR')}
               </Button>
             ) : (
               <Button 
                 colorScheme="green" 
                 onClick={downloadQR}
                 isLoading={isDownloading}
-                loadingText="Descargando..."
+                loadingText={t('wifiQr.downloading')}
               >
-                Descargar
+                {t('wifiQr.download')}
               </Button>
             )}
           </ModalFooter>

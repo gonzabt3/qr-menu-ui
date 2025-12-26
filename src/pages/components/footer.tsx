@@ -1,8 +1,11 @@
 import React from 'react';
 import { Box, Container, Flex, Heading, Image, Stack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 export default function Footer() {
+    const { t } = useTranslation('common');
+    
     return (
         <Box bg="gray.800" py={16} px={4}>
             <Container maxW="6xl">
@@ -33,14 +36,14 @@ export default function Footer() {
                         {/* Columna 1: Contenido útil */}
                         <Box>
                             <Heading size="md" color="white" mb={4} fontWeight="600">
-                                Contenido útil
+                                {t('footer.usefulContent')}
                             </Heading>
                             <Stack spacing={3}>
                                 <Text color="gray.300" fontSize="sm" _hover={{ color: 'white' }} cursor="pointer">
-                                    Características
+                                    {t('footer.features')}
                                 </Text>
                                 <Text color="gray.300" fontSize="sm" _hover={{ color: 'white' }} cursor="pointer">
-                                    Precios
+                                    {t('footer.pricing')}
                                 </Text>
                             </Stack>
                         </Box>
@@ -48,16 +51,16 @@ export default function Footer() {
                         {/* Columna 2: Legal */}
                         <Box>
                             <Heading size="md" color="white" mb={4} fontWeight="600">
-                                Legal
+                                {t('footer.legal')}
                             </Heading>
                             <Stack spacing={3}>
                                 <Link href="/terms" passHref>
                                     <Text color="gray.300" fontSize="sm" _hover={{ color: 'white' }} cursor="pointer">
-                                        Términos de servicio
+                                        {t('footer.termsOfService')}
                                     </Text>
                                 </Link>
                                 <Text color="gray.300" fontSize="sm" _hover={{ color: 'white' }} cursor="pointer">
-                                    Política de privacidad
+                                    {t('footer.privacyPolicy')}
                                 </Text>
                             </Stack>
                         </Box>
@@ -65,11 +68,11 @@ export default function Footer() {
                         {/* Columna 3: Contactanos */}
                         <Box>
                             <Heading size="md" color="white" mb={4} fontWeight="600">
-                                Contactanos
+                                {t('footer.contactUs')}
                             </Heading>
                             <Stack spacing={3}>
                                 <Text color="gray.300" fontSize="sm" _hover={{ color: 'white' }} cursor="pointer">
-                                    WhatsApp
+                                    {t('footer.whatsapp')}
                                 </Text>
                                 <Text color="gray.300" fontSize="sm" _hover={{ color: 'white' }} cursor="pointer">
                                     info@menuqr.ai
@@ -82,7 +85,7 @@ export default function Footer() {
                 {/* Línea separadora */}
                 <Box borderTop="1px solid" borderColor="gray.600" mt={12} pt={8}>
                     <Text color="gray.400" fontSize="sm" textAlign="center">
-                        © 2025 Menu QR. Todos los derechos reservados.
+                        {t('footer.allRightsReserved')}
                     </Text>
                 </Box>
             </Container>

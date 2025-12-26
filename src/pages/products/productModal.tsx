@@ -25,11 +25,13 @@ import useProduct from '../../hooks/useProduct';
 import { CloseIcon, DeleteIcon } from '@chakra-ui/icons';
 import * as Yup from 'yup';
 import { set } from 'cypress/types/lodash';
+import { useTranslation } from 'next-i18next';
 
 const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, closeAndRefresh, isOpen, close }: any) => {
   const [initialValues, setInitialValues] = useState<any>(null);
   const [isLoadingSections, setIsLoadingSections] = useState(true);
   const [showImage, setShowImage] = useState(false);
+  const { t } = useTranslation('common');
   const {
     isLoadingProduct,
     error,
@@ -38,9 +40,9 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
   } = useProduct(restaurantId, menuId, section?.id, product?.id);
 
   const validationSchema = Yup.object({
-    name: Yup.string().required('El nombre es obligatorio'),
-    price: Yup.number().required('El precio es obligatorio').positive('El precio debe ser un número positivo'),
-    section: Yup.string().required('La sección es obligatoria'),
+    name: Yup.string().required(t('productModal.nameRequired')),
+    price: Yup.number().required(t('productModal.priceRequired')).positive(t('productModal.pricePositive')),
+    section: Yup.string().required(t('productModal.sectionRequired')),
     is_vegan: Yup.boolean(),
     is_celiac: Yup.boolean(),
   });
@@ -127,7 +129,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
         <ModalOverlay />
         <ModalContent>
           {isLoadingSections ? (
-            <div>Loading...</div>
+            <div>{t('loading')}</div>
           ) : (
             <Formik
               initialValues={initialValues}
@@ -137,14 +139,14 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
             >
               {({ isSubmitting, setFieldValue, values }) => (
                 <Form>
-                  <ModalHeader>Nuevo Producto</ModalHeader>
+                  <ModalHeader>{t('productModal.title')}</ModalHeader>
                   <ModalCloseButton onClick={handleOnClose} />
                   <ModalBody>
                     <Stack spacing={4}>
                       <Field name="name">
                         {({ field, form }: any) => (
                           <FormControl isInvalid={form.errors.name && form.touched.name}>
-                            <Input {...field} type="text" placeholder="Nombre" />
+                            <Input {...field} type="text" placeholder={t('productModal.name')} />
                             <FormErrorMessage>{form.errors.name}</FormErrorMessage>
                           </FormControl>
                         )}
@@ -152,7 +154,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                       <Field name="description">
                         {({ field, form }: any) => (
                           <FormControl isInvalid={form.errors.description && form.touched.description}>
-                            <Input {...field} type="text" placeholder="Descripción" />
+                            <Input {...field} type="text" placeholder={t('productModal.description')} />
                             <FormErrorMessage>{form.errors.description}</FormErrorMessage>
                           </FormControl>
                         )}
@@ -160,7 +162,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                       <Field name="price">
                         {({ field, form }: any) => (
                           <FormControl isInvalid={form.errors.price && form.touched.price}>
-                            <Input {...field} type="text" placeholder="Precio" />
+                            <Input {...field} type="text" placeholder={t('productModal.price')} />
                             <FormErrorMessage>{form.errors.price}</FormErrorMessage>
                           </FormControl>
                         )}
@@ -168,7 +170,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                       <Field name="section">
                         {({ field, form }: any) => (
                           <FormControl isInvalid={form.errors.section && form.touched.section}>
-                            <Select {...field} placeholder="Seleccione una sección">
+                            <Select {...field} placeholder={t('productModal.selectSection')}>
                               {sections.map((section: any) => (
                                 <option key={section.id} value={section.id}>{section.name}</option>
                               ))}
@@ -181,7 +183,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                         {({ field }: any) => (
                           <FormControl display="flex" alignItems="center">
                             <Checkbox {...field} isChecked={field.value} colorScheme="green">
-                              Vegano
+                              {t('productModal.vegan')}
                             </Checkbox>
                           </FormControl>
                         )}
@@ -190,7 +192,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                         {({ field }: any) => (
                           <FormControl display="flex" alignItems="center">
                             <Checkbox {...field} isChecked={field.value} colorScheme="orange">
-                              Apto Celíacos
+                              {t('productModal.celiac')}
                             </Checkbox>
                           </FormControl>
                         )}
@@ -203,7 +205,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                                 <Box position="relative" display="inline-block">
                                   <img src={product?.image_url} alt="Uploaded" style={{ maxWidth: '100px' }} />
                                   <IconButton
-                                    aria-label="Delete image"
+                                    aria-label={t('productModal.deleteImage')}
                                     icon={<CloseIcon />}
                                     size="xs"
                                     margin={1}
@@ -216,7 +218,7 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                                 </Box>
                               ) : (
                                 <>
-                                  <label>No hay imágenes</label>
+                                  <label>{t('productModal.noImages')}</label>
                                   <Flex alignItems="center">
                                     <Input type="file" onChange={(e) => handleImageChange(e, setFieldValue)} />
                                   </Flex>
@@ -230,9 +232,9 @@ const ProductModal = ({ product, restaurantId, menuId, section, sections, menu, 
                   </ModalBody>
                   <ModalFooter>
                     <Button colorScheme='orange' mr={3} type="submit" disabled={isSubmitting}>
-                      {isLoadingProduct ? <Spinner /> : 'Guardar'}
+                      {isLoadingProduct ? <Spinner /> : t('productModal.save')}
                     </Button>
-                    <Button onClick={handleOnClose} variant='ghost'>Cancelar</Button>
+                    <Button onClick={handleOnClose} variant='ghost'>{t('productModal.cancel')}</Button>
                   </ModalFooter>
                 </Form>
               )}

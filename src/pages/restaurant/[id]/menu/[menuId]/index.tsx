@@ -15,6 +15,11 @@ import useSections from "../../../../../hooks/useSections";
 import { returnOnlyString } from "../../../../../common/utils";
 import useProducts from "../../../../../hooks/useProducts";
 import WiFiQRModal from "../../../../../components/WiFiQRModal";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { GetServerSideProps } from 'next';
+import i18nConfig from '../../../../../../next-i18next.config.js';
+
 const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
 const createMenuUrl = async (menu:any) => {
@@ -23,6 +28,7 @@ const createMenuUrl = async (menu:any) => {
 
 export default function Page() {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const id  = returnOnlyString(router.query.id);
   const menuId  = returnOnlyString(router.query.menuId);
 
@@ -125,7 +131,7 @@ export default function Page() {
               >
                 <GridItem rowSpan={5} colSpan={3} >
                   <CardHeader>
-                    <Heading as='h2' size='md'>Menu</Heading>
+                    <Heading as='h2' size='md'>{t('menuEdit.menu')}</Heading>
                   </CardHeader>
                 </GridItem>
                 <GridItem colStart={1} rowSpan={5} colSpan={[2]}>
@@ -147,7 +153,7 @@ export default function Page() {
                         style={{ marginTop: '10px' }}
                         size="sm"
                         width="100%"
-                        >Descargar QR Menú</Button>
+                        >{t('menuEdit.downloadQRMenu')}</Button>
                     </div>
                     
                     <WiFiQRModal 
@@ -157,7 +163,7 @@ export default function Page() {
                           size="sm"
                           width="150px"
                         >
-                          🔗 QR WiFi
+                          {t('menuEdit.wifiQR')}
                         </Button>
                       }
                     />
@@ -166,7 +172,7 @@ export default function Page() {
                 </GridItem>
                 <GridItem colSpan={4}>
                   <CardBody>
-                    <Heading as='h2' size='md'>Secciones</Heading>
+                    <Heading as='h2' size='md'>{t('menuEdit.sections')}</Heading>
                   </CardBody>
                 </GridItem>
                 <GridItem colSpan={3} >
@@ -180,7 +186,7 @@ export default function Page() {
           </>
         ) : (
           <Center>
-            <Text>Cargando...</Text>
+            <Text>{t('loading')}</Text>
           </Center>
         )}
       </GridItem>
@@ -188,3 +194,11 @@ export default function Page() {
     </div>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? 'es', ['common'], i18nConfig)),
+    },
+  };
+};

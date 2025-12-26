@@ -5,12 +5,18 @@ import { Box, Button, Flex, Heading, Icon, IconButton, Spacer, Image } from '@ch
 import { FaStore, FaUser, FaUserCircle } from "react-icons/fa";
 import { useRouter } from 'next/navigation'
 import { useAuth0 } from '@auth0/auth0-react';
+import { useTranslation } from 'next-i18next';
+import LanguageSelector from '../../components/LanguageSelector';
 
 const Navbar = () => {
   const { isAuthenticated, loginWithRedirect, user,logout } = useAuth0();
+  const { t } = useTranslation('common');
   const router = useRouter();
   const currentUrl = typeof window !== 'undefined' ? window.location.pathname : '';
   const currentPage = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
+  
+  // Verificar si estamos en una página de restaurant/menú
+  const isInRestaurantSection = currentUrl.includes('/restaurant/') || currentUrl.includes('/restaurants');
 
   const goToHome = () => {
     if (isAuthenticated) {
@@ -39,6 +45,7 @@ const Navbar = () => {
         <Image src={'/menuqr_new.svg'} height={9} mr={4} alt="Menu QR Icon" />
         </Box>
         <Spacer />
+        <LanguageSelector />
         { (!user) ?
           <>
               <Button  
@@ -46,8 +53,9 @@ const Navbar = () => {
                 color='gray.600'
                 _hover={{ color: 'gray.900' }}
                 onClick={goToProfilePage}
+                ml={4}
               >
-                Ingresar
+                {t('navbar.login')}
               </Button>
               <Button  
                 bgGradient="linear(to-r, orange.500, pink.500)"
@@ -62,7 +70,7 @@ const Navbar = () => {
                 }}
                 transition="all 0.3s"
               >
-                Ver Demostración
+                {t('navbar.viewDemo')}
               </Button>
             </>
           :
@@ -75,23 +83,25 @@ const Navbar = () => {
               aria-label="Restuarants"
               icon={<FaStore />}
               onClick={goToRestaurantsPage}
+              ml={4}
             />         
             }
             {
-            currentPage === 'restaurants' &&
+            (currentPage === 'restaurants' || isInRestaurantSection) &&
             <IconButton
               colorScheme='orange' 
               variant='outline'
               aria-label="Profile"
               icon={<FaUser />}
               onClick={goToProfilePage}
+              ml={4}
             />         
             }
             {
             currentPage === '' &&
-            <Button onClick={goToRestaurantsPage} colorScheme='orange' variant='outline'>Mis Restaurantes</Button>
+            <Button onClick={goToRestaurantsPage} colorScheme='orange' variant='outline' ml={4}>{t('navbar.myRestaurants')}</Button>
             }
-            <Button  onClick={signOut} colorScheme='orange' variant='outline'>Salir</Button>
+            <Button  onClick={signOut} colorScheme='orange' variant='outline' ml={4}>{t('navbar.logout')}</Button>
           </>
         }          
       </Flex>
