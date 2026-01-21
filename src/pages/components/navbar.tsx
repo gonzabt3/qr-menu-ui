@@ -87,6 +87,10 @@ const Navbar = () => {
               onClick={goToProfilePage}
             />         
             }
+            {
+            currentPage === '' &&
+            <Button onClick={goToRestaurantsPage} colorScheme='orange' variant='outline'>Mis Restaurantes</Button>
+            }
             <Button  onClick={signOut} colorScheme='orange' variant='outline'>Salir</Button>
           </>
         }          

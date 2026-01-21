@@ -102,7 +102,7 @@ export default function Home() {
                         </Box>
 
                         {/* Right Image Space */}
-                        <Box 
+                        {/* <Box 
                             flex="1" 
                             w="100%" 
                             maxW="500px"
@@ -118,7 +118,6 @@ export default function Home() {
                             overflow="hidden"
                             shadow="sm"
                         >
-                            {/* Placeholder content for image */}
                             <Stack spacing={4} align="center" textAlign="center" p={8}>
                                 <Box
                                     w="80px"
@@ -139,7 +138,6 @@ export default function Home() {
                                 </Text>
                             </Stack>
                             
-                            {/* Background pattern */}
                             <Box
                                 position="absolute"
                                 top="0"
@@ -149,7 +147,7 @@ export default function Home() {
                                 opacity={0.1}
                                 bg="gray.100"
                             />
-                        </Box>
+                        </Box> */}
                     </Flex>
                 </Container>
             </Box>
