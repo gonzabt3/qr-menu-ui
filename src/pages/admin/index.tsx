@@ -317,7 +317,7 @@ export default function AdminPage() {
               colorScheme="purple"
               size="lg"
               height="80px"
-              onClick={() => fetchData('users')}
+              onClick={() => router.push('/admin/users')}
               leftIcon={<span style={{ fontSize: '24px' }}>👥</span>}
               flexDirection="column"
               bg="white"

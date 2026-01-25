@@ -37,6 +37,10 @@ export interface AdminUser {
   createdAt: string;
 }
 
+export interface AdminUserExtended extends AdminUser {
+  subscribed?: boolean;
+}
+
 class AdminApiClient {
   private baseUrl: string;
 
@@ -92,6 +96,13 @@ class AdminApiClient {
 
   async verifySession(token: string): Promise<AdminUser> {
     return this.request<AdminUser>('/api/auth/me', {}, token);
+  }
+
+  async updateUser(userId: number, data: Partial<AdminUserExtended>, token: string): Promise<AdminUser> {
+    return this.request<AdminUser>(`/users/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }, token);
   }
 }
 
