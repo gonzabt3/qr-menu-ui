@@ -1,6 +1,6 @@
 'use client'
 import React, { useRef, useEffect } from 'react';
-import { Box, Button, Divider, Flex, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import Section from './section';
 
 const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
@@ -11,6 +11,13 @@ const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
       refScreen.current.style.maxHeight = `${window.innerHeight}px`;
     }
   }, []);
+
+  const handleSectionClick = (sectionId: string | number) => {
+    const target = document.getElementById(`section-${sectionId}`);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div ref={refScreen}>
@@ -25,8 +32,8 @@ const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
               ) : (
                 <>
                   <Box bg="#fefaf4" p={8} minH="100vh">
-                    <VStack spacing={6} align="start">
-                      <VStack align="center" w="full" spacing={3}>
+                    <VStack spacing={6} align="stretch">
+                      <VStack align="start" w="full" spacing={3}>
                         <Heading fontFamily="'KC Clementine Regular Inked', serif" size="2xl">
                           {menu.restaurantName}
                         </Heading>
@@ -41,14 +48,42 @@ const CustomerMenu = ({ menu, showErrorNotFound, loading }: any) => {
                             size="sm"
                             bg="green.500"
                             color="white"
-                            _hover={{ bg: "green.600" }}
+                            _hover={{ bg: 'green.600' }}
                           >
                             WhatsApp
                           </Button>
                         )}
                       </VStack>
+
+                      <Box
+                        position="sticky"
+                        top={0}
+                        zIndex={10}
+                        bg="#fefaf4"
+                        py={2}
+                        w="full"
+                      >
+                        <HStack spacing={2} overflowX="auto" w="full">
+                          {menu.sections.map((section: any) => (
+                            <Button
+                              key={section.id}
+                              size="sm"
+                              variant="outline"
+                              borderRadius="full"
+                              onClick={() => handleSectionClick(section.id)}
+                            >
+                              {section.name}
+                            </Button>
+                          ))}
+                        </HStack>
+                      </Box>
+
+                      <Divider />
+
                       {menu.sections.map((section: any) => (
-                        <Section key={section.id} section={section} />
+                        <Box key={section.id} id={`section-${section.id}`} scrollMarginTop="96px">
+                          <Section section={section} />
+                        </Box>
                       ))}
                     </VStack>
                   </Box>
